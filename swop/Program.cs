@@ -29,7 +29,7 @@ public record ContractTransfers(int TransferId, decimal TransferCashVolume, deci
 public record TransferProofs(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofCandidateProofId, int ProofRelayProofId);
 
 
-public class Simulation
+public class Swop
 {
     public ProcessStates ParseFromTabbedTextLine(string line)
     {
