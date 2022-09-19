@@ -8,24 +8,8 @@ Console.WriteLine("Hello, Swopblock World!");
 
 int simulationArgsIndex = 0;
 
-IntentionTree Tree = swop.DemoWeb.GetTree();
+int consensusArgsIndex = 0;
 
-string userInput = Console.ReadLine();
-
-byte[] serByte = Tree.Serializer.Serialize(userInput);
-
-string check = Tree.Serializer.Deserialize(serByte);
-
-if (check.ToLower() == userInput.ToLower())
-{
-    Console.WriteLine("input is valid");
-    //          [0] [1] [2]     [3]
-    MatchResult mr = IntentionBranch.MatchesPattern(userInput, "i want to * * * * * * for * *");
-}
-else
-{
-    Console.WriteLine("input error");
-}
 #region Intention Demonstration
 
 
@@ -38,7 +22,7 @@ byte[] serByte = Tree.Serializer.Serialize(userInput);
 string check = Tree.Serializer.Deserialize(serByte);
 
 if(check.ToLower() == userInput.ToLower())
-int consensusArgsIndex = 0;
+
 {
     Console.WriteLine("input is valid");
                                                               //          [0] [1] [2]     [3]
