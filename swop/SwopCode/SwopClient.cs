@@ -11,28 +11,38 @@ namespace swop.SwopCode
 {
     public sealed class SwopClient
     {
-        public void CaptureIntention(string intention)
+        public bool CaptureIntention(string intention)
         {
             IntentionTree tree = DemoWeb.GetTree();
 
-            if(tree.Validate(intention))
+            if (tree.Validate(intention))
             {
                 MatchResult mr = IntentionBranch.MatchesPattern(intention, DemoWeb.pattern);
+
+                if (mr.EmbeddedValues != null)
+                {
+                    if (mr.EmbeddedValues.Count > 0)
+                    {
+                        ContractState state = new ContractState(0, 0, 0, 0, 0);
+
+                        if (WriteContract(state))
+                        {
+                            if (SignContract(state))
+                            {
+                                return BroadcastContract(state);
+                            }
+                        }
+                    }
+                }
             }
 
-            ContractState state = new ContractState(1, 1, 1, 1, 1);
+            return false;
+        }
 
-            WriteBidContract(new ContractState(1, 2, 3, 4, 5));
-
-            WriteBidContract(new ContractState(1, 2, 3, 4, 5));
-            WriteAskContract(new ContractState(1, 2, 3, 4, 5));
-            WriteSellContract(new ContractState(1, 2, 3, 4, 5));
-            WriteBuyContract(new ContractState(1, 2, 3, 4, 5));
-            WriteSellAndBuyContract(new ContractState(1, 2, 3, 4, 5));
-
-            SignContract();
-
-            BroadcastContract();
+        public bool WriteContract(ContractState State)
+        {
+            
+            return false;
         }
 
         public void WriteBidContract(ContractState contract)
@@ -59,14 +69,14 @@ namespace swop.SwopCode
 
         }
 
-        public void SignContract()
+        public bool SignContract(ContractState State)
         {
-
+            return false;
         }
 
-        public void BroadcastContract()
+        public bool BroadcastContract(ContractState State)
         {
-
+            return false;
         }
 
         Queue<string> intentionsQueue = new Queue<string>();
