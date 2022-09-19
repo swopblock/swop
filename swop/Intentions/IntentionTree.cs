@@ -29,6 +29,15 @@ namespace Swopblock.Intentions
             Serializer = new IntentionSerializer(WebStructure);
         }
 
+        public bool Validate(string intention)
+        {
+            byte[] serial = Serializer.Serialize(intention);
+
+            string result = Serializer.Deserialize(serial);
+
+            return intention.ToLower().Trim() == result.ToLower().Trim();
+        }
+
         public static IntentionTree DefaultTree()
         {
             return new IntentionTree(IntentionWeb.DefaultStructure());

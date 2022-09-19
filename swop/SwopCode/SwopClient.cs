@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Swopblock.Intentions;
+using Swopblock.Intentions.Utilities;
 
 namespace swop.SwopCode
 {
     public sealed class SwopClient
     {
-        //Look here Brandon********************************************************
-        //Look here Brandon********************************************************
-        //Look here Brandon********************************************************
-
         public void CaptureIntention(string intention)
         {
-            //Brandon put code here to write contract 
+            IntentionTree tree = DemoWeb.GetTree();
+
+            if(tree.Validate(intention))
+            {
+                MatchResult mr = IntentionBranch.MatchesPattern(intention, DemoWeb.pattern);
+            }
+
+            ContractState state = new ContractState(1, 1, 1, 1, 1);
 
             WriteBidContract(new ContractState(1, 2, 3, 4, 5));
 
