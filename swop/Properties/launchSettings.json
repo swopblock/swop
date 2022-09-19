@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "swop": {
+      "commandName": "Project",
+      "commandLineArgs": "simulation 1 2 3 consensus 4 5 execution 6"
+    }
+  }
+}

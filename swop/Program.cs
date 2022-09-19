@@ -1,11 +1,31 @@
-﻿// See https://github.com/swopblock
+﻿// Copywrite (c) 2022 Swopblock LLC
+// See https://github.com/swopblock
 using Swopblock.Intentions;
 using Swopblock.Intentions.Utilities;
 using System.Globalization;
 
 Console.WriteLine("Hello, Swopblock World!");
 
+int simulationArgsIndex = 0;
 
+IntentionTree Tree = swop.DemoWeb.GetTree();
+
+string userInput = Console.ReadLine();
+
+byte[] serByte = Tree.Serializer.Serialize(userInput);
+
+string check = Tree.Serializer.Deserialize(serByte);
+
+if (check.ToLower() == userInput.ToLower())
+{
+    Console.WriteLine("input is valid");
+    //          [0] [1] [2]     [3]
+    MatchResult mr = IntentionBranch.MatchesPattern(userInput, "i want to * * * * * * for * *");
+}
+else
+{
+    Console.WriteLine("input error");
+}
 #region Intention Demonstration
 
 
@@ -18,6 +38,7 @@ byte[] serByte = Tree.Serializer.Serialize(userInput);
 string check = Tree.Serializer.Deserialize(serByte);
 
 if(check.ToLower() == userInput.ToLower())
+int consensusArgsIndex = 0;
 {
     Console.WriteLine("input is valid");
                                                               //          [0] [1] [2]     [3]
@@ -33,20 +54,43 @@ else
 
 int stateCount = args.Length > 0 ? int.Parse(args[0]) : 2;
 
-int streamCount = args.Length > 1 ? int.Parse(args[0]) : 3;
+int executionArgsIndex = 0;
 
-int assetCount = args.Length > 2 ? int.Parse(args[1]) : 4;
+for (int i = 0; i < args.Length; i++)
+{
+    if (args[i] == "simulation")
+    {
+        simulationArgsIndex = i;
+    }
 
-int contractCount = args.Length > 3 ? int.Parse(args[2]) : 5;
+    if (args[i] == "consensus")
+    {
+        consensusArgsIndex = i;
+    }
 
-int transferCount = args.Length > 4 ? int.Parse(args[4]) : 6;
+    if (args[i] == "execution")
+    {
+        executionArgsIndex = i;
+    }
+}
 
-int proofCount = args.Length > 5 ? int.Parse(args[5]) : 7;
+string[] simulationArgs = args.Skip(simulationArgsIndex).ToArray().Take(consensusArgsIndex - simulationArgsIndex).ToArray();
+
+string[] consensusArgs = args.Skip(consensusArgsIndex).ToArray().Take(executionArgsIndex - consensusArgsIndex).ToArray();
+
+string[] executionArgs = args.Skip(executionArgsIndex).ToArray().Take(args.Length - executionArgsIndex).ToArray();
 
 
-public record ProcessStates(int StateId, CashStreams Stream, StreamAssets Asset, AssetContracts Contract, ContractTransfers Transfer, TransferProofs Proof);
+SimulationModule simulationModule = new SimulationModule(simulationArgs);
 
-public record CashStreams(int StreamId, decimal StreamCashVolume, decimal StreamCashInventory);
+ConsensusModule consensusModule = new ConsensusModule(consensusArgs);
+
+ExecutionModule executionModule = new ExecutionModule(executionArgs);
+
+
+public record ProcessStates(int StateId, NetworkStreams Stream, StreamAssets Asset, AssetContracts Contract, ContractTransfers Transfer, TransferProofs Proof);
+
+public record NetworkStreams(int StreamId, decimal StreamCashVolume, decimal StreamCashInventory);
 
 public record StreamAssets(int AssetId, decimal AssetCashVolume, decimal AssetCashInventory, decimal AssetAssetVolume, decimal AssetAssetInventory);
 
@@ -57,8 +101,69 @@ public record ContractTransfers(int TransferId, decimal TransferCashVolume, deci
 public record TransferProofs(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofCandidateProofId, int ProofRelayProofId);
 
 
-public class Simulation
+public sealed class SimulationModule
 {
+    public SimulationModule(string[] simulationArgs)
+    {
+
+    }
+
+    public ProcessStates CurrentState { get; set; }
+
+    public ProcessStates ResetState()
+    {
+        return null;
+    }
+
+    public ProcessStates GetNextState()
+    {
+        return null;
+    }
+}
+
+public sealed class ConsensusModule
+{
+    public ConsensusModule(string[] consensusArgs)
+    {
+
+    }
+
+
+    public ProcessStates GetFirstContract()
+    {
+        return null;
+    }
+
+    public ProcessStates GetNextContract()
+    {
+        return null;
+    }
+}
+
+public sealed class ExecutionModule
+{
+    public ExecutionModule(string[] executionArgs)
+    {
+
+    }
+
+    public ProcessStates GetFirstContract()
+    {
+        return null;
+    }
+
+    public ProcessStates GetNextContract()
+    {
+        return null;
+    }
+}
+
+public sealed class Swop
+{
+    public ProcessStates ParseFromIntention(string intention)
+    {
+        return null;
+    }
     public ProcessStates ParseFromTabbedTextLine(string line)
     {
         string[] fields = line.Split('\t', 25);
@@ -72,7 +177,7 @@ public class Simulation
         int StreamId = int.Parse(fields[i++]);
         decimal StreamCashVolume = decimal.Parse(fields[i++]);
         decimal StreamCashInventory = decimal.Parse(fields[i++]);
-        CashStreams stream = new CashStreams(StreamId, StreamCashVolume, StreamCashInventory);
+        NetworkStreams stream = new NetworkStreams(StreamId, StreamCashVolume, StreamCashInventory);
 
         //StreamAssets
         int AssetId = int.Parse(fields[i++]);
@@ -164,16 +269,48 @@ public class Simulation
 
         return line;
     }
+
+    public sealed class Consensus
+    {
+        public void ParseInputFromArrivalMessage(string intention)
+        {
+
+        }
+    }
+
+    public sealed class Execution
+    {
+        public void ParseOutputToDepartureMessage()
+        {
+
+        }
+    }
+    
 }
 
 public class ClientNetworks
 {
     public CashClients TheClients = new CashClients();
+
+    public void ParseIntentionsFromFile(string intentions)
+    {
+
+    }
+
+    public void ParseIntentionFromConsole(string intention)
+    {
+
+    }
+
+    public void ParseIntentionsFromStandardInput(string intentions)
+    {
+        //Console.R
+    }
 }
 
 public class CashClients
 {
-    public CashStreams CashState;
+    public NetworkStreams StreamState;
 
     public AssetServers TheServers = new AssetServers();
 
@@ -183,10 +320,10 @@ public class AssetServers
 {
     StreamAssets AssetState;
 
-    public ServerContracts TheContracts = new ServerContracts();
+    public ClientContracts TheContracts = new ClientContracts();
 }
 
-public class ServerContracts
+public class ClientContracts
 {
     public AssetContracts ContractState;
 
