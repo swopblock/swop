@@ -1,6 +1,34 @@
 ﻿// See https://github.com/swopblock
+using Swopblock.Intentions;
+using Swopblock.Intentions.Utilities;
+using System.Globalization;
 
 Console.WriteLine("Hello, Swopblock World!");
+
+
+#region Intention Demonstration
+
+
+IntentionTree Tree = swop.DemoWeb.GetTree();
+
+string userInput = Console.ReadLine();
+
+byte[] serByte = Tree.Serializer.Serialize(userInput);
+
+string check = Tree.Serializer.Deserialize(serByte);
+
+if(check.ToLower() == userInput.ToLower())
+{
+    Console.WriteLine("input is valid");
+                                                              //          [0] [1] [2]     [3]
+    MatchResult mr = IntentionBranch.MatchesPattern(userInput, "i want to * * * * * * for * *");
+}
+else
+{
+    Console.WriteLine("input error");
+}
+
+#endregion
 
 
 int stateCount = args.Length > 0 ? int.Parse(args[0]) : 2;
