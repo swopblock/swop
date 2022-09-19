@@ -70,36 +70,40 @@ ConsensusModule consensusModule = new ConsensusModule(consensusArgs);
 ExecutionModule executionModule = new ExecutionModule(executionArgs);
 
 
-public record ProcessStates(int StateId, NetworkStreams Stream, StreamAssets Asset, AssetContracts Contract, ContractTransfers Transfer, TransferProofs Proof);
+public record ProcessStates(int StateId, CashState Stream, AssetState Asset, ContractState Contract, TransferState Transfer, ProofState Proof);
 
-public record NetworkStreams(int StreamId, decimal StreamCashVolume, decimal StreamCashInventory);
+public record CashState(int CashId, decimal StreamCashVolume, decimal StreamCashInventory);
 
-public record StreamAssets(int AssetId, decimal AssetCashVolume, decimal AssetCashInventory, decimal AssetAssetVolume, decimal AssetAssetInventory);
+public record AssetState(int AssetId, decimal AssetCashVolume, decimal AssetCashInventory, decimal AssetAssetVolume, decimal AssetAssetInventory);
 
-public record AssetContracts(int ContractId, decimal ContractCashVolume, decimal ContractCashInventory, decimal ContractAssetVolume, decimal ContractAssetInventory);
+public record ContractState(int ContractId, decimal ContractCashVolume, decimal ContractCashInventory, decimal ContractAssetVolume, decimal ContractAssetInventory);
 
-public record ContractTransfers(int TransferId, decimal TransferCashVolume, decimal TransferCashInventory, decimal TransferAssetVolume, decimal TransferAssetInventory);
+public record TransferState(int TransferId, decimal TransferCashVolume, decimal TransferCashInventory, decimal TransferAssetVolume, decimal TransferAssetInventory);
 
-public record TransferProofs(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofCandidateProofId, int ProofRelayProofId);
+public record ProofState(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofCandidateProofId, int ProofRelayProofId);
 
 
 public sealed class SimulationModule
 {
+    int stateId = 0;
+    int cashIdCount = 1;
+    int assetIdCount = 2;
+    int contractIdCount = 1;
+    int transferIdCount = 2;
+    int proofIdCount = 1;
+
+    int proofStateCount = 0;
+
+    Random random = new Random();
+
     public SimulationModule(string[] simulationArgs)
     {
 
     }
 
-    public ProcessStates CurrentState { get; set; }
-
-    public ProcessStates ResetState()
+    public ProcessStates GetNextRandomState()
     {
-        return null;
-    }
-
-    public ProcessStates GetNextState()
-    {
-        return null;
+        return new ProcessStates(stateId++, null, null, null, null, new ProofState(proofIdCount++, 0, 0, 0, 0, 0));
     }
 }
 
@@ -140,8 +144,71 @@ public sealed class ExecutionModule
     }
 }
 
-public sealed class Swop
+public sealed class SwopClient
 {
+    //Look here Brandon********************************************************
+    //Look here Brandon********************************************************
+    //Look here Brandon********************************************************
+
+    public void CaptureIntention(string intention)
+    {
+        //Brandon put code here to write contract 
+
+        WriteBidContract(new ContractState(1, 2, 3, 4, 5));
+
+        WriteBidContract(new ContractState(1, 2, 3, 4, 5));
+        WriteAskContract(new ContractState(1, 2, 3, 4, 5));
+        WriteSellContract(new ContractState(1, 2, 3, 4, 5));
+        WriteBuyContract(new ContractState(1, 2, 3, 4, 5));
+        WriteSellAndBuyContract(new ContractState(1, 2, 3, 4, 5));
+
+        SignContract();
+
+        BroadcastContract();
+    }
+
+    public void WriteBidContract(ContractState contract)
+    {
+
+    }
+
+    public void WriteAskContract(ContractState contract)
+    {
+
+    }
+
+    public void WriteSellContract(ContractState contract)
+    {
+
+    }
+    public void WriteBuyContract(ContractState contract)
+    {
+
+    }
+
+    public void WriteSellAndBuyContract(ContractState contract)
+    {
+
+    }
+
+    public void SignContract()
+    {
+
+    }
+
+    public void BroadcastContract()
+    {
+
+    }
+
+    Queue<string> intentionsQueue = new Queue<string>();
+
+    //ConsensusModule ConsensusModule
+
+    Queue<ProcessStates> ProcessStatesQueue;
+
+    Queue<string> reportsQueue = new Queue<string>();
+
     public ProcessStates ParseFromIntention(string intention)
     {
         return null;
@@ -159,7 +226,7 @@ public sealed class Swop
         int StreamId = int.Parse(fields[i++]);
         decimal StreamCashVolume = decimal.Parse(fields[i++]);
         decimal StreamCashInventory = decimal.Parse(fields[i++]);
-        NetworkStreams stream = new NetworkStreams(StreamId, StreamCashVolume, StreamCashInventory);
+        CashState stream = new CashState(StreamId, StreamCashVolume, StreamCashInventory);
 
         //StreamAssets
         int AssetId = int.Parse(fields[i++]);
@@ -167,7 +234,7 @@ public sealed class Swop
         decimal AssetCashInventory = decimal.Parse(fields[i++]);
         decimal AssetAssetVolume = decimal.Parse(fields[i++]);
         decimal AssetAssetInventory = decimal.Parse(fields[i++]);
-        StreamAssets asset = new StreamAssets(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
+        AssetState asset = new AssetState(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
 
         //AssetContracts
         int ContractId = int.Parse(fields[i++]);
@@ -175,7 +242,7 @@ public sealed class Swop
         decimal ContractCashInventory = decimal.Parse(fields[i++]);
         decimal ContractAssetVolume = decimal.Parse(fields[i++]);
         decimal ContractAssetInventory = decimal.Parse(fields[i++]);
-        AssetContracts contract = new AssetContracts(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
+        ContractState contract = new ContractState(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
 
         //ContractTransfers
         int TransferId = int.Parse(fields[i++]);
@@ -183,7 +250,7 @@ public sealed class Swop
         decimal TransferCashInventory = decimal.Parse(fields[i++]);
         decimal TransferAssetVolume = decimal.Parse(fields[i++]);
         decimal TransferAssetInventory = decimal.Parse(fields[i++]);
-        ContractTransfers transfer = new ContractTransfers(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
+        TransferState transfer = new TransferState(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
 
         //TransferProofs
         int ProofId = int.Parse(fields[i++]);
@@ -192,7 +259,7 @@ public sealed class Swop
         decimal ProofWork = decimal.Parse(fields[i++]);
         int ProofCandidateProofId = int.Parse(fields[i++]);
         int ProofRelayProofId = int.Parse(fields[i++]);
-        TransferProofs proof = new TransferProofs(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
+        ProofState proof = new ProofState(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
 
         //Process States
         return new ProcessStates(StateId, stream, asset, contract, transfer, proof);
@@ -207,10 +274,10 @@ public sealed class Swop
         line += $"{StateId}";
 
         //CashStreams
-        int StreamId = state.Stream.StreamId;
+        int CashId = state.Stream.CashId;
         decimal StreamCashVolume = state.Stream.StreamCashVolume;
         decimal StreamCashInventory = state.Stream.StreamCashInventory;
-        line += $"\t{StreamId}\t{StreamCashVolume}\t{StreamCashInventory}";
+        line += $"\t{CashId}\t{StreamCashVolume}\t{StreamCashInventory}";
 
         //StreamAssets
         int AssetId = state.Asset.AssetId;
@@ -218,7 +285,7 @@ public sealed class Swop
         decimal AssetCashInventory = state.Asset.AssetCashInventory;
         decimal AssetAssetVolume = state.Asset.AssetAssetVolume;
         decimal AssetAssetInventory = state.Asset.AssetAssetInventory;
-        StreamAssets asset = new StreamAssets(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
+        AssetState asset = new AssetState(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
         line += $"\t{AssetId}\t{AssetCashVolume}\t{AssetCashInventory}\t{AssetAssetVolume}\t{AssetAssetInventory}";
 
         //AssetContracts
@@ -227,7 +294,7 @@ public sealed class Swop
         decimal ContractCashInventory = state.Contract.ContractCashInventory;
         decimal ContractAssetVolume = state.Contract.ContractAssetVolume;
         decimal ContractAssetInventory = state.Contract.ContractAssetInventory;
-        AssetContracts contract = new AssetContracts(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
+        ContractState contract = new ContractState(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
         line += $"\t{ContractId}\t{ContractCashVolume}\t{ContractCashInventory}\t{ContractAssetVolume}\t{ContractAssetInventory}";
 
         //ContractTransfers
@@ -236,7 +303,7 @@ public sealed class Swop
         decimal TransferCashInventory = state.Transfer.TransferCashInventory;
         decimal TransferAssetVolume = state.Transfer.TransferAssetVolume;
         decimal TransferAssetInventory = state.Transfer.TransferAssetInventory;
-        ContractTransfers transfer = new ContractTransfers(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
+        TransferState transfer = new TransferState(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
         line += $"\t{TransferId}\t{TransferCashVolume}\t{TransferCashInventory}\t{TransferAssetVolume}\t{TransferAssetInventory}";
 
         //TransferProofs
@@ -246,7 +313,7 @@ public sealed class Swop
         decimal ProofWork = state.Proof.ProofWork;
         int ProofCandidateProofId = state.Proof.ProofCandidateProofId;
         int ProofRelayProofId = state.Proof.ProofRelayProofId;
-        TransferProofs proof = new TransferProofs(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
+        ProofState proof = new ProofState(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
         line += $"\t{ProofId}\t{ProofDifficulty}\t{ProofStake}\t{ProofWork}\t{ProofCandidateProofId}\t{ProofRelayProofId}";
 
         return line;
@@ -270,48 +337,102 @@ public sealed class Swop
     
 }
 
-public class ClientNetworks
+public class TestSystem
 {
-    public CashClients TheClients = new CashClients();
+    public TestSystemNetworks[] networks;
 
-    public void ParseIntentionsFromFile(string intentions)
+    public TestSystem(int networkCount, int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
     {
+        networks = new TestSystemNetworks[networkCount];
 
-    }
+        for (int i = 0; i < networkCount; i++)
+        {
+            networks[i] = new TestSystemNetworks(clientCount, serverCount, contractCount, transferCount, proofCount);
+        }
+    }   
+}
 
-    public void ParseIntentionFromConsole(string intention)
+public class TestSystemNetworks
+{
+    public TestSwopClients[] clients;
+
+    public TestSystemNetworks(int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
     {
+        clients = new TestSwopClients[clientCount];
 
-    }
+        for (int i = 0; i < clientCount; i++)
+        {
+            clients[i] = new TestSwopClients(serverCount, contractCount, transferCount, proofCount);
+        }
+    }   
+}
 
-    public void ParseIntentionsFromStandardInput(string intentions)
+public class TestSwopClients
+{
+    public SwopClient SwopClient;
+
+    public SimAssetServers[] servers;
+
+    public TestSwopClients(int serverCount, int contractCount, int transferCount, int proofCount)
     {
-        //Console.R
+        SwopClient = new SwopClient();
+
+        servers = new SimAssetServers[serverCount];
+
+        for (int i = 0; i < serverCount; i++)
+        {
+            servers[i] = new SimAssetServers(contractCount, transferCount, proofCount);
+        }
     }
 }
 
-public class CashClients
+public class SimAssetServers
 {
-    public NetworkStreams StreamState;
+    public TestClientContracts[] contracts;
 
-    public AssetServers TheServers = new AssetServers();
+    public SimAssetServers(int contractCount, int transferCount, int proofCount)
+    {
+        contracts = new TestClientContracts[contractCount];
 
+        for (int i = 0; i < contractCount; i++)
+        {
+            contracts[i] = new TestClientContracts(transferCount, proofCount);
+        }
+    }
 }
 
-public class AssetServers
+public class TestClientContracts
 {
-    StreamAssets AssetState;
+    public TestContractTransfers[] transfers;
 
-    public ClientContracts TheContracts = new ClientContracts();
+    public TestClientContracts(int transferCount, int proofCount)
+    {
+        transfers = new TestContractTransfers[transferCount];
+
+        for (int i = 0; i < transferCount; i++)
+        {
+            transfers[i] = new TestContractTransfers(proofCount);
+        }
+    }
 }
 
-public class ClientContracts
+public class TestContractTransfers
 {
-    public AssetContracts ContractState;
+    public TestTransferProofs[] proofs;
 
-    public ContractTransfers TransferState;
+    public TestContractTransfers(int proofCount)
+    {
+        proofs = new TestTransferProofs[proofCount];
 
-    public TransferProofs ProofState;
+        for (int i = 0; i < proofCount; i++)
+        {
+            proofs[i] = new TestTransferProofs();
+        }
+    }
+}
+
+public class TestTransferProofs
+{ 
 }
 
 
