@@ -15,6 +15,8 @@ int consensusArgsIndex = 0;
 
 IntentionTree Tree = swop.DemoWeb.GetTree();
 
+SwopClient client = new SwopClient();
+
 string userInput = Console.ReadLine();
 
 byte[] serByte = Tree.Serializer.Serialize(userInput);
@@ -22,11 +24,8 @@ byte[] serByte = Tree.Serializer.Serialize(userInput);
 string check = Tree.Serializer.Deserialize(serByte);
 
 if(check.ToLower() == userInput.ToLower())
-
 {
-    Console.WriteLine("input is valid");
-                                                              //          [0] [1] [2]     [3]
-    MatchResult mr = IntentionBranch.MatchesPattern(userInput, "i want to * * * * * * for * *");
+    client.CaptureIntention(userInput);
 }
 else
 {
