@@ -10,6 +10,8 @@ namespace swop
 {
     internal class DemoWeb
     {
+        public static string pattern = "i want to * * * * * * for * *";
+
         private static IntentionWeb demo = new IntentionWeb("i want to", new List<IntentionWeb>
         {
         new IntentionWeb("bid", new List<IntentionWeb>
