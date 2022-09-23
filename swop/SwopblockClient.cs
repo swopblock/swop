@@ -1,10 +1,53 @@
-﻿using Swopblock.Intentions;
+﻿// Copywrite (c) 2022 Swopblock LLC
+// See https://github.com/swopblock
+
+using Swopblock.Intentions;
 
 namespace Swopblock
 {
+    public record Intention();
+
+    public record Report();
+
+    public interface NetworkServices
+    {
+
+    }
+
+    public interface IntentionServices
+    {
+
+    }
+
+    public interface ReportServices
+    {
+
+    }
+
     public class SwopblockClient
     {
-        public static List<ProcessStates> CapturedIntentions { get; set; }
+        IntentionServices UserInput;
+
+        NetworkServices NetworkIO;
+
+        ReportServices UserOutput;
+
+
+        ConsensusModule consensus;
+
+        ExecutionModule execution;
+
+
+        public SwopblockClient(IntentionServices UserInput, NetworkServices NetworkIO, ReportServices UserOutput)
+        {
+            this.UserInput = UserInput;
+            this.NetworkIO = NetworkIO;
+            this.UserOutput = UserOutput;
+        }
+
+        public Consensus ConsensusProcessor;
+
+        public Execution ExecutionProcessor;
 
         public bool CaptureIntention(string intention)
         {
@@ -30,8 +73,6 @@ namespace Swopblock
                     }
                 }
             }
-
-            CapturedIntentions.Add(new ProcessStates(0, null, null, null, null, null));
 
             return false;
         }

@@ -16,7 +16,7 @@ int consensusArgsIndex = 0;
 
 IntentionTree Tree = DemoWeb.GetTree();
 
-SwopblockClient client = new SwopblockClient();
+SwopblockClient client = new SwopblockClient(null, null, null);
 
 string userInput = Console.ReadLine();
 
