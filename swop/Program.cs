@@ -156,6 +156,8 @@ public sealed class ExecutionModule
     }
 }
 
+#region Moving Test Structure to Simulation.cs
+
 public class TestSystem
 {
     public TestSystemNetworks[] networks;
@@ -254,4 +256,4 @@ public class TestTransferProofs
 { 
 }
 
-
+#endregion
