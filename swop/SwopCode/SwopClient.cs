@@ -9,7 +9,7 @@ using Swopblock.Intentions.Utilities;
 
 namespace swop.SwopCode
 {
-    public sealed class SwopClient
+    public class SwopblockClient
     {
         public bool CaptureIntention(string intention)
         {

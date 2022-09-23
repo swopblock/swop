@@ -15,7 +15,7 @@ int consensusArgsIndex = 0;
 
 IntentionTree Tree = swop.DemoWeb.GetTree();
 
-SwopClient client = new SwopClient();
+SwopblockClient client = new SwopblockClient();
 
 string userInput = Console.ReadLine();
 
@@ -177,13 +177,13 @@ public class TestSystemNetworks
 
 public class TestSwopClients
 {
-    public SwopClient SwopClient;
+    public SwopblockClient SwopClient;
 
     public SimAssetServers[] servers;
 
     public TestSwopClients(int serverCount, int contractCount, int transferCount, int proofCount)
     {
-        SwopClient = new SwopClient();
+        SwopClient = new SwopblockClient();
 
         servers = new SimAssetServers[serverCount];
 
