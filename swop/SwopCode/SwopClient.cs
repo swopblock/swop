@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Swopblock.Intentions;
 using Swopblock.Intentions.Utilities;
 
-namespace swop.SwopCode
+namespace Swopblock
 {
-    public class SwopblockClient
+    public class SwopblockClientMove
     {
         public bool CaptureIntention(string intention)
         {

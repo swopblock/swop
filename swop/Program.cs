@@ -1,11 +1,11 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC
 // See https://github.com/swopblock
+
+using Swopblock;
 using Swopblock.Intentions;
 using Swopblock.Intentions.Utilities;
 using System.Globalization;
-using swop.SwopCode;
-using swop;
-using swop.Demo;
+using Swopblock.Demo;
 
 Console.WriteLine("Hello, Swopblock World!");
 
@@ -14,34 +14,34 @@ int consensusArgsIndex = 0;
 
 #region Intention Demonstration
 
-IntentionTree Tree = swop.DemoWeb.GetTree();
+//IntentionTree Tree = swop.DemoWeb.GetTree();
 
-SwopblockClient client = new SwopblockClient();
+//SwopblockClient client = new SwopblockClient();
 
-string userInput = Console.ReadLine();
+//string userInput = Console.ReadLine();
 
-byte[] serByte = Tree.Serializer.Serialize(userInput);
+//byte[] serByte = Tree.Serializer.Serialize(userInput);
 
-string check = Tree.Serializer.Deserialize(serByte);
+//string check = Tree.Serializer.Deserialize(serByte);
 
-if(check.ToLower() == userInput.ToLower())
-{
-    if(client.CaptureIntention(userInput))
-    {
-        Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
-    }
-}
-else
-{
-    Console.WriteLine("input error");
-}
+//if(check.ToLower() == userInput.ToLower())
+//{
+//    if(client.CaptureIntention(userInput))
+//    {
+//        Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
+//    }
+//}
+//else
+//{
+//    Console.WriteLine("input error");
+//}
 
-// start network state
-ContractState NetworkContractState = new ContractState(0, 0, 0, 0, 0);
-// get user contract
-ContractState state = DemoPrompt.Run();
-// update network state
-NetworkContractState = DemoPrompt.AddStates(NetworkContractState, state);
+//// start network state
+//ContractState NetworkContractState = new ContractState(0, 0, 0, 0, 0);
+//// get user contract
+//ContractState state = DemoPrompt.Run();
+//// update network state
+//NetworkContractState = DemoPrompt.AddStates(NetworkContractState, state);
 
 #endregion
 
@@ -190,13 +190,13 @@ public class TestSystemNetworks
 
 public class TestSwopClients
 {
-    public SwopblockClient SwopClient;
+    public SwopblockClientMove SwopClient;
 
     public SimAssetServers[] servers;
 
     public TestSwopClients(int serverCount, int contractCount, int transferCount, int proofCount)
     {
-        SwopClient = new SwopblockClient();
+        SwopClient = new SwopblockClientMove();
 
         servers = new SimAssetServers[serverCount];
 

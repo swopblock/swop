@@ -1,4 +1,4 @@
-﻿using swop.SwopCode;
+﻿using Swopblock;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace xUnitTest
 {
     public sealed class Simulation
     {
-        public SwopblockClient PublicSwopblockClient;
+        public SwopblockClientMove PublicSwopblockClient;
 
         public SimulationSystemNetworks[] networks;
 
@@ -54,7 +54,7 @@ namespace xUnitTest
 
     public sealed class SimulationSwopblockClients
     {
-        public SwopblockClient SwopblockClient;
+        public SwopblockClientMove SwopblockClient;
 
         public SimulationAssetServers[] servers;
 
@@ -62,7 +62,7 @@ namespace xUnitTest
         [InlineData(2, 3, 4, 5)]
         public void BuildSimultion(int serverCount, int contractCount, int transferCount, int proofCount)
         {
-            SwopblockClient = new SwopblockClient();
+            SwopblockClient = new SwopblockClientMove();
 
             servers = new SimulationAssetServers[serverCount];
 

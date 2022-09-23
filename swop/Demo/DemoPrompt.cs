@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace swop.Demo
+namespace Swopblock.Demo
 {
     public class DemoPrompt
     {

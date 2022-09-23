@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Swopblock.Intentions;
 
-namespace swop
+namespace Swopblock
 {
     internal class DemoWeb
     {
