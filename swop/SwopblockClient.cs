@@ -2,6 +2,7 @@
 // See https://github.com/swopblock
 
 using Swopblock.Intentions;
+using System.Net.Http.Headers;
 
 namespace Swopblock
 {
@@ -37,17 +38,20 @@ namespace Swopblock
 
         ExecutionModule execution;
 
+        public Consensus ConsensusProcessor;
+
+        public Execution ExecutionProcessor;
+
 
         public SwopblockClient(IntentionServices UserInput, NetworkServices NetworkIO, ReportServices UserOutput)
         {
             this.UserInput = UserInput;
             this.NetworkIO = NetworkIO;
             this.UserOutput = UserOutput;
+
+            ConsensusProcessor = new Consensus();
+            ExecutionProcessor = new Execution();
         }
-
-        public Consensus ConsensusProcessor;
-
-        public Execution ExecutionProcessor;
 
         public bool CaptureIntention(string intention)
         {
@@ -240,6 +244,11 @@ namespace Swopblock
             public void ParseInputFromArrivalMessage(string intention)
             {
 
+            }
+
+            public ProcessStates GetNetworkState()
+            {
+                return null;
             }
         }
 

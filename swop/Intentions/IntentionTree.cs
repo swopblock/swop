@@ -10,8 +10,6 @@ namespace Swopblock.Intentions
     public class IntentionTree
     { 
         public IntentionSerializer Serializer { get; set; }
-       
-        //i am paying at most 200 and at least 100 swobl of mine at address SomeAddress in order to send at most 25 and at least 20 usd of mine at address SomeAddress and the payment is pending until when upon acceptance you withdraw 1 btc of yours at address OtherAddress
         
         public IntentionTree()
         {
@@ -29,13 +27,26 @@ namespace Swopblock.Intentions
             Serializer = new IntentionSerializer(WebStructure);
         }
 
+        /// <summary>
+        /// Checks if the submited intention is a valid format
+        /// </summary>
+        /// <param name="intention"></param>
+        /// <returns></returns>
         public bool Validate(string intention)
         {
-            byte[] serial = Serializer.Serialize(intention);
+            if(intention != null)
+            {
+                if(intention != string.Empty)
+                {
+                    byte[] serial = Serializer.Serialize(intention);
 
-            string result = Serializer.Deserialize(serial);
+                    string result = Serializer.Deserialize(serial);
 
-            return intention.ToLower().Trim() == result.ToLower().Trim();
+                    return intention.ToLower().Trim() == result.ToLower().Trim();
+                }
+            }
+
+            return false;
         }
 
         public static IntentionTree DefaultTree()
