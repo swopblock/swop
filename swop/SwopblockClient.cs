@@ -1,14 +1,11 @@
 ﻿using Swopblock.Intentions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Swopblock
 {
     public class SwopblockClient
     {
+        public static List<ProcessStates> CapturedIntentions { get; set; }
+
         public bool CaptureIntention(string intention)
         {
             IntentionTree tree = DemoWeb.GetTree();
@@ -33,6 +30,8 @@ namespace Swopblock
                     }
                 }
             }
+
+            CapturedIntentions.Add(new ProcessStates(0, null, null, null, null, null));
 
             return false;
         }

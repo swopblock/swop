@@ -14,34 +14,34 @@ int consensusArgsIndex = 0;
 
 #region Intention Demonstration
 
-//IntentionTree Tree = swop.DemoWeb.GetTree();
+IntentionTree Tree = DemoWeb.GetTree();
 
-//SwopblockClient client = new SwopblockClient();
+SwopblockClient client = new SwopblockClient();
 
-//string userInput = Console.ReadLine();
+string userInput = Console.ReadLine();
 
-//byte[] serByte = Tree.Serializer.Serialize(userInput);
+byte[] serByte = Tree.Serializer.Serialize(userInput);
 
-//string check = Tree.Serializer.Deserialize(serByte);
+string check = Tree.Serializer.Deserialize(serByte);
 
-//if(check.ToLower() == userInput.ToLower())
-//{
-//    if(client.CaptureIntention(userInput))
-//    {
-//        Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
-//    }
-//}
-//else
-//{
-//    Console.WriteLine("input error");
-//}
+if (check.ToLower() == userInput.ToLower())
+{
+    if (client.CaptureIntention(userInput))
+    {
+        Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
+    }
+}
+else
+{
+    Console.WriteLine("input error");
+}
 
-//// start network state
-//ContractState NetworkContractState = new ContractState(0, 0, 0, 0, 0);
-//// get user contract
-//ContractState state = DemoPrompt.Run();
-//// update network state
-//NetworkContractState = DemoPrompt.AddStates(NetworkContractState, state);
+// start network state
+ContractState NetworkContractState = new ContractState(0, 0, 0, 0, 0);
+// get user contract
+ContractState state = DemoPrompt.Run();
+// update network state
+NetworkContractState = DemoPrompt.AddStates(NetworkContractState, state);
 
 #endregion
 
