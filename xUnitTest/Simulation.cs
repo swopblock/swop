@@ -9,14 +9,15 @@ namespace xUnitTest
 {
     public sealed class Simulation
     {
+        public SwopblockClient PublicSwopblockClient;
+
         public SimulationSystemNetworks[] networks;
 
         [Theory]
-        [InlineData(2,3,4,5,6,7)]
-        public Simulation BuildSimultion(int networkCount, int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
+        [InlineData(2, 3, 4, 5, 6, 7)]
+        [InlineData(7, 6, 5, 4, 3, 2)]
+        public void BuildSimultion(int networkCount, int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
         {
-            var simulation = new Simulation();
-
             networks = new SimulationSystemNetworks[networkCount];
 
             for (int i = 0; i < networkCount; i++)
@@ -27,8 +28,6 @@ namespace xUnitTest
             }
 
             Assert.Equal(networkCount, networks.Length);
-
-            return simulation;
         }
     }
 
@@ -38,10 +37,8 @@ namespace xUnitTest
 
         [Theory]
         [InlineData(2, 3, 4, 5, 6)]
-        public SimulationSystemNetworks BuildSimultion(int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
+        public void BuildSimultion(int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
         {
-            var network = new SimulationSystemNetworks();
-
             clients = new SimulationSwopblockClients[clientCount];
 
             for (int i = 0; i < clientCount; i++)
@@ -52,8 +49,6 @@ namespace xUnitTest
             }
 
             Assert.Equal(clientCount, clients.Length);
-
-            return network;
         }
     }
 
@@ -65,10 +60,8 @@ namespace xUnitTest
 
         [Theory]
         [InlineData(2, 3, 4, 5)]
-        public SimulationSwopblockClients BuildSimultion(int serverCount, int contractCount, int transferCount, int proofCount)
+        public void BuildSimultion(int serverCount, int contractCount, int transferCount, int proofCount)
         {
-            var client = new SimulationSwopblockClients();
-
             SwopblockClient = new SwopblockClient();
 
             servers = new SimulationAssetServers[serverCount];
@@ -83,8 +76,6 @@ namespace xUnitTest
             Assert.Equal(serverCount, servers.Length);
 
             Assert.NotNull(SwopblockClient);
-
-            return client;
         }
     }
 
@@ -94,10 +85,8 @@ namespace xUnitTest
 
         [Theory]
         [InlineData(2, 3, 4)]
-        public SimulationAssetServers BuildSimultion(int contractCount, int transferCount, int proofCount)
+        public void BuildSimultion(int contractCount, int transferCount, int proofCount)
         {
-            var server = new SimulationAssetServers();
-
             contracts = new SimulationClientContracts[contractCount];
 
             for (int i = 0; i < contractCount; i++)
@@ -108,8 +97,6 @@ namespace xUnitTest
             }
 
             Assert.Equal(contractCount, contracts.Length);
-
-            return server;
         }
     }
 
@@ -119,10 +106,8 @@ namespace xUnitTest
 
         [Theory]
         [InlineData(2, 3)]
-        public SimulationClientContracts BuildSimultion(int transferCount, int proofCount)
+        public void BuildSimultion(int transferCount, int proofCount)
         {
-            var contract = new SimulationClientContracts();
-
             transfers = new SimulationContractTransfers[transferCount];
 
             for (int i = 0; i < transferCount; i++)
@@ -133,8 +118,6 @@ namespace xUnitTest
             }
 
             Assert.Equal(transferCount, transfers.Length);
-
-            return contract;
         }
     }
 
@@ -144,10 +127,8 @@ namespace xUnitTest
 
         [Theory]
         [InlineData(2)]
-        public SimulationContractTransfers BuildSimultion(int proofCount)
+        public void BuildSimultion(int proofCount)
         {
-            var transfer = new SimulationContractTransfers();
-
             proofs = new SimulationTransferProofs[proofCount];
 
             for (int i = 0; i < proofCount; i++)
@@ -156,8 +137,6 @@ namespace xUnitTest
             }
 
             Assert.Equal(proofCount, proofs.Length);
-
-            return transfer;
         }
     }
 
