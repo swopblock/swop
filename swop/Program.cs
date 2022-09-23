@@ -5,13 +5,14 @@ using Swopblock.Intentions.Utilities;
 using System.Globalization;
 using swop.SwopCode;
 using swop;
+using swop.Demo;
+
 Console.WriteLine("Hello, Swopblock World!");
 
 int simulationArgsIndex = 0;
 int consensusArgsIndex = 0;
 
 #region Intention Demonstration
-
 
 IntentionTree Tree = swop.DemoWeb.GetTree();
 
@@ -25,12 +26,22 @@ string check = Tree.Serializer.Deserialize(serByte);
 
 if(check.ToLower() == userInput.ToLower())
 {
-    client.CaptureIntention(userInput);
+    if(client.CaptureIntention(userInput))
+    {
+        Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
+    }
 }
 else
 {
     Console.WriteLine("input error");
 }
+
+// start network state
+ContractState NetworkContractState = new ContractState(0, 0, 0, 0, 0);
+// get user contract
+ContractState state = DemoPrompt.Run();
+// update network state
+NetworkContractState = DemoPrompt.AddStates(NetworkContractState, state);
 
 #endregion
 
