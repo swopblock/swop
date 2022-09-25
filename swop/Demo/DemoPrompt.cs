@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swopblock.Intentions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,26 +9,29 @@ namespace Swopblock.Demo
 {
     public class DemoPrompt
     {
-        public static ContractStream Run()
+        IntentionTree Tree = DemoWeb.GetTree();
+
+        SwopblockClient client = new SwopblockClient();
+        public void Run()
         {
+            LiquidityStreams state;
+
             Console.WriteLine("Commands:");
             Console.WriteLine("Run - Runs a simulation.");
             Console.WriteLine("Trade - Simulates a specific trade.");
             Console.WriteLine("Enter a command:");
 
-            string line = Console.ReadLine();
+            string command = Console.ReadLine();
 
-            return new ContractStream(0, 0, 0, 0, 0);
-        }
+            if (client.CaptureIntention(command))
+            {
+                Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
+                    
+                //state = client.ConsensusProcessor.GetNetworkState();
 
-        public static ContractStream AddStates(ContractStream network, ContractStream contract)
-        {
-            return new ContractStream(
-                0, /// new id
-                network.ContractCashVolume + contract.ContractCashVolume,
-                network.ContractCashInventory + contract.ContractCashInventory,
-                network.ContractAssetVolume + contract.ContractAssetVolume,
-                network.ContractAssetInventory + contract.ContractAssetInventory);
+                //Console.WriteLine("Cash Volume: " + state.Contract.ContractCashVolume);
+                //Console.WriteLine("Asset Volume: " + state.Contract.ContractAssetVolume);
+            }           
         }
     }
 }

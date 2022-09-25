@@ -56,17 +56,13 @@ namespace Swopblock
 
         ExecutionModule execution;
 
-        public Consensus ConsensusProcessor;
+        Consensus ConsensusProcessor;
 
-        public Execution ExecutionProcessor;
+        Execution ExecutionProcessor;
 
 
         public SwopblockClient()
         {
-            this.UserInput = UserInput;
-            this.NetworkIO = NetworkIO;
-            this.UserOutput = UserOutput;
-
             ConsensusProcessor = new Consensus();
             ExecutionProcessor = new Execution();
         }
@@ -278,7 +274,7 @@ namespace Swopblock
 
             }
 
-            public ProcessStates GetNetworkState()
+            public LiquidityStreams GetNetworkState()
             {
                 return null;
             }

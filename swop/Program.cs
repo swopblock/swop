@@ -6,6 +6,7 @@ using Swopblock.Intentions;
 using Swopblock.Intentions.Utilities;
 using System.Globalization;
 using Swopblock.Demo;
+using swop.Demo;
 
 Console.WriteLine("Hello, Swopblock World!");
 
@@ -39,9 +40,9 @@ else
 // start network state
 ContractStream NetworkContractState = new ContractStream(0, 0, 0, 0, 0);
 // get user contract
-ContractStream state = DemoPrompt.Run();
+//ContractStream state = DemoPrompt.Run();
 // update network state
-NetworkContractState = DemoPrompt.AddStates(NetworkContractState, state);
+//NetworkContractState.Add(state);
 
 #endregion
 
