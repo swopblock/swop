@@ -12,10 +12,9 @@ namespace swop.Demo
         {
             ContractStreamStates cState = new ContractStreamStates(
                 0,
-                obj.ContractCashVolume + two.ContractCashVolume,
-                0,
-                obj.ContractAssetVolume + two.ContractAssetVolume,
-                0);
+                new DigitalCash(0,0,new StreamLocks(obj.Cash.Lock.Volume + two.Cash.Lock.Volume)),
+                new DigitalAsset(0,0,new StreamLocks(obj.Asset.Lock.Volume + two.Asset.Lock.Volume)),
+                null);
 
 
             return cState;

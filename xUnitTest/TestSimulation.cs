@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Simulation
 {
-    public class TestSimulation : Simulation
+    public class TestSimulation : SimulationModule
     {
         public override LiquidityStreamStates PeekAtConsensusOutput()
         {

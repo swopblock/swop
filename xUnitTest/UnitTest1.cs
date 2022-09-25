@@ -7,7 +7,7 @@ namespace Simulation
         [Fact]
         public void TestSimulationModule()
         {
-            var simulationModule = new Simulation();
+            var simulationModule = new SimulationModule();
 
             Assert.NotNull(simulationModule);
         }

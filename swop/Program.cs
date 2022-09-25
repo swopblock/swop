@@ -11,14 +11,10 @@ using swop.Demo;
 
 Console.WriteLine("Hello, Swopblock World!");
 
-int contractBatchCount = 10;
+var Sim = new SimulationModule();
 
-//Simulation
+Sim.BuildSimultion(1, 1, 1, 1, 1, 1);
 
-for (int i = 0; i < contractBatchCount; i++)
-{
-
-}
 
 int simulationArgsIndex = 0;
 int consensusArgsIndex = 0;
@@ -48,7 +44,7 @@ else
 }
 
 // start network state
-ContractStreamStates NetworkContractState = new ContractStreamStates(0, 0, 0, 0, 0);
+ContractStreamStates NetworkContractState = new ContractStreamStates(0, null, null, null);
 // get user contract
 //ContractStream state = DemoPrompt.Run();
 // update network state
@@ -93,28 +89,93 @@ string[] executionArgs = args.Skip(executionArgsIndex).ToArray().Take(args.Lengt
 //ExecutionModule executionModule = new ExecutionModule(executionArgs);
 
 #region Input Output Data Types
-public record StreamLocks(decimal Volume);
-
-public record DigitalEntry(decimal Supply, decimal Demand, StreamLocks StreamLock) : StreamLocks(StreamLock.Volume);
-
-public record DigitalCash(decimal Supply, decimal Demand, StreamLocks StreamLock) : DigitalEntry(Supply, Demand, StreamLock);
-
-public record DigitalAsset(decimal Supply, decimal Demand, StreamLocks StreamLock) : DigitalEntry(Supply, Demand, StreamLock);
-
-public record DigitalValue(DigitalCash cash, DigitalAsset asset) ;
-
-public record SimulationStates(int StateId, LiquidityStreamStates Stream, AssetStreamStates Asset, ContractStreamStates Contract, LiquidityTransferStates Transfer, ConsensusStates Proof);
-
-public record LiquidityStreamStates(int CashId, decimal StreamCashVolume, decimal StreamCashInventory)
+public record StreamLocks(decimal Volume)
 {
-    public static LiquidityStreamStates Empty { get { return new LiquidityStreamStates(0, 0, 0); } }    
+    public string ParseToTabbed()
+    {
+        return $"{Volume}";
+    }
 }
-public record AssetStreamStates(int AssetId, decimal AssetCashVolume, decimal AssetCashInventory, decimal AssetAssetVolume, decimal AssetAssetInventory);
 
-public record ContractStreamStates(int ContractId, decimal ContractCashVolume, decimal ContractCashInventory, decimal ContractAssetVolume, decimal ContractAssetInventory);
+public record DigitalEntry(decimal Supply, decimal Demand, StreamLocks Lock)
+{
+    public string ParseToTabbed()
+    {
+        return $"{Supply}\t{Demand}\t{Lock.ParseToTabbed()}";
+    }
+}
 
-public record LiquidityTransferStates(int TransferId, decimal TransferCashVolume, decimal TransferCashInventory, decimal TransferAssetVolume, decimal TransferAssetInventory);
 
-public record ConsensusStates(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofSuperProofId, int ProofRelayProofId);
+public record DigitalCash(decimal Supply, decimal Demand, StreamLocks Lock) : DigitalEntry(Supply, Demand, Lock)
+{
+}
 
+public record DigitalAsset(decimal Supply, decimal Demand, StreamLocks Lock) : DigitalEntry(Supply, Demand, Lock)
+{
+}
+
+public record DigitalValue(DigitalCash cash, DigitalAsset asset)
+{
+    public string ParseToTabbed()
+    {
+        return $"{cash.ParseToTabbed()}\t{asset.ParseToTabbed()}";
+    }
+}
+
+
+
+
+
+
+
+public record SimulationStates(int SimId, LiquidityStreamStates Stream)
+{
+    public string ParseToTabbedLine()
+    {
+        return $"{SimId}\t{Stream.ParseToTabbedLine()}";
+    }
+}
+
+public record LiquidityStreamStates(int StreamId,  DigitalCash Cash, AssetStreamStates State)
+{
+    public string ParseToTabbedLine()
+    {
+        return $"{StreamId}\t{Cash.ParseToTabbed()}\t{State.ParseToTabbedLine()}";
+    }
+
+    public static LiquidityStreamStates Empty { get { return new LiquidityStreamStates(0, null, null); } }
+}
+
+public record AssetStreamStates(int AssetId, DigitalCash Cash, DigitalAsset Asset, ContractStreamStates State)
+{
+    public string ParseToTabbedLine()
+    {
+        return $"{AssetId}\t{Cash.ParseToTabbed()}\t{Asset.ParseToTabbed()}\t{State.ParseToTabbedLine()}";
+    }
+}
+
+public record ContractStreamStates(int ContractId, DigitalCash Cash, DigitalAsset Asset, LiquidityTransferStates Transfer)
+{
+    public string ParseToTabbedLine()
+    {
+        return $"{ContractId}\t{Cash.ParseToTabbed()}\t{Asset.ParseToTabbed()}\t{Transfer}";
+    }
+}
+
+
+public record LiquidityTransferStates(int TransferId, DigitalCash Cash, DigitalAsset Asset, ConsensusStates State)
+{
+    public string ParseToTabbedLine()
+    {
+        return $"{TransferId}\t{Cash.ParseToTabbed()}\t{Asset.ParseToTabbed()}\t{State.ParseToTabbedLine()}";
+    }
+}
+
+public record ConsensusStates(int ConsensusId, decimal Safety, Int64 ProofOfStake, Int64 ProofOfWork, int SuperConsensusId, int RelayConsensusId)
+{
+    public string ParseToTabbedLine()
+    {
+        return $"{ConsensusId}\t{Safety}\t{ProofOfStake}\t{ProofOfWork}\t{SuperConsensusId}\t{RelayConsensusId}\n";
+    }
+}
 #endregion

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Simulation
 {
-    public class Simulation : SwopblockModule
+    public class SimulationModule : SwopblockModule
     {
         int ContractBatchCount = 10;
 
