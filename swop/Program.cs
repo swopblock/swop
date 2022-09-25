@@ -27,7 +27,7 @@ string check = Tree.Serializer.Deserialize(serByte);
 
 if (check.ToLower() == userInput.ToLower())
 {
-    if (client.CaptureIntention(userInput))
+    if (false) // (client.CaptureIntention(userInput))
     {
         Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
     }

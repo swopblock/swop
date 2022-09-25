@@ -23,7 +23,7 @@ namespace Swopblock.Demo
 
             string command = Console.ReadLine();
 
-            if (client.CaptureIntention(command))
+            if (false) //(client.CaptureIntention(command))
             {
                 Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
                     

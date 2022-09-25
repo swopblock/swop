@@ -33,6 +33,12 @@ namespace Swopblock
 
     public class SwopblockClient
     {
+        public SwopblockClient()
+        {
+            ConsensusProcessor = new Consensus();
+            ExecutionProcessor = new Execution();
+        }
+
         public void PokeInEntryInput(LiquidityStream Entry) { }
 
         public void PokeInConsensusInput(LiquidityStream ConsensusEntry) { }
@@ -61,13 +67,7 @@ namespace Swopblock
         Execution ExecutionProcessor;
 
 
-        public SwopblockClient()
-        {
-            ConsensusProcessor = new Consensus();
-            ExecutionProcessor = new Execution();
-        }
-
-        public bool CaptureIntention(string intention)
+        bool CaptureIntention(string intention)
         {
             IntentionTree tree = DemoWeb.GetTree();
 
@@ -95,7 +95,7 @@ namespace Swopblock
             return false;
         }
 
-        public Contract WriteContract(string intention)
+        Contract WriteContract(string intention)
         {
             //UserInput.CommitIntention(intention);
 
@@ -104,36 +104,36 @@ namespace Swopblock
             return null;
         }
 
-        public void WriteBidContract(ContractStream contract)
+        void WriteBidContract(ContractStream contract)
         {
 
         }
 
-        public void WriteAskContract(ContractStream contract)
+        void WriteAskContract(ContractStream contract)
         {
 
         }
 
-        public void WriteSellContract(ContractStream contract)
+        void WriteSellContract(ContractStream contract)
         {
 
         }
-        public void WriteBuyContract(ContractStream contract)
-        {
-
-        }
-
-        public void WriteSellAndBuyContract(ContractStream contract)
+        void WriteBuyContract(ContractStream contract)
         {
 
         }
 
-        public bool SignContract(ContractStream State)
+        void WriteSellAndBuyContract(ContractStream contract)
+        {
+
+        }
+
+        bool SignContract(ContractStream State)
         {
             return false;
         }
 
-        public bool BroadcastContract(ContractStream State)
+        bool BroadcastContract(ContractStream State)
         {
             return false;
         }
@@ -146,11 +146,11 @@ namespace Swopblock
 
         Queue<string> reportsQueue = new Queue<string>();
 
-        public LiquidityStreams ParseFromIntention(string intention)
+        LiquidityStreams ParseFromIntention(string intention)
         {
             return null;
         }
-        public LiquidityStreams ParseFromTabbedTextLine(string line)
+        LiquidityStreams ParseFromTabbedTextLine(string line)
         {
             string[] fields = line.Split('\t', 25);
 
@@ -202,7 +202,7 @@ namespace Swopblock
             return new LiquidityStreams(StateId, stream, asset, contract, transfer, proof);
         }
 
-        public string ParseToTabbedTextLine(LiquidityStreams state)
+        string ParseToTabbedTextLine(LiquidityStreams state)
         {
             string line = string.Empty;
 
