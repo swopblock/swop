@@ -1,3 +1,5 @@
+using Swopblock;
+
 namespace xUnitTest
 {
     public class UnitTestSimulationModule
@@ -5,78 +7,86 @@ namespace xUnitTest
         [Fact]
         public void TestSimulationModule()
         {
-            var simulationModule = new SimulationModule(null);
+            var simulationModule = new Simulation();
 
             Assert.NotNull(simulationModule);
         }
 
-        [Fact]
-        public void TestConsensusModule()
+        public void TestSwopblockEntrySimulation()
         {
-            var consensusModule = new ConsensusModule(null);
+            var clientSim = new SimulationSwopblockClients();
 
-            Assert.NotNull(consensusModule);
+            Assert.NotNull(clientSim.Entry);
         }
 
         [Fact]
-        public void TestExecutionModule()
+        public void TestSwopblockConsensusSimulation()
         {
-            var executionModule = new ExecutionModule(null);
+            var clientSim = new SimulationSwopblockClients();
 
-            Assert.NotNull(executionModule);
+            Assert.NotNull(clientSim.Consensus);
+        }
+
+        [Fact]
+        public void TestSwopblockExecutionSimulation()
+        {
+            var clientSim = new SimulationSwopblockClients();
+
+            Assert.NotNull(clientSim.Execution);
+        }
+
+        [Fact]
+        public void TestSwopblockExitSimulation()
+        {
+            var clientSim = new SimulationSwopblockClients();
+
+            Assert.NotNull(clientSim.Exit);
         }
     }
 
     public class UnitTestConcensusModule
     {
         [Fact]
-        public void TestSimulationModule()
+        public void TestSwopblockEntry()
         {
-            var simulationModule = new SimulationModule(null);
+            var client = new SwopblockClient();
 
-            Assert.NotNull(simulationModule);
+            client.PokeInEntryInput(LiquidityStream.Empty);
+
+            Assert.NotNull(client.PeekAtEntryOutput());
         }
 
         [Fact]
-        public void TestConsensusModule()
+        public void TestSwopblockConcensus()
         {
-            var consensusModule = new ConsensusModule(null);
+            var client = new SwopblockClient();
 
-            Assert.NotNull(consensusModule);
-        }
+            client.PokeInConsensusInput(LiquidityStream.Empty);
 
-        [Fact]
-        public void TestExecutionModule()
-        {
-            var executionModule = new ExecutionModule(null);
-
-            Assert.NotNull(executionModule);
+            Assert.NotNull(client.PeekAtConsensusOutput());
         }
     }
+
     public class UnitTestExecutionModule
     {
         [Fact]
-        public void TestSimulationModule()
+        public void TestSwopblockEntry()
         {
-            var simulationModule = new SimulationModule(null);
+            var client = new SwopblockClient();
 
-            Assert.NotNull(simulationModule);
+            client.PokeInExecutionInput(LiquidityStream.Empty);
+
+            Assert.NotNull(client.PeekAtExecutionOuput());
         }
 
         [Fact]
-        public void TestConsensusModule()
+        public void TestSwopblockConcensus()
         {
-            var consensusModule = new ConsensusModule(null);
+            var client = new SwopblockClient();
 
-            Assert.NotNull(consensusModule);
-        }
+            client.PokeInExitInput(LiquidityStream.Empty);
 
-        [Fact]
-        public void TestExecutionModule()
-        {
-            var executionModule = new ExecutionModule(null);
-
-            Assert.NotNull(executionModule);
+            Assert.NotNull(client.PeekAtExitOutput());
         }
     }
 

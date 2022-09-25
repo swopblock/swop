@@ -16,7 +16,7 @@ int consensusArgsIndex = 0;
 
 IntentionTree Tree = DemoWeb.GetTree();
 
-SwopblockClient client = new SwopblockClient(null, null, null);
+SwopblockClient client = new SwopblockClient();
 
 string userInput = Console.ReadLine();
 
@@ -37,9 +37,9 @@ else
 }
 
 // start network state
-ContractState NetworkContractState = new ContractState(0, 0, 0, 0, 0);
+ContractStream NetworkContractState = new ContractStream(0, 0, 0, 0, 0);
 // get user contract
-ContractState state = DemoPrompt.Run();
+ContractStream state = DemoPrompt.Run();
 // update network state
 NetworkContractState = DemoPrompt.AddStates(NetworkContractState, state);
 
@@ -75,185 +75,34 @@ string[] consensusArgs = args.Skip(consensusArgsIndex).ToArray().Take(executionA
 string[] executionArgs = args.Skip(executionArgsIndex).ToArray().Take(args.Length - executionArgsIndex).ToArray();
 
 
-SimulationModule simulationModule = new SimulationModule(simulationArgs);
+//SimulationModule simulationModule = new SimulationModule(simulationArgs);
 
-ConsensusModule consensusModule = new ConsensusModule(consensusArgs);
+//ConsensusModule consensusModule = new ConsensusModule(consensusArgs);
 
-ExecutionModule executionModule = new ExecutionModule(executionArgs);
+//ExecutionModule executionModule = new ExecutionModule(executionArgs);
 
+#region Input Output Data Types
+public record StreamLocks(decimal Volume);
+public record DigitalEntry(decimal Supply, decimal Demand, StreamLocks StreamLock) : StreamLocks(StreamLock.Volume);
 
-public record ProcessStates(int StateId, CashState Stream, AssetState Asset, ContractState Contract, TransferState Transfer, ProofState Proof);
+public record DigitalCash(decimal Supply, decimal Demand, StreamLocks StreamLock) : DigitalEntry(Supply, Demand, StreamLock);
 
-public record CashState(int CashId, decimal StreamCashVolume, decimal StreamCashInventory);
+public record DigitalAsset(decimal Supply, decimal Demand, StreamLocks StreamLock) : DigitalEntry(Supply, Demand, StreamLock);
 
-public record AssetState(int AssetId, decimal AssetCashVolume, decimal AssetCashInventory, decimal AssetAssetVolume, decimal AssetAssetInventory);
+public record DigitalValue(DigitalCash cash, DigitalAsset asset) ;
 
-public record ContractState(int ContractId, decimal ContractCashVolume, decimal ContractCashInventory, decimal ContractAssetVolume, decimal ContractAssetInventory);
+public record LiquidityStreams(int StateId, LiquidityStream Stream, AssetStream Asset, ContractStream Contract, LiquidityTransfer Transfer, Concessions Proof);
 
-public record TransferState(int TransferId, decimal TransferCashVolume, decimal TransferCashInventory, decimal TransferAssetVolume, decimal TransferAssetInventory);
-
-public record ProofState(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofCandidateProofId, int ProofRelayProofId);
-
-
-public sealed class SimulationModule
+public record LiquidityStream(int CashId, decimal StreamCashVolume, decimal StreamCashInventory)
 {
-    int stateId = 0;
-    int cashIdCount = 1;
-    int assetIdCount = 2;
-    int contractIdCount = 1;
-    int transferIdCount = 2;
-    int proofIdCount = 1;
-
-    int proofStateCount = 0;
-
-    Random random = new Random();
-
-    public SimulationModule(string[] simulationArgs)
-    {
-
-    }
-
-    public ProcessStates GetNextRandomState()
-    {
-        return new ProcessStates(stateId++, null, null, null, null, new ProofState(proofIdCount++, 0, 0, 0, 0, 0));
-    }
+    public static LiquidityStream Empty { get { return new LiquidityStream(0, 0, 0); } }    
 }
+public record AssetStream(int AssetId, decimal AssetCashVolume, decimal AssetCashInventory, decimal AssetAssetVolume, decimal AssetAssetInventory);
 
-public sealed class ConsensusModule
-{
-    public ConsensusModule(string[] consensusArgs)
-    {
+public record ContractStream(int ContractId, decimal ContractCashVolume, decimal ContractCashInventory, decimal ContractAssetVolume, decimal ContractAssetInventory);
 
-    }
+public record LiquidityTransfer(int TransferId, decimal TransferCashVolume, decimal TransferCashInventory, decimal TransferAssetVolume, decimal TransferAssetInventory);
 
-
-    public ProcessStates GetFirstContract()
-    {
-        return null;
-    }
-
-    public ProcessStates GetNextContract()
-    {
-        return null;
-    }
-}
-
-public sealed class ExecutionModule
-{
-    public ExecutionModule(string[] executionArgs)
-    {
-
-    }
-
-    public ProcessStates GetFirstContract()
-    {
-        return null;
-    }
-
-    public ProcessStates GetNextContract()
-    {
-        return null;
-    }
-}
-
-#region Moving Test Structure to Simulation.cs
-
-public class TestSystem
-{
-    public TestSystemNetworks[] networks;
-
-    public TestSystem(int networkCount, int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
-    {
-        networks = new TestSystemNetworks[networkCount];
-
-        for (int i = 0; i < networkCount; i++)
-        {
-            networks[i] = new TestSystemNetworks(clientCount, serverCount, contractCount, transferCount, proofCount);
-        }
-    }   
-}
-
-public class TestSystemNetworks
-{
-    public TestSwopClients[] clients;
-
-    public TestSystemNetworks(int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
-    {
-        clients = new TestSwopClients[clientCount];
-
-        for (int i = 0; i < clientCount; i++)
-        {
-            clients[i] = new TestSwopClients(serverCount, contractCount, transferCount, proofCount);
-        }
-    }   
-}
-
-public class TestSwopClients
-{
-    public SwopblockClientMove SwopClient;
-
-    public SimAssetServers[] servers;
-
-    public TestSwopClients(int serverCount, int contractCount, int transferCount, int proofCount)
-    {
-        SwopClient = new SwopblockClientMove();
-
-        servers = new SimAssetServers[serverCount];
-
-        for (int i = 0; i < serverCount; i++)
-        {
-            servers[i] = new SimAssetServers(contractCount, transferCount, proofCount);
-        }
-    }
-}
-
-public class SimAssetServers
-{
-    public TestClientContracts[] contracts;
-
-    public SimAssetServers(int contractCount, int transferCount, int proofCount)
-    {
-        contracts = new TestClientContracts[contractCount];
-
-        for (int i = 0; i < contractCount; i++)
-        {
-            contracts[i] = new TestClientContracts(transferCount, proofCount);
-        }
-    }
-}
-
-public class TestClientContracts
-{
-    public TestContractTransfers[] transfers;
-
-    public TestClientContracts(int transferCount, int proofCount)
-    {
-        transfers = new TestContractTransfers[transferCount];
-
-        for (int i = 0; i < transferCount; i++)
-        {
-            transfers[i] = new TestContractTransfers(proofCount);
-        }
-    }
-}
-
-public class TestContractTransfers
-{
-    public TestTransferProofs[] proofs;
-
-    public TestContractTransfers(int proofCount)
-    {
-        proofs = new TestTransferProofs[proofCount];
-
-        for (int i = 0; i < proofCount; i++)
-        {
-            proofs[i] = new TestTransferProofs();
-        }
-    }
-}
-
-public class TestTransferProofs
-{ 
-}
+public record Concessions(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofSuperProofId, int ProofRelayProofId);
 
 #endregion

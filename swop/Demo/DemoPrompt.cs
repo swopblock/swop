@@ -8,7 +8,7 @@ namespace Swopblock.Demo
 {
     public class DemoPrompt
     {
-        public static ContractState Run()
+        public static ContractStream Run()
         {
             Console.WriteLine("Commands:");
             Console.WriteLine("Run - Runs a simulation.");
@@ -17,12 +17,12 @@ namespace Swopblock.Demo
 
             string line = Console.ReadLine();
 
-            return new ContractState(0, 0, 0, 0, 0);
+            return new ContractStream(0, 0, 0, 0, 0);
         }
 
-        public static ContractState AddStates(ContractState network, ContractState contract)
+        public static ContractStream AddStates(ContractStream network, ContractStream contract)
         {
-            return new ContractState(
+            return new ContractStream(
                 0, /// new id
                 network.ContractCashVolume + contract.ContractCashVolume,
                 network.ContractCashInventory + contract.ContractCashInventory,

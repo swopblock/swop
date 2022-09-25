@@ -54,15 +54,26 @@ namespace xUnitTest
 
     public sealed class SimulationSwopblockClients
     {
-        public SwopblockClientMove SwopblockClient;
+        public SwopblockClient Entry, Consensus, Execution, Exit;
 
         public SimulationAssetServers[] servers;
+
+        public SimulationSwopblockClients()
+        {
+            Entry = new SwopblockClient();
+
+            Consensus = new SwopblockClient();
+
+            Execution = new SwopblockClient();
+
+            Exit = new SwopblockClient();
+        }
 
         [Theory]
         [InlineData(2, 3, 4, 5)]
         public void BuildSimultion(int serverCount, int contractCount, int transferCount, int proofCount)
         {
-            SwopblockClient = new SwopblockClientMove();
+            var SwopblockClient = new SwopblockClientMove();
 
             servers = new SimulationAssetServers[serverCount];
 
