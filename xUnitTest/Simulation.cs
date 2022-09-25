@@ -9,7 +9,7 @@ namespace xUnitTest
 {
     public sealed class Simulation
     {
-        public SwopblockClientMove PublicSwopblockClient;
+        public SwopblockClient PublicSwopblockClient;
 
         public SimulationSystemNetworks[] networks;
 
@@ -73,7 +73,7 @@ namespace xUnitTest
         [InlineData(2, 3, 4, 5)]
         public void BuildSimultion(int serverCount, int contractCount, int transferCount, int proofCount)
         {
-            var SwopblockClient = new SwopblockClientMove();
+            var SwopblockClient = new SwopblockClient();
 
             servers = new SimulationAssetServers[serverCount];
 
