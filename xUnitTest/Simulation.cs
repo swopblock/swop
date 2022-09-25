@@ -5,11 +5,87 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace xUnitTest
+namespace Simulation
 {
-    public sealed class Simulation
+    public class Simulation : SwopblockModule
     {
-        public SwopblockClient PublicSwopblockClient;
+        int ContractBatchCount = 10;
+
+        LiquidityStreamStates Entry, Consensus, Execution, Exit;
+
+        public override LiquidityStreamStates PeekAtConsensusOutput()
+        {
+            return base.PeekAtConsensusOutput();
+        }
+
+        public override LiquidityStreamStates PeekAtEntryOutput()
+        {
+            return base.PeekAtEntryOutput();
+        }
+
+        public override LiquidityStreamStates PeekAtExecutionOuput()
+        {
+            return base.PeekAtExecutionOuput();
+        }
+
+        public override LiquidityStreamStates PeekAtExitOutput()
+        {
+            foreach (var network in networks)
+            {
+                foreach (var client in network.clients)
+                {
+                    foreach (var servers in client.servers)
+                    {
+                        for (int i = 0; i < ContractBatchCount; i++)
+                        {
+                            client.Exit.PeekAtExitOutput();
+                        }
+                    }
+                }
+            }
+
+            base.PokeInEntryInput(Entry);
+            return base.PeekAtExitOutput();
+        }
+
+        public override void PokeInConsensusInput(LiquidityStreamStates ConsensusEntry)
+        {
+            base.PokeInConsensusInput(ConsensusEntry);
+        }
+
+        public override void PokeInEntryInput(LiquidityStreamStates Entry)
+        {
+            foreach (var network in networks)
+            {
+                foreach (var client in network.clients)
+                {
+                    foreach (var server in client.servers)
+                    {
+                        foreach (var contract in server.contracts)
+                        {
+                            for (int i = 0; i < ContractBatchCount; i++)
+                            {
+                                //
+                            }
+                        }
+                    }
+                }
+            }
+
+            base.PokeInEntryInput(Entry);
+        }
+
+        public override void PokeInExecutionInput(LiquidityStreamStates ExectionEntry)
+        {
+            base.PokeInExecutionInput(ExectionEntry);
+        }
+
+        public override void PokeInExitInput(LiquidityStreamStates ExitEntry)
+        {
+            base.PokeInExitInput(ExitEntry);
+        }
+
+        public SwopblockModule PublicSwopblockClient;
 
         public SimulationSystemNetworks[] networks;
 
@@ -54,26 +130,26 @@ namespace xUnitTest
 
     public sealed class SimulationSwopblockClients
     {
-        public SwopblockClient Entry, Consensus, Execution, Exit;
+        public SwopblockModule Entry, Consensus, Execution, Exit;
 
         public SimulationAssetServers[] servers;
 
         public SimulationSwopblockClients()
         {
-            Entry = new SwopblockClient();
+            Entry = new SwopblockModule();
 
-            Consensus = new SwopblockClient();
+            Consensus = new SwopblockModule();
 
-            Execution = new SwopblockClient();
+            Execution = new SwopblockModule();
 
-            Exit = new SwopblockClient();
+            Exit = new SwopblockModule();
         }
 
         [Theory]
         [InlineData(2, 3, 4, 5)]
         public void BuildSimultion(int serverCount, int contractCount, int transferCount, int proofCount)
         {
-            var SwopblockClient = new SwopblockClient();
+            var SwopblockClient = new SwopblockModule();
 
             servers = new SimulationAssetServers[serverCount];
 

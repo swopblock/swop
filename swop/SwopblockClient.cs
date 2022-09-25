@@ -1,6 +1,7 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC
 // See https://github.com/swopblock
 
+using Swopblock;
 using Swopblock.Intentions;
 using System.Net.Http.Headers;
 
@@ -10,61 +11,73 @@ namespace Swopblock
 
     public record Report();
 
-    public interface NetworkServices
+    public class SwopblockModule
     {
+        public LiquidityStreamStates entry;
 
-    }
+        public Swopblock.ConsensusModule consensus;
 
-    public interface IntentionServices
-    {
-        void CommitIntention(string intention);
+        public LiquidityStreamStates pipe;
 
+        public Swopblock.ExecutionModule execution;
 
+        public LiquidityStreamStates exit;
 
-        Contract Convert(string intention);
-    }
-
-    public interface ReportServices
-    {
-        void SubmitReport(Report report);
-
-        Report Convert(string report);
-    }
-
-    public class SwopblockClient
-    {
-        public SwopblockClient()
+        public SwopblockModule()
         {
-            ConsensusProcessor = new Consensus();
-            ExecutionProcessor = new Execution();
+            consensus = new ConsensusModule();
+
+            execution = new ExecutionModule();
         }
 
-        public void PokeInEntryInput(LiquidityStreamStates Entry) { }
+        public virtual void PokeInEntryInput(LiquidityStreamStates state)
+        {
+            entry = state;
 
-        public void PokeInConsensusInput(LiquidityStreamStates ConsensusEntry) { }
+            pipe = consensus.Run(entry);
 
-        public void PokeInExecutionInput(LiquidityStreamStates ExectionEntry) { }
+            exit = execution.Run(pipe);
+        }
 
-        public void PokeInExitInput(LiquidityStreamStates ExitEntry) { }
+        public virtual void PokeInConsensusInput(LiquidityStreamStates state)
+        {
+            pipe = consensus.Run(state);
 
-        public LiquidityStreamStates PeekAtEntryOutput() { return LiquidityStreamStates.Empty; }
+            exit = execution.Run(pipe);
+        }
 
-        public LiquidityStreamStates PeekAtConsensusOutput() { return LiquidityStreamStates.Empty; ; }
+        public virtual void PokeInExecutionInput(LiquidityStreamStates state)
+        {
+            exit = execution.Run(state);
+        }
 
-        public LiquidityStreamStates PeekAtExecutionOuput() { return LiquidityStreamStates.Empty; ; }
+        public virtual void PokeInExitInput(LiquidityStreamStates state)
+        {
+            exit = state;
+        }
 
-        public LiquidityStreamStates PeekAtExitOutput() { return LiquidityStreamStates.Empty; ; }
+        public virtual LiquidityStreamStates PeekAtEntryOutput()
+        {
+            return entry;
+        }
+
+        public virtual LiquidityStreamStates PeekAtConsensusOutput()
+        {
+            return pipe;
+        }
+
+        public virtual LiquidityStreamStates PeekAtExecutionOuput()
+        {
+            return exit;
+        }
+
+        public virtual LiquidityStreamStates PeekAtExitOutput()
+        {
+            return exit;
+        }
 
         #region Non-Public Members
 
-
-        ConsensusModule consensus;
-
-        ExecutionModule execution;
-
-        Consensus ConsensusProcessor;
-
-        Execution ExecutionProcessor;
 
 
         bool CaptureIntention(string intention)
@@ -95,7 +108,7 @@ namespace Swopblock
             return false;
         }
 
-        Contract WriteContract(string intention)
+        ContractStreamStates WriteContract(string intention)
         {
             //UserInput.CommitIntention(intention);
 
@@ -196,7 +209,7 @@ namespace Swopblock
             decimal ProofWork = decimal.Parse(fields[i++]);
             int ProofCandidateProofId = int.Parse(fields[i++]);
             int ProofRelayProofId = int.Parse(fields[i++]);
-            ConcessionStates proof = new ConcessionStates(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
+            ConsensusStates proof = new ConsensusStates(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
 
             //Process States
             return new SimulationStates(StateId, stream, asset, contract, transfer, proof);
@@ -250,45 +263,22 @@ namespace Swopblock
             decimal ProofWork = state.Proof.ProofWork;
             int ProofCandidateProofId = state.Proof.ProofSuperProofId;
             int ProofRelayProofId = state.Proof.ProofRelayProofId;
-            ConcessionStates proof = new ConcessionStates(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
+            ConsensusStates proof = new ConsensusStates(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
             line += $"\t{ProofId}\t{ProofDifficulty}\t{ProofStake}\t{ProofWork}\t{ProofCandidateProofId}\t{ProofRelayProofId}";
 
             return line;
         }
 
-        public void CommitIntention(string intention)
+        void CommitIntention(string intention)
         {
-            
+
         }
 
-        public Contract Convert(string intention)
+        ContractStreamStates Convert(string intention)
         {
             //return UserInput.Convert(intention);
             return null;
         }
-
-        public sealed class Consensus
-        {
-            public void ParseInputFromArrivalMessage(string intention)
-            {
-
-            }
-
-            public SimulationStates GetNetworkState()
-            {
-                return null;
-            }
-        }
-
-        public sealed class Execution
-        {
-            public void ParseOutputToDepartureMessage()
-            {
-
-            }
-        }
-
         #endregion
-
     }
 }

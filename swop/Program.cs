@@ -10,9 +10,13 @@ using swop.Demo;
 
 Console.WriteLine("Hello, Swopblock World!");
 
-LiquidityStreamStates GetNextEntry()
+int contractBatchCount = 10;
+
+//Simulation
+
+for (int i = 0; i < contractBatchCount; i++)
 {
-    return null;
+
 }
 
 int simulationArgsIndex = 0;
@@ -22,7 +26,7 @@ int consensusArgsIndex = 0;
 
 IntentionTree Tree = DemoWeb.GetTree();
 
-SwopblockClient client = new SwopblockClient();
+SwopblockModule client = new SwopblockModule();
 
 string userInput = Console.ReadLine();
 
@@ -89,6 +93,7 @@ string[] executionArgs = args.Skip(executionArgsIndex).ToArray().Take(args.Lengt
 
 #region Input Output Data Types
 public record StreamLocks(decimal Volume);
+
 public record DigitalEntry(decimal Supply, decimal Demand, StreamLocks StreamLock) : StreamLocks(StreamLock.Volume);
 
 public record DigitalCash(decimal Supply, decimal Demand, StreamLocks StreamLock) : DigitalEntry(Supply, Demand, StreamLock);
@@ -97,7 +102,7 @@ public record DigitalAsset(decimal Supply, decimal Demand, StreamLocks StreamLoc
 
 public record DigitalValue(DigitalCash cash, DigitalAsset asset) ;
 
-public record SimulationStates(int StateId, LiquidityStreamStates Stream, AssetStreamStates Asset, ContractStreamStates Contract, LiquidityTransferStates Transfer, ConcessionStates Proof);
+public record SimulationStates(int StateId, LiquidityStreamStates Stream, AssetStreamStates Asset, ContractStreamStates Contract, LiquidityTransferStates Transfer, ConsensusStates Proof);
 
 public record LiquidityStreamStates(int CashId, decimal StreamCashVolume, decimal StreamCashInventory)
 {
@@ -109,6 +114,6 @@ public record ContractStreamStates(int ContractId, decimal ContractCashVolume, d
 
 public record LiquidityTransferStates(int TransferId, decimal TransferCashVolume, decimal TransferCashInventory, decimal TransferAssetVolume, decimal TransferAssetInventory);
 
-public record ConcessionStates(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofSuperProofId, int ProofRelayProofId);
+public record ConsensusStates(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofSuperProofId, int ProofRelayProofId);
 
 #endregion

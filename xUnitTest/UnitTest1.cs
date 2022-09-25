@@ -1,6 +1,6 @@
 using Swopblock;
 
-namespace xUnitTest
+namespace Simulation
 {
     public class UnitTestSimulationModule
     {
@@ -49,7 +49,7 @@ namespace xUnitTest
         [Fact]
         public void TestSwopblockEntry()
         {
-            var client = new SwopblockClient();
+            var client = new SwopblockModule();
 
             client.PokeInEntryInput(LiquidityStreamStates.Empty);
 
@@ -59,7 +59,7 @@ namespace xUnitTest
         [Fact]
         public void TestSwopblockConcensus()
         {
-            var client = new SwopblockClient();
+            var client = new SwopblockModule();
 
             client.PokeInConsensusInput(LiquidityStreamStates.Empty);
 
@@ -72,7 +72,7 @@ namespace xUnitTest
         [Fact]
         public void TestSwopblockEntry()
         {
-            var client = new SwopblockClient();
+            var client = new SwopblockModule();
 
             client.PokeInExecutionInput(LiquidityStreamStates.Empty);
 
@@ -82,7 +82,7 @@ namespace xUnitTest
         [Fact]
         public void TestSwopblockConcensus()
         {
-            var client = new SwopblockClient();
+            var client = new SwopblockModule();
 
             client.PokeInExitInput(LiquidityStreamStates.Empty);
 
