@@ -8,9 +8,9 @@ namespace swop.Demo
 {
     public static class Extentions
     {
-        public static ContractStream Add(this ContractStream obj, ContractStream two)
+        public static ContractStreamStates Add(this ContractStreamStates obj, ContractStreamStates two)
         {
-            ContractStream cState = new ContractStream(
+            ContractStreamStates cState = new ContractStreamStates(
                 0,
                 obj.ContractCashVolume + two.ContractCashVolume,
                 0,

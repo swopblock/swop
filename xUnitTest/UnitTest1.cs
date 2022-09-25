@@ -51,7 +51,7 @@ namespace xUnitTest
         {
             var client = new SwopblockClient();
 
-            client.PokeInEntryInput(LiquidityStream.Empty);
+            client.PokeInEntryInput(LiquidityStreamStates.Empty);
 
             Assert.NotNull(client.PeekAtEntryOutput());
         }
@@ -61,7 +61,7 @@ namespace xUnitTest
         {
             var client = new SwopblockClient();
 
-            client.PokeInConsensusInput(LiquidityStream.Empty);
+            client.PokeInConsensusInput(LiquidityStreamStates.Empty);
 
             Assert.NotNull(client.PeekAtConsensusOutput());
         }
@@ -74,7 +74,7 @@ namespace xUnitTest
         {
             var client = new SwopblockClient();
 
-            client.PokeInExecutionInput(LiquidityStream.Empty);
+            client.PokeInExecutionInput(LiquidityStreamStates.Empty);
 
             Assert.NotNull(client.PeekAtExecutionOuput());
         }
@@ -84,7 +84,7 @@ namespace xUnitTest
         {
             var client = new SwopblockClient();
 
-            client.PokeInExitInput(LiquidityStream.Empty);
+            client.PokeInExitInput(LiquidityStreamStates.Empty);
 
             Assert.NotNull(client.PeekAtExitOutput());
         }

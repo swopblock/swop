@@ -23,7 +23,7 @@ namespace Swopblock
                 {
                     if (mr.EmbeddedValues.Count > 0)
                     {
-                        ContractStream state = new ContractStream(0, 0, 0, 0, 0);
+                        ContractStreamStates state = new ContractStreamStates(0, 0, 0, 0, 0);
 
                         if (WriteContract(state))
                         {
@@ -39,42 +39,42 @@ namespace Swopblock
             return false;
         }
 
-        public bool WriteContract(ContractStream State)
+        public bool WriteContract(ContractStreamStates State)
         {
             
             return false;
         }
 
-        public void WriteBidContract(ContractStream contract)
+        public void WriteBidContract(ContractStreamStates contract)
         {
 
         }
 
-        public void WriteAskContract(ContractStream contract)
+        public void WriteAskContract(ContractStreamStates contract)
         {
 
         }
 
-        public void WriteSellContract(ContractStream contract)
+        public void WriteSellContract(ContractStreamStates contract)
         {
 
         }
-        public void WriteBuyContract(ContractStream contract)
-        {
-
-        }
-
-        public void WriteSellAndBuyContract(ContractStream contract)
+        public void WriteBuyContract(ContractStreamStates contract)
         {
 
         }
 
-        public bool SignContract(ContractStream State)
+        public void WriteSellAndBuyContract(ContractStreamStates contract)
+        {
+
+        }
+
+        public bool SignContract(ContractStreamStates State)
         {
             return false;
         }
 
-        public bool BroadcastContract(ContractStream State)
+        public bool BroadcastContract(ContractStreamStates State)
         {
             return false;
         }
@@ -83,15 +83,15 @@ namespace Swopblock
 
         //ConsensusModule ConsensusModule
 
-        Queue<LiquidityStreams> ProcessStatesQueue;
+        Queue<SimulationStates> ProcessStatesQueue;
 
         Queue<string> reportsQueue = new Queue<string>();
 
-        public LiquidityStreams ParseFromIntention(string intention)
+        public SimulationStates ParseFromIntention(string intention)
         {
             return null;
         }
-        public LiquidityStreams ParseFromTabbedTextLine(string line)
+        public SimulationStates ParseFromTabbedTextLine(string line)
         {
             string[] fields = line.Split('\t', 25);
 
@@ -104,7 +104,7 @@ namespace Swopblock
             int StreamId = int.Parse(fields[i++]);
             decimal StreamCashVolume = decimal.Parse(fields[i++]);
             decimal StreamCashInventory = decimal.Parse(fields[i++]);
-            LiquidityStream stream = new LiquidityStream(StreamId, StreamCashVolume, StreamCashInventory);
+            LiquidityStreamStates stream = new LiquidityStreamStates(StreamId, StreamCashVolume, StreamCashInventory);
 
             //StreamAssets
             int AssetId = int.Parse(fields[i++]);
@@ -112,7 +112,7 @@ namespace Swopblock
             decimal AssetCashInventory = decimal.Parse(fields[i++]);
             decimal AssetAssetVolume = decimal.Parse(fields[i++]);
             decimal AssetAssetInventory = decimal.Parse(fields[i++]);
-            AssetStream asset = new AssetStream(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
+            AssetStreamStates asset = new AssetStreamStates(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
 
             //AssetContracts
             int ContractId = int.Parse(fields[i++]);
@@ -120,7 +120,7 @@ namespace Swopblock
             decimal ContractCashInventory = decimal.Parse(fields[i++]);
             decimal ContractAssetVolume = decimal.Parse(fields[i++]);
             decimal ContractAssetInventory = decimal.Parse(fields[i++]);
-            ContractStream contract = new ContractStream(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
+            ContractStreamStates contract = new ContractStreamStates(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
 
             //ContractTransfers
             int TransferId = int.Parse(fields[i++]);
@@ -128,7 +128,7 @@ namespace Swopblock
             decimal TransferCashInventory = decimal.Parse(fields[i++]);
             decimal TransferAssetVolume = decimal.Parse(fields[i++]);
             decimal TransferAssetInventory = decimal.Parse(fields[i++]);
-            LiquidityTransfer transfer = new LiquidityTransfer(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
+            LiquidityTransferStates transfer = new LiquidityTransferStates(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
 
             //TransferProofs
             int ProofId = int.Parse(fields[i++]);
@@ -137,13 +137,13 @@ namespace Swopblock
             decimal ProofWork = decimal.Parse(fields[i++]);
             int ProofCandidateProofId = int.Parse(fields[i++]);
             int ProofRelayProofId = int.Parse(fields[i++]);
-            Concessions proof = new Concessions(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
+            ConcessionStates proof = new ConcessionStates(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
 
             //Process States
-            return new LiquidityStreams(StateId, stream, asset, contract, transfer, proof);
+            return new SimulationStates(StateId, stream, asset, contract, transfer, proof);
         }
 
-        public string ParseToTabbedTextLine(LiquidityStreams state)
+        public string ParseToTabbedTextLine(SimulationStates state)
         {
             string line = string.Empty;
 
@@ -163,7 +163,7 @@ namespace Swopblock
             decimal AssetCashInventory = state.Asset.AssetCashInventory;
             decimal AssetAssetVolume = state.Asset.AssetAssetVolume;
             decimal AssetAssetInventory = state.Asset.AssetAssetInventory;
-            AssetStream asset = new AssetStream(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
+            AssetStreamStates asset = new AssetStreamStates(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
             line += $"\t{AssetId}\t{AssetCashVolume}\t{AssetCashInventory}\t{AssetAssetVolume}\t{AssetAssetInventory}";
 
             //AssetContracts
@@ -172,7 +172,7 @@ namespace Swopblock
             decimal ContractCashInventory = state.Contract.ContractCashInventory;
             decimal ContractAssetVolume = state.Contract.ContractAssetVolume;
             decimal ContractAssetInventory = state.Contract.ContractAssetInventory;
-            ContractStream contract = new ContractStream(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
+            ContractStreamStates contract = new ContractStreamStates(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
             line += $"\t{ContractId}\t{ContractCashVolume}\t{ContractCashInventory}\t{ContractAssetVolume}\t{ContractAssetInventory}";
 
             //ContractTransfers
@@ -181,7 +181,7 @@ namespace Swopblock
             decimal TransferCashInventory = state.Transfer.TransferCashInventory;
             decimal TransferAssetVolume = state.Transfer.TransferAssetVolume;
             decimal TransferAssetInventory = state.Transfer.TransferAssetInventory;
-            LiquidityTransfer transfer = new LiquidityTransfer(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
+            LiquidityTransferStates transfer = new LiquidityTransferStates(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
             line += $"\t{TransferId}\t{TransferCashVolume}\t{TransferCashInventory}\t{TransferAssetVolume}\t{TransferAssetInventory}";
 
             //TransferProofs
@@ -191,7 +191,7 @@ namespace Swopblock
             decimal ProofWork = state.Proof.ProofWork;
             int ProofCandidateProofId = state.Proof.ProofSuperProofId;
             int ProofRelayProofId = state.Proof.ProofRelayProofId;
-            Concessions proof = new Concessions(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
+            ConcessionStates proof = new ConcessionStates(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
             line += $"\t{ProofId}\t{ProofDifficulty}\t{ProofStake}\t{ProofWork}\t{ProofCandidateProofId}\t{ProofRelayProofId}";
 
             return line;

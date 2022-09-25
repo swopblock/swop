@@ -10,6 +10,11 @@ using swop.Demo;
 
 Console.WriteLine("Hello, Swopblock World!");
 
+LiquidityStreamStates GetNextEntry()
+{
+    return null;
+}
+
 int simulationArgsIndex = 0;
 int consensusArgsIndex = 0;
 
@@ -38,7 +43,7 @@ else
 }
 
 // start network state
-ContractStream NetworkContractState = new ContractStream(0, 0, 0, 0, 0);
+ContractStreamStates NetworkContractState = new ContractStreamStates(0, 0, 0, 0, 0);
 // get user contract
 //ContractStream state = DemoPrompt.Run();
 // update network state
@@ -92,18 +97,18 @@ public record DigitalAsset(decimal Supply, decimal Demand, StreamLocks StreamLoc
 
 public record DigitalValue(DigitalCash cash, DigitalAsset asset) ;
 
-public record LiquidityStreams(int StateId, LiquidityStream Stream, AssetStream Asset, ContractStream Contract, LiquidityTransfer Transfer, Concessions Proof);
+public record SimulationStates(int StateId, LiquidityStreamStates Stream, AssetStreamStates Asset, ContractStreamStates Contract, LiquidityTransferStates Transfer, ConcessionStates Proof);
 
-public record LiquidityStream(int CashId, decimal StreamCashVolume, decimal StreamCashInventory)
+public record LiquidityStreamStates(int CashId, decimal StreamCashVolume, decimal StreamCashInventory)
 {
-    public static LiquidityStream Empty { get { return new LiquidityStream(0, 0, 0); } }    
+    public static LiquidityStreamStates Empty { get { return new LiquidityStreamStates(0, 0, 0); } }    
 }
-public record AssetStream(int AssetId, decimal AssetCashVolume, decimal AssetCashInventory, decimal AssetAssetVolume, decimal AssetAssetInventory);
+public record AssetStreamStates(int AssetId, decimal AssetCashVolume, decimal AssetCashInventory, decimal AssetAssetVolume, decimal AssetAssetInventory);
 
-public record ContractStream(int ContractId, decimal ContractCashVolume, decimal ContractCashInventory, decimal ContractAssetVolume, decimal ContractAssetInventory);
+public record ContractStreamStates(int ContractId, decimal ContractCashVolume, decimal ContractCashInventory, decimal ContractAssetVolume, decimal ContractAssetInventory);
 
-public record LiquidityTransfer(int TransferId, decimal TransferCashVolume, decimal TransferCashInventory, decimal TransferAssetVolume, decimal TransferAssetInventory);
+public record LiquidityTransferStates(int TransferId, decimal TransferCashVolume, decimal TransferCashInventory, decimal TransferAssetVolume, decimal TransferAssetInventory);
 
-public record Concessions(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofSuperProofId, int ProofRelayProofId);
+public record ConcessionStates(int ProofId, decimal ProofDifficulty, decimal ProofStake, decimal ProofWork, int ProofSuperProofId, int ProofRelayProofId);
 
 #endregion

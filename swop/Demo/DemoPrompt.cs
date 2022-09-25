@@ -14,7 +14,7 @@ namespace Swopblock.Demo
         SwopblockClient client = new SwopblockClient();
         public void Run()
         {
-            LiquidityStreams state;
+            SimulationStates state;
 
             Console.WriteLine("Commands:");
             Console.WriteLine("Run - Runs a simulation.");
