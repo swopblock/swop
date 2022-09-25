@@ -2,6 +2,7 @@
 // See https://github.com/swopblock
 
 using Swopblock;
+using Simulation;
 using Swopblock.Intentions;
 using Swopblock.Intentions.Utilities;
 using System.Globalization;

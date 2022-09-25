@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//JJH
+
 namespace Simulation
 {
-    public class TestSimulation : Simulation
+    public class Simulation : SwopblockModule
     {
         int ContractBatchCount = 10;
 
@@ -89,10 +91,7 @@ namespace Simulation
 
         public SimulationSystemNetworks[] networks;
 
-        [Theory]
-        [InlineData(2, 3, 4, 5, 6, 7)]
-        [InlineData(7, 6, 5, 4, 3, 2)]
-        public override void BuildSimultion(int networkCount, int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
+        public virtual void BuildSimultion(int networkCount, int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
         {
             networks = new SimulationSystemNetworks[networkCount];
 
@@ -103,17 +102,14 @@ namespace Simulation
                 networks[i].BuildSimultion(clientCount, serverCount, contractCount, transferCount, proofCount);
             }
 
-            Assert.Equal(networkCount, networks.Length);
         }
     }
 
-    public class TestSimulationSystemNetworks : SimulationSystemNetworks
+    public class SimulationSystemNetworks
     {
         public SimulationSwopblockClients[] clients;
 
-        [Theory]
-        [InlineData(2, 3, 4, 5, 6)]
-        public override void BuildSimultion(int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
+        public virtual void BuildSimultion(int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
         {
             clients = new SimulationSwopblockClients[clientCount];
 
@@ -124,17 +120,16 @@ namespace Simulation
                 clients[i].BuildSimultion(serverCount, contractCount, transferCount, proofCount);
             }
 
-            Assert.Equal(clientCount, clients.Length);
         }
     }
 
-    public class TestSimulationSwopblockClients : SimulationSwopblockClients
+    public class SimulationSwopblockClients
     {
         public SwopblockModule Entry, Consensus, Execution, Exit;
 
         public SimulationAssetServers[] servers;
 
-        public TestSimulationSwopblockClients()
+        public SimulationSwopblockClients()
         {
             Entry = new SwopblockModule();
 
@@ -145,9 +140,7 @@ namespace Simulation
             Exit = new SwopblockModule();
         }
 
-        [Theory]
-        [InlineData(2, 3, 4, 5)]
-        public override void BuildSimultion(int serverCount, int contractCount, int transferCount, int proofCount)
+        public virtual void BuildSimultion(int serverCount, int contractCount, int transferCount, int proofCount)
         {
             var SwopblockClient = new SwopblockModule();
 
@@ -160,19 +153,14 @@ namespace Simulation
                 servers[i].BuildSimultion(contractCount, transferCount, proofCount);
             }
 
-            Assert.Equal(serverCount, servers.Length);
-
-            Assert.NotNull(SwopblockClient);
         }
     }
 
-    public class TestSimulationAssetServers : SimulationAssetServers
+    public class SimulationAssetServers
     {
         public SimulationClientContracts[] contracts;
 
-        [Theory]
-        [InlineData(2, 3, 4)]
-        public override void BuildSimultion(int contractCount, int transferCount, int proofCount)
+        public virtual void BuildSimultion(int contractCount, int transferCount, int proofCount)
         {
             contracts = new SimulationClientContracts[contractCount];
 
@@ -183,17 +171,14 @@ namespace Simulation
                 contracts[i].BuildSimultion(transferCount, proofCount);
             }
 
-            Assert.Equal(contractCount, contracts.Length);
         }
     }
 
-    public class TestSimulationClientContracts : SimulationClientContracts
+    public class SimulationClientContracts
     {
         public SimulationContractTransfers[] transfers;
 
-        [Theory]
-        [InlineData(2, 3)]
-        public override void BuildSimultion(int transferCount, int proofCount)
+        public virtual void BuildSimultion(int transferCount, int proofCount)
         {
             transfers = new SimulationContractTransfers[transferCount];
 
@@ -204,17 +189,14 @@ namespace Simulation
                 transfers[i].BuildSimultion(proofCount);
             }
 
-            Assert.Equal(transferCount, transfers.Length);
         }
     }
 
-    public class TestSimulationContractTransfers : SimulationContractTransfers
+    public class SimulationContractTransfers
     {
         public SimulationTransferProofs[] proofs;
 
-        [Theory]
-        [InlineData(2)]
-        public override void BuildSimultion(int proofCount)
+        public virtual void BuildSimultion(int proofCount)
         {
             proofs = new SimulationTransferProofs[proofCount];
 
@@ -223,7 +205,6 @@ namespace Simulation
                 proofs[i] = new SimulationTransferProofs();
             }
 
-            Assert.Equal(proofCount, proofs.Length);
         }
     }
 
