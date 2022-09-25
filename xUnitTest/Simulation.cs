@@ -9,10 +9,6 @@ namespace Simulation
 {
     public class TestSimulation : Simulation
     {
-        int ContractBatchCount = 10;
-
-        LiquidityStreamStates Entry, Consensus, Execution, Exit;
-
         public override LiquidityStreamStates PeekAtConsensusOutput()
         {
             return base.PeekAtConsensusOutput();
@@ -30,64 +26,28 @@ namespace Simulation
 
         public override LiquidityStreamStates PeekAtExitOutput()
         {
-            foreach (var network in networks)
-            {
-                foreach (var client in network.clients)
-                {
-                    foreach (var servers in client.servers)
-                    {
-                        for (int i = 0; i < ContractBatchCount; i++)
-                        {
-                            client.Exit.PeekAtExitOutput();
-                        }
-                    }
-                }
-            }
-
-            base.PokeInEntryInput(Entry);
             return base.PeekAtExitOutput();
         }
 
-        public override void PokeInConsensusInput(LiquidityStreamStates ConsensusEntry)
+        public override void PokeInConsensusInput(LiquidityStreamStates state)
         {
-            base.PokeInConsensusInput(ConsensusEntry);
+            base.PokeInConsensusInput(state);
         }
 
-        public override void PokeInEntryInput(LiquidityStreamStates Entry)
+        public override void PokeInEntryInput(LiquidityStreamStates state)
         {
-            foreach (var network in networks)
-            {
-                foreach (var client in network.clients)
-                {
-                    foreach (var server in client.servers)
-                    {
-                        foreach (var contract in server.contracts)
-                        {
-                            for (int i = 0; i < ContractBatchCount; i++)
-                            {
-                                //
-                            }
-                        }
-                    }
-                }
-            }
-
-            base.PokeInEntryInput(Entry);
+            base.PokeInEntryInput(state);
         }
 
-        public override void PokeInExecutionInput(LiquidityStreamStates ExectionEntry)
+        public override void PokeInExecutionInput(LiquidityStreamStates state)
         {
-            base.PokeInExecutionInput(ExectionEntry);
+            base.PokeInExecutionInput(state);
         }
 
-        public override void PokeInExitInput(LiquidityStreamStates ExitEntry)
+        public override void PokeInExitInput(LiquidityStreamStates state)
         {
-            base.PokeInExitInput(ExitEntry);
+            base.PokeInExitInput(state);
         }
-
-        public SwopblockModule PublicSwopblockClient;
-
-        //public SimulationSystemNetworks[] networks;
 
         [Theory]
         [InlineData(2, 3, 4, 5, 6, 7)]
@@ -114,17 +74,6 @@ namespace Simulation
 
     public class TestSimulationSwopblockClients : SimulationSwopblockClients
     {
-        public TestSimulationSwopblockClients()
-        {
-            Entry = new SwopblockModule();
-
-            Consensus = new SwopblockModule();
-
-            Execution = new SwopblockModule();
-
-            Exit = new SwopblockModule();
-        }
-
         [Theory]
         [InlineData(2, 3, 4, 5)]
         public override void BuildSimultion(int serverCount, int contractCount, int transferCount, int proofCount)
