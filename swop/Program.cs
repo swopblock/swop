@@ -162,19 +162,20 @@ public record DigitalValue(DigitalCash cash, DigitalAsset asset)
 
 
 
-// top level
-public record SimulationStates(int SimId, LiquidityStreamStates Stream)
-{
-    public static SimulationStates ParseFromTabbedLine(string line)
-    {
-        return null;
-    }
-    public string ParseToTabbedLine()
-    {
-        return $"{SimId}\t{Stream.ParseToTabbedLine()}";
-    }
-}
 
+//public record SimulationStates(int SimId, LiquidityStreamStates Stream)
+//{
+//    public static SimulationStates ParseFromTabbedLine(string line)
+//    {
+//        return null;
+//    }
+//    public string ParseToTabbedLine()
+//    {
+//        return $"{SimId}\t{Stream.ParseToTabbedLine()}";
+//    }
+//}
+
+// top level
 public record LiquidityStreamStates(int StreamId,  DigitalCash Cash, AssetStreamStates State)
 {
     public string ParseToTabbedLine()

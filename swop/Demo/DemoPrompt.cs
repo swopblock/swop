@@ -14,7 +14,7 @@ namespace Swopblock.Demo
         SwopblockModule client = new SwopblockModule(null, null);
         public void Run()
         {
-            SimulationStates state;
+            //SimulationStates state;
 
             Console.WriteLine("Commands:");
             Console.WriteLine("Run - Runs a simulation.");

@@ -155,68 +155,68 @@ namespace Swopblock
 
         //ConsensusModule ConsensusModule
 
-        Queue<SimulationStates> ProcessStatesQueue;
+        //Queue<SimulationStates> ProcessStatesQueue;
 
         Queue<string> reportsQueue = new Queue<string>();
 
-        SimulationStates ParseFromIntention(string intention)
-        {
-            return null;
-        }
-        SimulationStates ParseFromTabbedTextLine(string line)
-        {
-            string[] fields = line.Split('\t', 25);
+        //SimulationStates ParseFromIntention(string intention)
+        //{
+        //    return null;
+        //}
+        ////SimulationStates ParseFromTabbedTextLine(string line)
+        //{
+        //    string[] fields = line.Split('\t', 25);
 
-            int i = 0;
+        //    int i = 0;
 
-            //Process States
-            int StateId = int.Parse(fields[i++]);
+        //    //Process States
+        //    int StateId = int.Parse(fields[i++]);
 
-            //CashStreams
-            int StreamId = int.Parse(fields[i++]);
-            decimal StreamCashVolume = decimal.Parse(fields[i++]);
-            decimal StreamCashInventory = decimal.Parse(fields[i++]);
-            //LiquidityStreamStates stream = new LiquidityStreamStates(StreamId, StreamCashVolume, StreamCashInventory);
+        //    //CashStreams
+        //    int StreamId = int.Parse(fields[i++]);
+        //    decimal StreamCashVolume = decimal.Parse(fields[i++]);
+        //    decimal StreamCashInventory = decimal.Parse(fields[i++]);
+        //    //LiquidityStreamStates stream = new LiquidityStreamStates(StreamId, StreamCashVolume, StreamCashInventory);
 
-            //StreamAssets
-            int AssetId = int.Parse(fields[i++]);
-            decimal AssetCashVolume = decimal.Parse(fields[i++]);
-            decimal AssetCashInventory = decimal.Parse(fields[i++]);
-            decimal AssetAssetVolume = decimal.Parse(fields[i++]);
-            decimal AssetAssetInventory = decimal.Parse(fields[i++]);
-            //AssetStreamStates asset = new AssetStreamStates(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
+        //    //StreamAssets
+        //    int AssetId = int.Parse(fields[i++]);
+        //    decimal AssetCashVolume = decimal.Parse(fields[i++]);
+        //    decimal AssetCashInventory = decimal.Parse(fields[i++]);
+        //    decimal AssetAssetVolume = decimal.Parse(fields[i++]);
+        //    decimal AssetAssetInventory = decimal.Parse(fields[i++]);
+        //    //AssetStreamStates asset = new AssetStreamStates(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
 
-            //AssetContracts
-            int ContractId = int.Parse(fields[i++]);
-            decimal ContractCashVolume = decimal.Parse(fields[i++]);
-            decimal ContractCashInventory = decimal.Parse(fields[i++]);
-            decimal ContractAssetVolume = decimal.Parse(fields[i++]);
-            decimal ContractAssetInventory = decimal.Parse(fields[i++]);
-            //ContractStreamStates contract = new ContractStreamStates(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
+        //    //AssetContracts
+        //    int ContractId = int.Parse(fields[i++]);
+        //    decimal ContractCashVolume = decimal.Parse(fields[i++]);
+        //    decimal ContractCashInventory = decimal.Parse(fields[i++]);
+        //    decimal ContractAssetVolume = decimal.Parse(fields[i++]);
+        //    decimal ContractAssetInventory = decimal.Parse(fields[i++]);
+        //    //ContractStreamStates contract = new ContractStreamStates(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
 
-            //ContractTransfers
-            int TransferId = int.Parse(fields[i++]);
-            decimal TransferCashVolume = decimal.Parse(fields[i++]);
-            decimal TransferCashInventory = decimal.Parse(fields[i++]);
-            decimal TransferAssetVolume = decimal.Parse(fields[i++]);
-            decimal TransferAssetInventory = decimal.Parse(fields[i++]);
-            //LiquidityTransferStates transfer = new LiquidityTransferStates(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
+        //    //ContractTransfers
+        //    int TransferId = int.Parse(fields[i++]);
+        //    decimal TransferCashVolume = decimal.Parse(fields[i++]);
+        //    decimal TransferCashInventory = decimal.Parse(fields[i++]);
+        //    decimal TransferAssetVolume = decimal.Parse(fields[i++]);
+        //    decimal TransferAssetInventory = decimal.Parse(fields[i++]);
+        //    //LiquidityTransferStates transfer = new LiquidityTransferStates(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
 
-            //TransferProofs
-            int ProofId = int.Parse(fields[i++]);
-            decimal ProofDifficulty = decimal.Parse(fields[i++]);
-            decimal ProofStake = decimal.Parse(fields[i++]);
-            decimal ProofWork = decimal.Parse(fields[i++]);
-            int ProofCandidateProofId = int.Parse(fields[i++]);
-            int ProofRelayProofId = int.Parse(fields[i++]);
-            //ConsensusStates proof = new ConsensusStates(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
+        //    //TransferProofs
+        //    int ProofId = int.Parse(fields[i++]);
+        //    decimal ProofDifficulty = decimal.Parse(fields[i++]);
+        //    decimal ProofStake = decimal.Parse(fields[i++]);
+        //    decimal ProofWork = decimal.Parse(fields[i++]);
+        //    int ProofCandidateProofId = int.Parse(fields[i++]);
+        //    int ProofRelayProofId = int.Parse(fields[i++]);
+        //    //ConsensusStates proof = new ConsensusStates(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
 
-            //Process States
-            return null;// new SimulationStates(StateId, stream, asset, contract, transfer, proof);
-        }
+        //    //Process States
+        //    return null;// new SimulationStates(StateId, stream, asset, contract, transfer, proof);
+        //}
 
-        string ParseToTabbedTextLine(SimulationStates state)
-        {
+        //string ParseToTabbedTextLine(SimulationStates state)
+        //{
             //string line = string.Empty;
 
             ////Process States
@@ -268,8 +268,8 @@ namespace Swopblock
 
             //return line;
 
-            return null;
-        }
+        //    return null;
+        //}
 
         void CommitIntention(string intention)
         {
