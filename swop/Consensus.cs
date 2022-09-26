@@ -5,6 +5,11 @@ namespace Swopblock
 {
     public class ConsensusModule
     {
+        public ConsensusModule(params string[] args)
+        {
+
+        }
+
         public LiquidityStreamStates Run(LiquidityStreamStates state)
         {
             return state;

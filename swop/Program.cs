@@ -2,91 +2,118 @@
 // See https://github.com/swopblock
 
 using Swopblock;
-using Simulation;
+using SimulationUnitTesting;
 using Swopblock.Intentions;
 using Swopblock.Intentions.Utilities;
 using System.Globalization;
 using Swopblock.Demo;
 using swop.Demo;
 
-Console.WriteLine("Hello, Swopblock World!");
-
-var Sim = new SimulationModule();
-
-Sim.BuildSimultion(1, 1, 1, 1, 1, 1);
-
-
-int simulationArgsIndex = 0;
-int consensusArgsIndex = 0;
-
-#region Intention Demonstration
-
-IntentionTree Tree = DemoWeb.GetTree();
-
-SwopblockModule client = new SwopblockModule();
-
-string userInput = Console.ReadLine();
-
-byte[] serByte = Tree.Serializer.Serialize(userInput);
-
-string check = Tree.Serializer.Deserialize(serByte);
-
-if (check.ToLower() == userInput.ToLower())
+namespace Swopblock
 {
-    if (false) // (client.CaptureIntention(userInput))
+    public class Program
     {
-        Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
+        public static string[] programAgrs;
+
+        public static string[] simulationArgs;
+
+        public static string[] consensusArgs;
+
+        public static string[] executionArgs;
+
+        public static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, Swopblock World!");
+
+            programAgrs = args;
+
+            GetModuleArgs(programAgrs);
+
+            var simulation = new SimulationModule(simulationArgs);
+
+            var consensus = new ConsensusModule(executionArgs);
+
+            var execution = new ExecutionModule(executionArgs);
+
+
+            simulation.BuildSimultion(1, 1, 1, 1, 1, 1);
+
+            IntentionDemonstrationRegion();
+
+            static void IntentionDemonstrationRegion()
+            {
+                #region Intention Demonstration
+
+                IntentionTree Tree = DemoWeb.GetTree();
+
+                SwopblockModule client = new SwopblockModule();
+
+                string userInput = Console.ReadLine();
+
+                byte[] serByte = Tree.Serializer.Serialize(userInput);
+
+                string check = Tree.Serializer.Deserialize(serByte);
+
+                if (check.ToLower() == userInput.ToLower())
+                {
+                    if (false) // (client.CaptureIntention(userInput))
+                    {
+                        Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("input error");
+                }
+
+                // start network state
+                ContractStreamStates NetworkContractState = new ContractStreamStates(0, null, null, null);
+                // get user contract
+                //ContractStream state = DemoPrompt.Run();
+                // update network state
+                //NetworkContractState.Add(state);
+
+                #endregion
+            }
+        }
+
+        public static void GetModuleArgs(string[] args)
+        {
+            int simulationArgsIndex = 0, consensusArgsIndex = 0, executionArgsIndex = 0;
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i] == "simulation")
+                {
+                    simulationArgsIndex = i;
+                }
+
+                if (args[i] == "consensus")
+                {
+                    consensusArgsIndex = i;
+                }
+
+                if (args[i] == "execution")
+                {
+                    executionArgsIndex = i;
+                }
+            }
+
+            simulationArgs = args.Skip(simulationArgsIndex).ToArray().Take(consensusArgsIndex - simulationArgsIndex).ToArray();
+
+            consensusArgs = args.Skip(consensusArgsIndex).ToArray().Take(executionArgsIndex - consensusArgsIndex).ToArray();
+
+            executionArgs = args.Skip(executionArgsIndex).ToArray().Take(args.Length - executionArgsIndex).ToArray();
+
+        }
     }
 }
-else
-{
-    Console.WriteLine("input error");
-}
-
-// start network state
-ContractStreamStates NetworkContractState = new ContractStreamStates(0, null, null, null);
-// get user contract
-//ContractStream state = DemoPrompt.Run();
-// update network state
-//NetworkContractState.Add(state);
-
-#endregion
 
 
-int stateCount = args.Length > 0 ? int.Parse(args[0]) : 2;
-
-int executionArgsIndex = 0;
-
-for (int i = 0; i < args.Length; i++)
-{
-    if (args[i] == "simulation")
-    {
-        simulationArgsIndex = i;
-    }
-
-    if (args[i] == "consensus")
-    {
-        consensusArgsIndex = i;
-    }
-
-    if (args[i] == "execution")
-    {
-        executionArgsIndex = i;
-    }
-}
-
-string[] simulationArgs = args.Skip(simulationArgsIndex).ToArray().Take(consensusArgsIndex - simulationArgsIndex).ToArray();
-
-string[] consensusArgs = args.Skip(consensusArgsIndex).ToArray().Take(executionArgsIndex - consensusArgsIndex).ToArray();
-
-string[] executionArgs = args.Skip(executionArgsIndex).ToArray().Take(args.Length - executionArgsIndex).ToArray();
 
 
-//SimulationModule simulationModule = new SimulationModule(simulationArgs);
 
-//ConsensusModule consensusModule = new ConsensusModule(consensusArgs);
 
-//ExecutionModule executionModule = new ExecutionModule(executionArgs);
 
 #region Input Output Data Types
 public record StreamLocks(decimal Volume)

@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 //JJH
 
-namespace Simulation
+namespace SimulationUnitTesting
 {
     public class SimulationModule : SwopblockModule
     {
-        int ContractBatchCount = 10;
+        public SimulationModule(params string[] args)
+        {
+
+        }
 
         LiquidityStreamStates Entry, Consensus, Execution, Exit;
 
@@ -38,10 +41,10 @@ namespace Simulation
                 {
                     foreach (var servers in client.servers)
                     {
-                        for (int i = 0; i < ContractBatchCount; i++)
-                        {
-                            client.Exit.PeekAtExitOutput();
-                        }
+                        //for (int i = 0; i < ContractBatchCount; i++)
+                        //{
+                        //    client.Exit.PeekAtExitOutput();
+                        //}
                     }
                 }
             }
@@ -65,10 +68,10 @@ namespace Simulation
                     {
                         foreach (var contract in server.contracts)
                         {
-                            for (int i = 0; i < ContractBatchCount; i++)
-                            {
-                                //
-                            }
+                            //for (int i = 0; i < ContractBatchCount; i++)
+                            //{
+                            //    //
+                            //}
                         }
                     }
                 }

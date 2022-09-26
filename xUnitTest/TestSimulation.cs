@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Simulation
+namespace SimulationUnitTesting
 {
     public class TestSimulation : SimulationModule
     {

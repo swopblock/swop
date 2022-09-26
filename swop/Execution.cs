@@ -5,6 +5,11 @@ namespace Swopblock
 {
     public class ExecutionModule
     {
+        public ExecutionModule(params string[] args)
+        {
+
+        }
+
         public LiquidityStreamStates Run(LiquidityStreamStates state)
         {
             return state;
