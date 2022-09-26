@@ -9,6 +9,13 @@ namespace SimulationUnitTesting
 {
     public class TestSimulation : SimulationModule
     {
+        public TestSimulation() : base(null, null, null) { }
+
+        public TestSimulation(string[] sim, string[] con, string[] exe) : base(sim, con, exe)
+        {
+
+        }
+
         public override LiquidityStreamStates PeekAtConsensusOutput()
         {
             return base.PeekAtConsensusOutput();

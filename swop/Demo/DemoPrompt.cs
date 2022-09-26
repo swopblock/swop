@@ -11,7 +11,7 @@ namespace Swopblock.Demo
     {
         IntentionTree Tree = DemoWeb.GetTree();
 
-        SwopblockModule client = new SwopblockModule();
+        SwopblockModule client = new SwopblockModule(null, null);
         public void Run()
         {
             SimulationStates state;

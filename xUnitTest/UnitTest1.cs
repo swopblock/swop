@@ -7,50 +7,26 @@ namespace SimulationUnitTesting
         [Fact]
         public void TestSimulationModule()
         {
-            var simulationModule = new SimulationModule();
+            var simulationModule = new SimulationModule(new string[] { "simulation", "one"}, new string[] { "consensus", "two"}, new string[] { "execution", "three"});
 
             Assert.NotNull(simulationModule);
-        }
 
-        public void TestSwopblockEntrySimulation()
-        {
-            var clientSim = new SimulationSwopblockClients();
+            Assert.Equal("simulation", SimulationModule.simulationArgs[0]);
+            Assert.Equal("one", SimulationModule.simulationArgs[1]);
 
-            Assert.NotNull(clientSim.Entry);
-        }
+            Assert.Equal("consensus", SimulationModule.consensusArgs[0]);
+            Assert.Equal("two", SimulationModule.consensusArgs[1]);
 
-        [Fact]
-        public void TestSwopblockConsensusSimulation()
-        {
-            var clientSim = new SimulationSwopblockClients();
-
-            Assert.NotNull(clientSim.Consensus);
-        }
-
-        [Fact]
-        public void TestSwopblockExecutionSimulation()
-        {
-            var clientSim = new SimulationSwopblockClients();
-
-            Assert.NotNull(clientSim.Execution);
-        }
-
-        [Fact]
-        public void TestSwopblockExitSimulation()
-        {
-            var clientSim = new SimulationSwopblockClients();
-
-            Assert.NotNull(clientSim.Exit);
+            Assert.Equal("execution", SimulationModule.executionArgs[0]);
+            Assert.Equal("three", SimulationModule.executionArgs[1]);
         }
 
         [Fact]
         public void TestSimulationArgs()
         {
-            var simulationArgs = new string[] { };
+            var sim = new SimulationModule(new string[] { }, new string[] { }, new string[] { });
 
-            var sim = new SimulationUnitTesting.SimulationModule(simulationArgs);
-
-            Assert.Empty(simulationArgs);
+            Assert.NotNull(sim);
         }
     }
 }
@@ -62,7 +38,7 @@ namespace ConsensusUnitTesting
         [Fact]
         public void TestSwopblockEntry()
         {
-            var client = new SwopblockModule();
+            var client = new SwopblockModule(null, null);
 
             client.PokeInEntryInput(LiquidityStreamStates.Empty);
 
@@ -72,7 +48,7 @@ namespace ConsensusUnitTesting
         [Fact]
         public void TestSwopblockConcensus()
         {
-            var client = new SwopblockModule();
+            var client = new SwopblockModule(null, null);
 
             client.PokeInConsensusInput(LiquidityStreamStates.Empty);
 
@@ -99,7 +75,7 @@ namespace ExecutionUnitTesting
         [Fact]
         public void TestSwopblockEntry()
         {
-            var client = new SwopblockModule();
+            var client = new SwopblockModule(null, null);
 
             client.PokeInExecutionInput(LiquidityStreamStates.Empty);
 
@@ -109,7 +85,7 @@ namespace ExecutionUnitTesting
         [Fact]
         public void TestSwopblockConcensus()
         {
-            var client = new SwopblockModule();
+            var client = new SwopblockModule(null, null);
 
             client.PokeInExitInput(LiquidityStreamStates.Empty);
 

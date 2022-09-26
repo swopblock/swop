@@ -8,6 +8,7 @@ using Swopblock.Intentions.Utilities;
 using System.Globalization;
 using Swopblock.Demo;
 using swop.Demo;
+using System.Data.Common;
 
 namespace Swopblock
 {
@@ -29,11 +30,7 @@ namespace Swopblock
 
             GetModuleArgs(programAgrs);
 
-            var simulation = new SimulationModule(simulationArgs);
-
-            var consensus = new ConsensusModule(executionArgs);
-
-            var execution = new ExecutionModule(executionArgs);
+            var simulation = new SimulationModule(simulationArgs, consensusArgs, executionArgs);
 
 
             simulation.BuildSimultion(1, 1, 1, 1, 1, 1);
@@ -46,7 +43,7 @@ namespace Swopblock
 
                 IntentionTree Tree = DemoWeb.GetTree();
 
-                SwopblockModule client = new SwopblockModule();
+                SwopblockModule client = new SwopblockModule(null, null);
 
                 string userInput = Console.ReadLine();
 
@@ -74,6 +71,17 @@ namespace Swopblock
                 //NetworkContractState.Add(state);
 
                 #endregion
+            }
+
+            while (true)
+            {
+                var contract = Console.ReadLine();
+
+                simulation.PokeInEntryInput(LiquidityStreamStates.Empty);
+
+                var output = simulation.PeekAtExitOutput();
+
+                Console.WriteLine(output.ParseToTabbedLine());
             }
         }
 
@@ -154,9 +162,13 @@ public record DigitalValue(DigitalCash cash, DigitalAsset asset)
 
 
 
-
+// top level
 public record SimulationStates(int SimId, LiquidityStreamStates Stream)
 {
+    public static SimulationStates ParseFromTabbedLine(string line)
+    {
+        return null;
+    }
     public string ParseToTabbedLine()
     {
         return $"{SimId}\t{Stream.ParseToTabbedLine()}";
@@ -169,6 +181,14 @@ public record LiquidityStreamStates(int StreamId,  DigitalCash Cash, AssetStream
     {
         return $"{StreamId}\t{Cash.ParseToTabbed()}\t{State.ParseToTabbedLine()}";
     }
+
+    public static LiquidityStreamStates ParseFromIntention(string intention)
+    {
+
+        return null;
+    }
+
+    public static LiquidityStreamStates operator +(LiquidityStreamStates one, LiquidityStreamStates two) { return null; }
 
     public static LiquidityStreamStates Empty { get { return new LiquidityStreamStates(0, null, null); } }
 }
@@ -183,9 +203,16 @@ public record AssetStreamStates(int AssetId, DigitalCash Cash, DigitalAsset Asse
 
 public record ContractStreamStates(int ContractId, DigitalCash Cash, DigitalAsset Asset, LiquidityTransferStates Transfer)
 {
+  
     public string ParseToTabbedLine()
     {
         return $"{ContractId}\t{Cash.ParseToTabbed()}\t{Asset.ParseToTabbed()}\t{Transfer}";
+    }
+
+    public static LiquidityStreamStates ParseFromIntention(string intention)
+    {
+        // bid
+        return null; // new LiquidityStreamStates(1, new DigitalCash(1, 0), )
     }
 }
 

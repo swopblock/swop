@@ -23,11 +23,11 @@ namespace Swopblock
 
         public LiquidityStreamStates exit;
 
-        public SwopblockModule()
+        public SwopblockModule(string[] consensusArgs, string[] executionArgs)
         {
-            consensus = new ConsensusModule();
+            consensus = new ConsensusModule(consensusArgs);
 
-            execution = new ExecutionModule();
+            execution = new ExecutionModule(executionArgs);
         }
 
         public virtual void PokeInEntryInput(LiquidityStreamStates state)
