@@ -144,6 +144,13 @@ namespace ProgramUnitTesting
             Assert.True(testA.IsEqual(testB));
         }
 
+        [Fact]
+        public void TestSimulationStateTabbedFormat()
+        {
+            string tabbedLine = "0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\n";
+
+            Assert.True(SimulationStates.CheckTabbedLineFormat(tabbedLine));
+        }
 
     }
 }

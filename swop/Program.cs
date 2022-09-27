@@ -25,19 +25,6 @@ namespace Swopblock
 
         public static void Main(string[] args)
         {
-            // begin temp test
-            var testA = SimulationStates.FromTest();
-
-            var line = testA.ParseToTabbedLine();
-
-            var testB = SimulationStates.ParseFromTabbedLine(line);
-
-            if (testA.IsEqual(testB))
-            {
-                Console.WriteLine("=");
-            }
-
-            // end temp test
             Console.WriteLine("Hello, Swopblock World!");
 
             programAgrs = args;
@@ -46,8 +33,35 @@ namespace Swopblock
 
             var simulation = new SimulationModule(simulationArgs, consensusArgs, executionArgs);
 
-
             simulation.BuildSimultion(1, 1, 1, 1, 1, 1);
+
+            SimulationStates simulationState;
+
+            string line = Console.ReadLine();
+
+            /* **************************************************************** */
+            /* **************************************************************** */
+            /* **************************************************************** */
+
+            while (line != null)
+            {
+                simulationState = SimulationStates.ParseFromLine(line);
+
+                simulation.PokeInEntryInput(simulationState);
+
+                while ((simulationState = simulation.PeekAtExitOutput()) != null)
+                {
+                    Console.WriteLine(simulation.PeekAtExitOutput());
+                }
+
+                
+
+                line = Console.ReadLine();
+            }
+
+            /* **************************************************************** */
+            /* **************************************************************** */
+            /* **************************************************************** */
 
             IntentionDemonstrationRegion();
 
@@ -192,6 +206,13 @@ public class SimulationStates
         ConsensusState = consensusState;
     }
 
+    public static bool CheckTabbedLineFormat(string line)
+    {
+        var tabs = line.Split('\t');
+
+        return line.Split('\t').Length == 31;
+    }
+
     public bool IsEqual(SimulationStates one)
     {
         if (this.LiquidityTransferState != one.LiquidityTransferState) return false;
@@ -298,17 +319,24 @@ public class SimulationStates
         // create the translated state
         var state = new SimulationStates();
 
-        state.LiquidityStreamState = null;
+        state.LiquidityStreamState = new LiquidityStreamStates(0, 0, 0, 0);
 
         state.AssetStreamState = new AssetStreamStates(0, 0, 0, 0, 0, 0, 0);
 
         state.ContractStreamState = new ContractStreamStates(0, 0, 0, 0, 0, 0, 0);
 
-        state.LiquidityTransferState = null;
+        state.LiquidityTransferState = new ContractTransferStates(0, 0, 0, 0, 0, 0, 0);
 
-        state.ConsensusState = null;
+        state.ConsensusState = new ConsensusStates(0, 0, 0, 0, 0, 0);
 
         return state;
+    }
+
+    public static SimulationStates ParseFromLine(string line)
+    {
+        if (line[0] == 'I') return SimulationStates.ParseFromIntention(line);
+
+        return SimulationStates.ParseFromTabbedLine(line);
     }
 
 }

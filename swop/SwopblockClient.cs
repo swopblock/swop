@@ -11,6 +11,9 @@ namespace Swopblock
 
     public record Report();
 
+    /// <summary>
+    /// This is the real swopblock protocol code driven by the Poke and Peek calls.
+    /// </summary>
     public class SwopblockModule
     {
         public SimulationStates entry;

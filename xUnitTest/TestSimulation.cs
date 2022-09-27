@@ -16,27 +16,27 @@ namespace SimulationUnitTesting
 
         }
 
-        public override LiquidityStreamStates PeekAtConsensusOutput()
+        public override SimulationStates PeekAtConsensusOutput()
         {
             return base.PeekAtConsensusOutput();
         }
 
-        public override LiquidityStreamStates PeekAtEntryOutput()
+        public override SimulationStates PeekAtEntryOutput()
         {
             return base.PeekAtEntryOutput();
         }
 
-        public override LiquidityStreamStates PeekAtExecutionOuput()
+        public override SimulationStates PeekAtExecutionOuput()
         {
             return base.PeekAtExecutionOuput();
         }
 
-        public override LiquidityStreamStates PeekAtExitOutput()
+        public override SimulationStates PeekAtExitOutput()
         {
             return base.PeekAtExitOutput();
         }
 
-        public override void PokeInConsensusInput(LiquidityStreamStates state)
+        public override void PokeInConsensusInput(SimulationStates state)
         {
             base.PokeInConsensusInput(state);
         }
@@ -46,12 +46,12 @@ namespace SimulationUnitTesting
             base.PokeInEntryInput(state);
         }
 
-        public override void PokeInExecutionInput(LiquidityStreamStates state)
+        public override void PokeInExecutionInput(SimulationStates state)
         {
             base.PokeInExecutionInput(state);
         }
 
-        public override void PokeInExitInput(LiquidityStreamStates state)
+        public override void PokeInExitInput(SimulationStates state)
         {
             base.PokeInExitInput(state);
         }

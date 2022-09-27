@@ -20,22 +20,22 @@ namespace SimulationUnitTesting
             SimulationModule.executionArgs = executionArgs;
         }
 
-        public virtual LiquidityStreamStates PeekAtEntryOutput()
+        public virtual SimulationStates PeekAtEntryOutput()
         {
             return null;
         }
 
-        public virtual LiquidityStreamStates PeekAtConsensusOutput()
+        public virtual SimulationStates PeekAtConsensusOutput()
         {
             return null;
         }
 
-        public virtual LiquidityStreamStates PeekAtExecutionOuput()
+        public virtual SimulationStates PeekAtExecutionOuput()
         {
             return null;
         }
 
-        public virtual LiquidityStreamStates PeekAtExitOutput()
+        public virtual SimulationStates PeekAtExitOutput()
         {
             return null;
         }
@@ -58,15 +58,15 @@ namespace SimulationUnitTesting
             }
         }
 
-        public virtual void PokeInConsensusInput(LiquidityStreamStates State)
+        public virtual void PokeInConsensusInput(SimulationStates State)
         {
         }
 
-        public virtual void PokeInExecutionInput(LiquidityStreamStates State)
+        public virtual void PokeInExecutionInput(SimulationStates State)
         {
         }
 
-        public virtual void PokeInExitInput(LiquidityStreamStates State)
+        public virtual void PokeInExitInput(SimulationStates State)
         {
         }
 
