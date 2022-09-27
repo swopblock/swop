@@ -147,7 +147,7 @@ namespace ProgramUnitTesting
         [Fact]
         public void TestSimulationStateTabbedFormat()
         {
-            string tabbedLine = "0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\n";
+            string tabbedLine = "0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\n";
 
             Assert.True(SimulationStates.CheckTabbedLineFormat(tabbedLine));
         }

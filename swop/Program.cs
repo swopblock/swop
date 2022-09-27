@@ -212,7 +212,7 @@ public class SimulationStates
     {
         var tabs = line.Split('\t');
 
-        return line.Split('\t').Length == 31;
+        return line.Split('\t').Length == 28;
     }
 
     public bool IsEqual(SimulationStates one)
@@ -238,13 +238,13 @@ public class SimulationStates
     {
         var LiquidityStreamState = new LiquidityStreamStates(1, 2, 3, 4);
 
-        var AssetStreamState = new AssetStreamStates(5, 6, 7, 8, 9, 10, 11);
+        var AssetStreamState = new AssetStreamStates(5, 6, 7, 8, 9, 10);
 
-        var ContractStreamState = new ContractStreamStates(12, 13, 14, 15, 16, 17, 18);
+        var ContractStreamState = new ContractStreamStates(11, 12, 13, 14, 15, 16);
 
-        var LiquidityTransferState = new ContractTransferStates(19, 20, 21, 22, 23, 24, 25);
+        var LiquidityTransferState = new ContractTransferStates(17, 18, 19, 20, 21, 22);
 
-        var ConsensusState = new ConsensusStates(26, 27, 28, 29, 30, 31);
+        var ConsensusState = new ConsensusStates(23, 24, 25, 26, 27, 28);
 
         var state = new SimulationStates(LiquidityStreamState, AssetStreamState, ContractStreamState, LiquidityTransferState, ConsensusState);
 
@@ -255,11 +255,11 @@ public class SimulationStates
     {
         var LiquidityStreamState = new LiquidityStreamStates(R.Next(NumberOfLiquityStreams), R.Next(), R.Next(), R.Next());
 
-        var AssetStreamState = new AssetStreamStates(R.Next(NumberOfAssetStreams), R.Next(), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
+        var AssetStreamState = new AssetStreamStates(R.Next(NumberOfAssetStreams), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
-        var ContractStreamState = new ContractStreamStates(R.Next(NumberOfContractStreamStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
+        var ContractStreamState = new ContractStreamStates(R.Next(NumberOfContractStreamStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
-        var LiquidityTransferState = new ContractTransferStates(R.Next(NumberOfContractTransferStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
+        var LiquidityTransferState = new ContractTransferStates(R.Next(NumberOfContractTransferStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
         var ConsensusState = new ConsensusStates(R.Next(NumberOfConsensusStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
@@ -323,11 +323,11 @@ public class SimulationStates
 
         state.LiquidityStreamState = new LiquidityStreamStates(0, 0, 0, 0);
 
-        state.AssetStreamState = new AssetStreamStates(0, 0, 0, 0, 0, 0, 0);
+        state.AssetStreamState = new AssetStreamStates(0, 0, 0, 0, 0, 0);
 
-        state.ContractStreamState = new ContractStreamStates(0, 0, 0, 0, 0, 0, 0);
+        state.ContractStreamState = new ContractStreamStates(0, 0, 0, 0, 0, 0);
 
-        state.LiquidityTransferState = new ContractTransferStates(0, 0, 0, 0, 0, 0, 0);
+        state.LiquidityTransferState = new ContractTransferStates(0, 0, 0, 0, 0, 0);
 
         state.ConsensusState = new ConsensusStates(0, 0, 0, 0, 0, 0);
 
@@ -373,16 +373,16 @@ public record LiquidityStreamStates(int StreamId,  decimal CashSupply, decimal C
     public static LiquidityStreamStates Empty { get { return new LiquidityStreamStates(0, 0, 0, 0); } }
 }
 
-public record AssetStreamStates(int AssetId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand, decimal AssetLock)
+public record AssetStreamStates(int AssetId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
 {
     public string ParseToTabbedLine()
     {
-        return $"{AssetId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t{AssetLock}\t";
+        return $"{AssetId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
     }
 
     public static AssetStreamStates ParseFromTabbedLine(ref string line)
     {
-        var fields = line.Split('\t', 8);
+        var fields = line.Split('\t', 7);
 
         var i = int.Parse(fields[0]);
 
@@ -396,24 +396,22 @@ public record AssetStreamStates(int AssetId, decimal CashSupply, decimal CashDem
 
         var aD = decimal.Parse(fields[5]);
 
-        var aL = decimal.Parse(fields[6]);
+        line = fields[6];
 
-        line = fields[7];
-
-        return new AssetStreamStates(i, cS, cD, cL, aS, aD, aL);
+        return new AssetStreamStates(i, cS, cD, cL, aS, aD);
     }
 }
 
-public record ContractStreamStates(int ContractId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand, decimal AssetLock)
+public record ContractStreamStates(int ContractId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
 {
     public string ParseToTabbedLine()
     {
-        return $"{ContractId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t{AssetLock}\t";
+        return $"{ContractId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
     }
 
     public static ContractStreamStates ParseFromTabbedLine(ref string line)
     {
-        var fields = line.Split('\t', 8);
+        var fields = line.Split('\t', 7);
 
         var i = int.Parse(fields[0]);
 
@@ -427,25 +425,23 @@ public record ContractStreamStates(int ContractId, decimal CashSupply, decimal C
 
         var aD = decimal.Parse(fields[5]);
 
-        var aL = decimal.Parse(fields[6]);
+        line = fields[6];
 
-        line = fields[7];
-
-        return new ContractStreamStates(i, cS, cD, cL, aS, aD, aL);
+        return new ContractStreamStates(i, cS, cD, cL, aS, aD);
     }
 }
 
 
-public record ContractTransferStates(int TransferId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand, decimal AssetLock)
+public record ContractTransferStates(int TransferId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
 {
     public string ParseToTabbedLine()
     {
-        return $"{TransferId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t{AssetLock}\t";
+        return $"{TransferId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
     }
 
     public static ContractTransferStates ParseFromTabbedLine(ref string line)
     {
-        var fields = line.Split('\t', 8);
+        var fields = line.Split('\t', 7);
 
         var i = int.Parse(fields[0]);
 
@@ -459,11 +455,9 @@ public record ContractTransferStates(int TransferId, decimal CashSupply, decimal
 
         var aD = decimal.Parse(fields[5]);
 
-        var aL = decimal.Parse(fields[6]);
+        line = fields[6];
 
-        line = fields[7];
-
-        return new ContractTransferStates(i, cS, cD, cL, aS, aD, aL);
+        return new ContractTransferStates(i, cS, cD, cL, aS, aD);
     }
 }
 
