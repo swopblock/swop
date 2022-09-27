@@ -178,6 +178,20 @@ public record LiquidityStreamStates(int StreamId,  DigitalCash Cash, AssetStream
 
     public static LiquidityStreamStates ParseFromIntention(string intention)
     {
+        // figure out which patterns are matched
+
+        foreach (string pattern in DemoWeb.Patterns)
+        {
+            MatchResult mr = IntentionBranch.MatchesPattern(intention, pattern);
+
+            if (mr.Matches)
+            {
+                // analize mr.EmbeddedValues
+                break;
+            }
+        }
+
+        // create the translated state
         LiquidityStreamStates state = new LiquidityStreamStates(
             0,
             new DigitalCash(0, 0, new StreamLocks(1)),
