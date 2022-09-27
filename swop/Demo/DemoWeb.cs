@@ -10,7 +10,10 @@ namespace Swopblock
 {
     internal class DemoWeb
     {
-        public static string pattern = "i want to * * * * * * for * *";
+        public static List<string> Patterns = new List<string> 
+        { 
+            "i want to * * * * * * for * *"
+        };
 
         private static IntentionWeb demo = new IntentionWeb("i want to", new List<IntentionWeb>
         {
