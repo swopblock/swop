@@ -40,7 +40,7 @@ namespace ConsensusUnitTesting
         {
             var client = new SwopblockModule(null, null);
 
-            client.PokeInEntryInput(LiquidityStreamStates.Empty);
+            client.PokeInEntryInput(SimulationStates.Empty);
 
             Assert.NotNull(client.PeekAtEntryOutput());
         }
@@ -50,7 +50,7 @@ namespace ConsensusUnitTesting
         {
             var client = new SwopblockModule(null, null);
 
-            client.PokeInConsensusInput(LiquidityStreamStates.Empty);
+            client.PokeInConsensusInput(SimulationStates.Empty);
 
             Assert.NotNull(client.PeekAtConsensusOutput());
         }
@@ -77,7 +77,7 @@ namespace ExecutionUnitTesting
         {
             var client = new SwopblockModule(null, null);
 
-            client.PokeInExecutionInput(LiquidityStreamStates.Empty);
+            client.PokeInExecutionInput(SimulationStates.Empty);
 
             Assert.NotNull(client.PeekAtExecutionOuput());
         }
@@ -87,7 +87,7 @@ namespace ExecutionUnitTesting
         {
             var client = new SwopblockModule(null, null);
 
-            client.PokeInExitInput(LiquidityStreamStates.Empty);
+            client.PokeInExitInput(SimulationStates.Empty);
 
             Assert.NotNull(client.PeekAtExitOutput());
         }

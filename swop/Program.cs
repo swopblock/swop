@@ -67,7 +67,8 @@ namespace Swopblock
                 {
                     if (Tree.Validate(userInput))
                     {
-                        client.PokeInEntryInput(LiquidityStreamStates.ParseFromIntention(userInput));
+                        //client.PokeInEntryInput(LiquidityStreamStates.ParseFromIntention(userInput));
+                        client.PokeInEntryInput(SimulationStates.ParseFromIntention(userInput));
                         var output = client.PeekAtExitOutput();
                         Console.WriteLine(output.ParseToTabbedLine());
                     }
@@ -176,19 +177,41 @@ public class SimulationStates
     public static int NumberOfConsensusStates = 10;
 
     public static Random R = new Random();
+
+    public SimulationStates()
+    {
+
+    }
+
+    public SimulationStates(LiquidityStreamStates liquidityStreamState, AssetStreamStates assetStreamState, ContractStreamStates contractStreamState, ContractTransferStates liquidityTransferState, ConsensusStates consensusState)
+    {
+        LiquidityStreamState = liquidityStreamState;
+        AssetStreamState = assetStreamState;
+        ContractStreamState = contractStreamState;
+        LiquidityTransferState = liquidityTransferState;
+        ConsensusState = consensusState;
+    }
+
+    public static SimulationStates Empty
+    {
+        get
+        {
+            return new SimulationStates(null, null, null, null, null);
+        }
+    }
     public static SimulationStates FromRandom()
     {
-        var state = new SimulationStates();
+        var LiquidityStreamState = new LiquidityStreamStates(R.Next(NumberOfLiquityStreams), R.Next(), R.Next(), R.Next());
 
-        state.LiquidityStreamState = new LiquidityStreamStates(R.Next(NumberOfLiquityStreams), R.Next(), R.Next(), R.Next());
+        var AssetStreamState = new AssetStreamStates(R.Next(NumberOfAssetStreams), R.Next(), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
-        state.AssetStreamState = new AssetStreamStates(R.Next(NumberOfAssetStreams), R.Next(), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
+        var ContractStreamState = new ContractStreamStates(R.Next(NumberOfContractStreamStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
-        state.ContractStreamState = new ContractStreamStates(R.Next(NumberOfContractStreamStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
+        var LiquidityTransferState = new ContractTransferStates(R.Next(NumberOfContractTransferStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
-        state.LiquidityTransferState = new ContractTransferStates(R.Next(NumberOfContractTransferStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
+        var ConsensusState = new ConsensusStates(R.Next(NumberOfConsensusStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
-        state.ConsensusState = new ConsensusStates(R.Next(NumberOfConsensusStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
+        var state = new SimulationStates(LiquidityStreamState, AssetStreamState, ContractStreamState, LiquidityTransferState, ConsensusState);
 
         return state;
     }
@@ -225,6 +248,40 @@ public class SimulationStates
 
         return line;
     }
+
+    public static SimulationStates ParseFromIntention(string intention)
+    {
+        // figure out which patterns are matched
+
+        foreach (string pattern in DemoWeb.Patterns)
+        {
+            MatchResult mr = IntentionBranch.MatchesPattern(intention, pattern);
+
+            if (mr.Matches)
+            {
+                // analize mr.EmbeddedValues
+                break;
+            }
+        }
+
+
+
+        // create the translated state
+        var state = new SimulationStates();
+
+        state.LiquidityStreamState = null;
+
+        state.AssetStreamState = new AssetStreamStates(0, 0, 0, 0, 0, 0, 0);
+
+        state.ContractStreamState = new ContractStreamStates(0, 0, 0, 0, 0, 0, 0);
+
+        state.LiquidityTransferState = null;
+
+        state.ConsensusState = null;
+
+        return state;
+    }
+
 }
 
 // top level
@@ -250,42 +307,6 @@ public record LiquidityStreamStates(int StreamId,  decimal CashSupply, decimal C
         line = fields[4];
 
         return new LiquidityStreamStates(i, s, d, l);
-    }
-
-    public static LiquidityStreamStates ParseFromIntention(string intention)
-    {
-        // figure out which patterns are matched
-
-        foreach (string pattern in DemoWeb.Patterns)
-        {
-            MatchResult mr = IntentionBranch.MatchesPattern(intention, pattern);
-
-            if (mr.Matches)
-            {
-                // analize mr.EmbeddedValues
-                break;
-            }
-        }
-
-        // create the translated state
-        LiquidityStreamStates state = new LiquidityStreamStates(
-            0,
-            new DigitalCash(0, 0, new StreamLocks(1)),
-                new AssetStreamStates(
-                    0,
-                    new DigitalCash(0, 0, new StreamLocks(1)),
-                    new DigitalAsset(0, 0, new StreamLocks(1)),
-            new ContractStreamStates(
-                0,
-                new DigitalCash(0, 0, new StreamLocks(1)),
-                new DigitalAsset(0, 0, new StreamLocks(1)), 
-            new LiquidityTransferStates(
-                0, 
-                new DigitalCash(0, 0, new StreamLocks(1)), 
-                new DigitalAsset(0,0,new StreamLocks(1)), 
-                new ConsensusStates(0,0,0,0,0,0)))));
-
-        return state;
     }
 
     public static LiquidityStreamStates operator +(LiquidityStreamStates one, LiquidityStreamStates two) { return null; }

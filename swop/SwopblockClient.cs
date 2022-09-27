@@ -13,15 +13,15 @@ namespace Swopblock
 
     public class SwopblockModule
     {
-        public LiquidityStreamStates entry;
+        public SimulationStates entry;
 
         public Swopblock.ConsensusModule consensus;
 
-        public LiquidityStreamStates pipe;
+        public SimulationStates pipe;
 
         public Swopblock.ExecutionModule execution;
 
-        public LiquidityStreamStates exit;
+        public SimulationStates exit;
 
         public SwopblockModule(string[] consensusArgs, string[] executionArgs)
         {
@@ -30,48 +30,48 @@ namespace Swopblock
             execution = new ExecutionModule(executionArgs);
         }
 
-        public virtual void PokeInEntryInput(LiquidityStreamStates state)
+        public virtual void PokeInEntryInput(SimulationStates state)
         {
-            entry = state;
+            //entry = state;
 
-            pipe = consensus.Run(entry);
+            //pipe = consensus.Run(entry);
 
-            exit = execution.Run(pipe);
+            //exit = execution.Run(pipe);
         }
 
-        public virtual void PokeInConsensusInput(LiquidityStreamStates state)
+        public virtual void PokeInConsensusInput(SimulationStates state)
         {
-            pipe = consensus.Run(state);
+            //pipe = consensus.Run(state);
 
-            exit = execution.Run(pipe);
+            //exit = execution.Run(pipe);
         }
 
-        public virtual void PokeInExecutionInput(LiquidityStreamStates state)
+        public virtual void PokeInExecutionInput(SimulationStates state)
         {
-            exit = execution.Run(state);
+            //exit = execution.Run(state);
         }
 
-        public virtual void PokeInExitInput(LiquidityStreamStates state)
+        public virtual void PokeInExitInput(SimulationStates state)
         {
-            exit = state;
+            //exit = state;
         }
 
-        public virtual LiquidityStreamStates PeekAtEntryOutput()
+        public virtual SimulationStates PeekAtEntryOutput()
         {
             return entry;
         }
 
-        public virtual LiquidityStreamStates PeekAtConsensusOutput()
+        public virtual SimulationStates PeekAtConsensusOutput()
         {
             return pipe;
         }
 
-        public virtual LiquidityStreamStates PeekAtExecutionOuput()
+        public virtual SimulationStates PeekAtExecutionOuput()
         {
             return exit;
         }
 
-        public virtual LiquidityStreamStates PeekAtExitOutput()
+        public virtual SimulationStates PeekAtExitOutput()
         {
             return exit;
         }
@@ -86,23 +86,23 @@ namespace Swopblock
 
             if (tree.Validate(intention))
             {
-                MatchResult mr = IntentionBranch.MatchesPattern(intention, DemoWeb.pattern);
+                //MatchResult mr = IntentionBranch.MatchesPattern(intention, DemoWeb.pattern);
 
-                if (mr.EmbeddedValues != null)
-                {
-                    if (mr.EmbeddedValues.Count > 0)
-                    {
-                        //ContractStreamStates state = new ContractStreamStates(0, null, null, null);
+                //if (mr.EmbeddedValues != null)
+                //{
+                //    if (mr.EmbeddedValues.Count > 0)
+                //    {
+                //        //ContractStreamStates state = new ContractStreamStates(0, null, null, null);
 
-                        //if (WriteContract(state))
-                        //{
-                        //    if (SignContract(state))
-                        //    {
-                        //        return BroadcastContract(state);
-                        //    }
-                        //}
-                    }
-                }
+                //        //if (WriteContract(state))
+                //        //{
+                //        //    if (SignContract(state))
+                //        //    {
+                //        //        return BroadcastContract(state);
+                //        //    }
+                //        //}
+                //    }
+                //}
             }
 
             return false;

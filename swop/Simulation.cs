@@ -40,7 +40,7 @@ namespace SimulationUnitTesting
             return null;
         }
 
-        public virtual void PokeInEntryInput(LiquidityStreamStates State)
+        public virtual void PokeInEntryInput(SimulationStates State)
         {
             foreach(var network in networks)
             {

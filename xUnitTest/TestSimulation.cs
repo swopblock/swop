@@ -41,7 +41,7 @@ namespace SimulationUnitTesting
             base.PokeInConsensusInput(state);
         }
 
-        public override void PokeInEntryInput(LiquidityStreamStates state)
+        public override void PokeInEntryInput(SimulationStates state)
         {
             base.PokeInEntryInput(state);
         }
