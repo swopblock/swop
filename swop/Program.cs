@@ -316,9 +316,8 @@ public class SimulationStates
             }
         }
 
-
-
         // create the translated state
+
         var state = new SimulationStates();
 
         state.LiquidityStreamState = new LiquidityStreamStates(0, 0, 0, 0);
@@ -336,7 +335,7 @@ public class SimulationStates
 
     public static SimulationStates ParseFromLine(string line)
     {
-        if (line[0] == 'I') return SimulationStates.ParseFromIntention(line);
+        if (line[0].ToString().ToLower() == "i") return SimulationStates.ParseFromIntention(line);
 
         return SimulationStates.ParseFromTabbedLine(line);
     }
