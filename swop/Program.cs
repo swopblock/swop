@@ -38,6 +38,8 @@ namespace Swopblock
             SimulationStates simulationState;
 
             string line = Console.ReadLine();
+            
+            line = SimulationStates.FromTest().ParseToTabbedLine();
 
             /* **************************************************************** */
             /* **************************************************************** */
@@ -51,12 +53,12 @@ namespace Swopblock
 
                 while ((simulationState = simulation.PeekAtExitOutput()) != null)
                 {
-                    Console.WriteLine(simulation.PeekAtExitOutput());
+                    Console.WriteLine(simulationState.ParseToTabbedLine());
                 }
 
-                
-
                 line = Console.ReadLine();
+
+                line = SimulationStates.FromTest().ParseToTabbedLine(); 
             }
 
             /* **************************************************************** */

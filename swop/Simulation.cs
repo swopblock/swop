@@ -20,6 +20,8 @@ namespace SimulationUnitTesting
             SimulationModule.executionArgs = executionArgs;
         }
 
+        SimulationStates shortCircut;
+
         public virtual SimulationStates PeekAtEntryOutput()
         {
             return null;
@@ -37,25 +39,30 @@ namespace SimulationUnitTesting
 
         public virtual SimulationStates PeekAtExitOutput()
         {
-            return null;
+            //foreach (var network in networks)
+            //{
+            //    foreach (var client in network.clients)
+            //    {
+            //        return client.ActualSwopblockClient.PeekAtExitOutput();
+            //    }
+            //}
+
+            //return networks[0].clients[0].ActualSwopblockClient.PeekAtExitOutput();
+
+            return shortCircut;
         }
 
         public virtual void PokeInEntryInput(SimulationStates State)
         {
-            foreach(var network in networks)
-            {
-                foreach(var client in network.clients)
-                {
-                    foreach(var server in client.servers)
-                    {
-                        for (int i = 0; i < 3; i++)
-                        {
-                            client.ActualSwopblockClient.PokeInEntryInput(State);
-                            //Make and Poke new random contract state
-                        }
-                    }
-                }
-            }
+            //foreach(var network in networks)
+            //{
+            //    foreach(var client in network.clients)
+            //    {
+            //        client.ActualSwopblockClient.PokeInEntryInput(SimulationStates.FromTest());
+            //    }
+            //}
+
+            shortCircut = State;
         }
 
         public virtual void PokeInConsensusInput(SimulationStates State)
