@@ -131,5 +131,19 @@ namespace ProgramUnitTesting
 
             Assert.Equal(args[7], Program.executionArgs[2]);
         }
+
+        [Fact]
+        public void TestSimulationParsing()
+        {
+            var testA = SimulationStates.FromTest();
+
+            var line = testA.ParseToTabbedLine();
+
+            var testB = SimulationStates.ParseFromTabbedLine(line);
+
+            Assert.True(testA.IsEqual(testB));
+        }
+
+
     }
 }

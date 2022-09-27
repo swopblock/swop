@@ -56,15 +56,15 @@ namespace SimulationUnitTesting
             base.PokeInExitInput(state);
         }
 
-        [Theory]
-        [InlineData(2, 3, 4, 5, 6, 7)]
-        [InlineData(7, 6, 5, 4, 3, 2)]
-        public override void BuildSimultion(int networkCount, int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
-        {
-            base.BuildSimultion(networkCount, clientCount, serverCount, contractCount, transferCount, proofCount);
+        //[Theory]
+        //[InlineData(2, 3, 4, 5, 6, 7)]
+        //[InlineData(7, 6, 5, 4, 3, 2)]
+        //public override void BuildSimultion(int networkCount, int clientCount, int serverCount, int contractCount, int transferCount, int proofCount)
+        //{
+        //    base.BuildSimultion(networkCount, clientCount, serverCount, contractCount, transferCount, proofCount);
 
-            Assert.Equal(networkCount, networks.Length);
-        }
+        //    Assert.Equal(networkCount, networks.Length);
+        //}
     }
 
     public class TestSimulationSystemNetworks : SimulationSystemNetworks

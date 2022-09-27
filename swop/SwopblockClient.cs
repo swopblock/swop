@@ -32,28 +32,28 @@ namespace Swopblock
 
         public virtual void PokeInEntryInput(SimulationStates state)
         {
-            //entry = state;
+            entry = state;
 
-            //pipe = consensus.Run(entry);
+            pipe = consensus.Run(entry);
 
-            //exit = execution.Run(pipe);
+            exit = execution.Run(pipe);
         }
 
         public virtual void PokeInConsensusInput(SimulationStates state)
         {
-            //pipe = consensus.Run(state);
+            pipe = consensus.Run(state);
 
-            //exit = execution.Run(pipe);
+            exit = execution.Run(pipe);
         }
 
         public virtual void PokeInExecutionInput(SimulationStates state)
         {
-            //exit = execution.Run(state);
+            exit = execution.Run(state);
         }
 
         public virtual void PokeInExitInput(SimulationStates state)
         {
-            //exit = state;
+            exit = state;
         }
 
         public virtual SimulationStates PeekAtEntryOutput()

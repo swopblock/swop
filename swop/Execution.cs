@@ -10,7 +10,7 @@ namespace Swopblock
 
         }
 
-        public LiquidityStreamStates Run(LiquidityStreamStates state)
+        public SimulationStates Run(SimulationStates state)
         {
             return state;
         }

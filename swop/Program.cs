@@ -26,13 +26,13 @@ namespace Swopblock
         public static void Main(string[] args)
         {
             // begin temp test
-            var testA = SimulationStates.FromRandom();
+            var testA = SimulationStates.FromTest();
 
             var line = testA.ParseToTabbedLine();
 
             var testB = SimulationStates.ParseFromTabbedLine(line);
 
-            if (testA == testB)
+            if (testA.IsEqual(testB))
             {
                 Console.WriteLine("=");
             }
@@ -192,6 +192,17 @@ public class SimulationStates
         ConsensusState = consensusState;
     }
 
+    public bool IsEqual(SimulationStates one)
+    {
+        if (this.LiquidityTransferState != one.LiquidityTransferState) return false;
+        if (this.AssetStreamState != one.AssetStreamState) return false;
+        if (this.ContractStreamState != one.ContractStreamState) return false;
+        if (this.LiquidityTransferState != one.LiquidityTransferState) return false;
+        if (this.ConsensusState != one.ConsensusState) return false;
+
+        return true;
+    }
+
     public static SimulationStates Empty
     {
         get
@@ -210,7 +221,7 @@ public class SimulationStates
 
         var LiquidityTransferState = new ContractTransferStates(19, 20, 21, 22, 23, 24, 25);
 
-        var ConsensusState = new ConsensusStates(26, 26, 28, 29, 30, 31);
+        var ConsensusState = new ConsensusStates(26, 27, 28, 29, 30, 31);
 
         var state = new SimulationStates(LiquidityStreamState, AssetStreamState, ContractStreamState, LiquidityTransferState, ConsensusState);
 
@@ -307,7 +318,7 @@ public record LiquidityStreamStates(int StreamId,  decimal CashSupply, decimal C
 {
     public string ParseToTabbedLine()
     {
-        return $"{StreamId}\t{CashSupply}\t{CashDemand}\t{CashLock}";
+        return $"{StreamId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t";
     }
 
     public static LiquidityStreamStates ParseFromTabbedLine(ref string line)
@@ -336,7 +347,7 @@ public record AssetStreamStates(int AssetId, decimal CashSupply, decimal CashDem
 {
     public string ParseToTabbedLine()
     {
-        return $"{AssetId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t{AssetLock}";
+        return $"{AssetId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t{AssetLock}\t";
     }
 
     public static AssetStreamStates ParseFromTabbedLine(ref string line)
@@ -367,7 +378,7 @@ public record ContractStreamStates(int ContractId, decimal CashSupply, decimal C
 {
     public string ParseToTabbedLine()
     {
-        return $"{ContractId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t{AssetLock}";
+        return $"{ContractId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t{AssetLock}\t";
     }
 
     public static ContractStreamStates ParseFromTabbedLine(ref string line)
@@ -399,7 +410,7 @@ public record ContractTransferStates(int TransferId, decimal CashSupply, decimal
 {
     public string ParseToTabbedLine()
     {
-        return $"{TransferId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t{AssetLock}";
+        return $"{TransferId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t{AssetLock}\t";
     }
 
     public static ContractTransferStates ParseFromTabbedLine(ref string line)
@@ -434,7 +445,7 @@ public record ConsensusStates(int ConsensusId, decimal Safety, Int64 ProofOfStak
     }
     public static ConsensusStates ParseFromTabbedLine(ref string line)
     {
-        var fields = line.Split('\t', 7);
+        var fields = line.Split('\t', '\n');
 
         var i = int.Parse(fields[0]);
 
@@ -448,7 +459,7 @@ public record ConsensusStates(int ConsensusId, decimal Safety, Int64 ProofOfStak
 
         var relayId = int.Parse(fields[5]);
 
-        line = fields[6];
+        line = "\n";
 
         return new ConsensusStates(i, S, pS, pW, supperId, relayId);
     }
