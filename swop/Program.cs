@@ -199,6 +199,24 @@ public class SimulationStates
             return new SimulationStates(null, null, null, null, null);
         }
     }
+
+    public static SimulationStates FromTest()
+    {
+        var LiquidityStreamState = new LiquidityStreamStates(1, 2, 3, 4);
+
+        var AssetStreamState = new AssetStreamStates(5, 6, 7, 8, 9, 10, 11);
+
+        var ContractStreamState = new ContractStreamStates(12, 13, 14, 15, 16, 17, 18);
+
+        var LiquidityTransferState = new ContractTransferStates(19, 20, 21, 22, 23, 24, 25);
+
+        var ConsensusState = new ConsensusStates(26, 26, 28, 29, 30, 31);
+
+        var state = new SimulationStates(LiquidityStreamState, AssetStreamState, ContractStreamState, LiquidityTransferState, ConsensusState);
+
+        return state;
+    }
+
     public static SimulationStates FromRandom()
     {
         var LiquidityStreamState = new LiquidityStreamStates(R.Next(NumberOfLiquityStreams), R.Next(), R.Next(), R.Next());
