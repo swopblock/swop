@@ -45,22 +45,26 @@ namespace Swopblock
 
                 SwopblockModule client = new SwopblockModule(null, null);
 
+                string errMessage = "Error";
+
                 string userInput = Console.ReadLine();
 
-                byte[] serByte = Tree.Serializer.Serialize(userInput);
-
-                string check = Tree.Serializer.Deserialize(serByte);
-
-                if (check.ToLower() == userInput.ToLower())
+                if (userInput != null)
                 {
-                    if (false) // (client.CaptureIntention(userInput))
+                    if (Tree.Validate(userInput))
                     {
-                        Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
+                        client.PokeInEntryInput(LiquidityStreamStates.ParseFromIntention(userInput));
+                        var output = client.PeekAtExitOutput();
+                        Console.WriteLine(output.ParseToTabbedLine());
+                    }
+                    else
+                    {
+                        Console.WriteLine(errMessage);
                     }
                 }
                 else
                 {
-                    Console.WriteLine("input error");
+                    Console.WriteLine(errMessage);
                 }
 
                 // start network state
@@ -71,17 +75,6 @@ namespace Swopblock
                 //NetworkContractState.Add(state);
 
                 #endregion
-            }
-
-            while (true)
-            {
-                var contract = Console.ReadLine();
-
-                simulation.PokeInEntryInput(LiquidityStreamStates.Empty);
-
-                var output = simulation.PeekAtExitOutput();
-
-                Console.WriteLine(output.ParseToTabbedLine());
             }
         }
 
@@ -185,8 +178,24 @@ public record LiquidityStreamStates(int StreamId,  DigitalCash Cash, AssetStream
 
     public static LiquidityStreamStates ParseFromIntention(string intention)
     {
+        LiquidityStreamStates state = new LiquidityStreamStates(
+            0,
+            new DigitalCash(0, 0, new StreamLocks(1)),
+                new AssetStreamStates(
+                    0,
+                    new DigitalCash(0, 0, new StreamLocks(1)),
+                    new DigitalAsset(0, 0, new StreamLocks(1)),
+            new ContractStreamStates(
+                0,
+                new DigitalCash(0, 0, new StreamLocks(1)),
+                new DigitalAsset(0, 0, new StreamLocks(1)), 
+            new LiquidityTransferStates(
+                0, 
+                new DigitalCash(0, 0, new StreamLocks(1)), 
+                new DigitalAsset(0,0,new StreamLocks(1)), 
+                new ConsensusStates(0,0,0,0,0,0)))));
 
-        return null;
+        return state;
     }
 
     public static LiquidityStreamStates operator +(LiquidityStreamStates one, LiquidityStreamStates two) { return null; }
