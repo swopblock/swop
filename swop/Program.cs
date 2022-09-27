@@ -23,6 +23,12 @@ namespace Swopblock
 
         public static string[] executionArgs;
 
+        /* **************************************************************** */
+        //   Step 1: Get interpretation working
+        //   Step 2: Get simulation states updating 
+        //   Step 3: Show user updated simulation state
+        /* **************************************************************** */
+
         public static void Main(string[] args)
         {
             Console.WriteLine("Hello, Swopblock World!");
