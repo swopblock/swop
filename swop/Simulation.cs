@@ -50,7 +50,7 @@ namespace SimulationUnitTesting
                     {
                         for (int i = 0; i < 3; i++)
                         {
-                            client.SimulationSwopblockClient.PokeInEntryInput(State);
+                            client.ActualSwopblockClient.PokeInEntryInput(State);
                             //Make and Poke new random contract state
                         }
                     }
@@ -108,11 +108,11 @@ namespace SimulationUnitTesting
 
     public class SimulationSwopblockClients
     {     
-        public SwopblockModule SimulationSwopblockClient;
+        public SwopblockModule ActualSwopblockClient;
 
         public SimulationSwopblockClients()
         {
-            SimulationSwopblockClient = new SwopblockModule(SimulationModule.consensusArgs, SimulationModule.executionArgs);
+            ActualSwopblockClient = new SwopblockModule(SimulationModule.consensusArgs, SimulationModule.executionArgs);
         }
 
 
