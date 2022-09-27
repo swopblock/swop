@@ -92,7 +92,7 @@ namespace Swopblock
                 {
                     if (mr.EmbeddedValues.Count > 0)
                     {
-                        ContractStreamStates state = new ContractStreamStates(0, null, null, null);
+                        //ContractStreamStates state = new ContractStreamStates(0, null, null, null);
 
                         //if (WriteContract(state))
                         //{
