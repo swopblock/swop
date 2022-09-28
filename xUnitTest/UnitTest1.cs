@@ -163,7 +163,7 @@ namespace ProgramUnitTesting
         [InlineData(2, 260, 1, 20, 6000, 69999)]
         [InlineData(1, 370, 2, 30, 7000, 79999)]
         [InlineData(2, 480, 2, 40, 8000, 89999)]
-
+        //I am [bidding] exactly [100] [SWOBL] of mine from my address [cid] in order to buy at least [1] [BTC] of yours from the market and my order is good until the market volume reaches [expirationVolume] SWOBL using my signature [transferId].
         public void TestSimulationStateFromIntention(int assetId, int contractId, int transferId, decimal valueOfMine, decimal valueOfYours, decimal expirationVolume)
         {
             var ofMine = $"exactly {valueOfMine} SWOBL of mine from my address {contractId}";
@@ -186,22 +186,28 @@ namespace ProgramUnitTesting
 
                 intention = $"I am {contracting} {expiration} {signature}";
 
-                cashSupply = valueOfMine; 
+                cashSupply = valueOfMine;
 
-                assetSupply = valueOfYours; 
+                cashDemand = 0;
+
+                assetSupply = 0;
+                // asset demand wasnt set so i fixed it
+                assetDemand = valueOfYours;
             }
-
             if (transferId == 2) //sell
             {
                 contracting = $"asking {ofYours} in order to sell {ofMine}";
 
                 intention = $"I am {contracting} {expiration} {signature}";
 
-                cashSupply = valueOfYours;
+                cashSupply = 0;
+                // cash demand wasnt set so i fixed it
+                cashDemand = valueOfYours;
 
                 assetSupply = valueOfMine;
-            }
 
+                assetDemand = 0;
+            }
             else
             {
                 Assert.True(false);
@@ -221,6 +227,7 @@ namespace ProgramUnitTesting
 
             stateB.ConsensusState = new ConsensusStates(0, 0, 0, 0, 0, 0);
 
+            Assert.True(stateA.AssetStreamState.IsEqual(stateB.AssetStreamState));
 
             Assert.True(stateA.IsEqual(stateB));
 

@@ -10,6 +10,7 @@ using Swopblock.Demo;
 using swop.Demo;
 using System.Data.Common;
 using System.Diagnostics.Contracts;
+using static Swopblock.Program;
 
 namespace Swopblock
 {
@@ -22,6 +23,8 @@ namespace Swopblock
         public static string[] consensusArgs;
 
         public static string[] executionArgs;
+
+        public enum AssetTags { SWOBL = 0, BTC = 1, ETH = 2 };
 
         /* **************************************************************** */
         //   Step 1: Get interpretation working
@@ -309,22 +312,6 @@ public class SimulationStates
 
     public static SimulationStates ParseFromIntention(string intention)
     {
-
-        // figure out which patterns are matched
-
-        foreach (string pattern in DemoWeb.Patterns)
-        {
-            MatchResult mr = IntentionBranch.MatchesPattern(intention, pattern);
-
-            if (mr.Matches)
-            {
-                // analize mr.EmbeddedValues
-                break;
-            }
-        }
-
-        // create the translated state
-
         var state = new SimulationStates();
 
         state.LiquidityStreamState = new LiquidityStreamStates(0, 0, 0, 0);
@@ -388,8 +375,81 @@ public record AssetStreamStates(int AssetId, decimal CashSupply, decimal CashDem
 
     public static AssetStreamStates ParseFromIntention(string intention)
     {
-        // replace this line with correct code
-        return AssetStreamStates.ParseFromTabbedLine(ref intention);
+        /*
+         * I am [bidding] exactly [100] [SWOBL] of mine from my address [cid] 
+         * in order to buy at least [1] [BTC] of yours from the market 
+         * and my order is good until the market volume reaches [expirationVolume] SWOBL 
+         * using my signature [transferId].
+         */
+
+        string assetTag = "";
+        int assetID = 0;
+        decimal cashSup = 0;
+        decimal cashDem = 0;
+        decimal assetSup = 0;
+        decimal assetDem = 0;
+        decimal cashLock = 0;
+
+        MatchResult res = null;
+
+        foreach (string pattern in DemoWeb.Patterns)
+        {
+            res = IntentionBranch.MatchesPattern(intention, pattern);
+
+            if (res.Matches)
+            {
+                break;
+            }
+        }
+
+        if(res != null)
+        {
+            if(res.EmbeddedValues != null)
+            {
+                if(res.EmbeddedValues.Count > 7)
+                {
+                    if (res.EmbeddedValues[0].ToLower() == "bidding")
+                    {
+                        if (res.EmbeddedValues[2].ToLower() == "swobl")
+                        {
+                            cashSup = decimal.Parse(res.EmbeddedValues[1]);
+                            cashDem = 0;
+                            assetSup = 0;
+                            assetDem = decimal.Parse(res.EmbeddedValues[4]);
+                            cashLock = decimal.Parse(res.EmbeddedValues[6]);
+
+                            assetTag = res.EmbeddedValues[5].ToLower();
+                        }
+                    }
+                    else if (res.EmbeddedValues[0].ToLower() == "asking")
+                    {
+                        assetTag = res.EmbeddedValues[2].ToLower();
+
+                        cashDem = decimal.Parse(res.EmbeddedValues[3]);
+                        cashSup = 0;
+                        assetDem = 0;
+                        assetSup = decimal.Parse(res.EmbeddedValues[1]);
+                    }
+
+                    for (int i = 0; i < ushort.MaxValue; i++)
+                    {
+                        Program.AssetTags tag = (Program.AssetTags)i;
+
+                        if (tag.ToString().ToLower() == assetTag)
+                        {
+                            assetID = i;
+                            break;
+                        }
+
+                        // break if tag no longer converts to text
+                    }
+                }
+            }
+        }
+
+        
+
+        return new AssetStreamStates(assetID, cashSup, cashDem, cashLock, assetSup, assetDem);
     }
 
     public static AssetStreamStates ParseFromTabbedLine(ref string line)
@@ -412,6 +472,18 @@ public record AssetStreamStates(int AssetId, decimal CashSupply, decimal CashDem
 
         return new AssetStreamStates(i, cS, cD, cL, aS, aD);
     }
+
+    public bool IsEqual(AssetStreamStates state)
+    {
+        if (state.AssetId != AssetId) return false;
+        if (state.AssetSupply != AssetSupply) return false;
+        if (state.AssetDemand != AssetDemand) return false;
+        if (state.CashSupply != CashSupply) return false;
+        if (state.CashDemand != CashDemand) return false;
+        if (state.CashLock != CashLock) return false;
+
+        return true;
+    }
 }
 
 public record ContractStreamStates(int ContractId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
@@ -422,9 +494,8 @@ public record ContractStreamStates(int ContractId, decimal CashSupply, decimal C
     }
 
     public static ContractStreamStates ParseFromIntention(string intention)
-    { 
-        // replace this line with correct code
-        return ContractStreamStates.ParseFromTabbedLine(ref intention);
+    {
+        return new ContractStreamStates(0, 0, 0, 0, 0, 0);
     }
 
     public static ContractStreamStates ParseFromTabbedLine(ref string line)
@@ -461,7 +532,7 @@ public record ContractTransferStates(int TransferId, decimal CashSupply, decimal
     public static ContractTransferStates ParseFromIntention(string intention)
     {
         // replace this line with correct code
-        return ContractTransferStates.ParseFromTabbedLine(ref intention);
+        return new ContractTransferStates(0, 0, 0, 0, 0, 0);
     }
     public static ContractTransferStates ParseFromTabbedLine(ref string line)
     {

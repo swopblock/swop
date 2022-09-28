@@ -11,8 +11,9 @@ namespace Swopblock
     internal class DemoWeb
     {
         public static List<string> Patterns = new List<string> 
-        { 
-            "i want to * * * * * * for * *"
+        {
+            "I am * * exactly * * * * of mine from my address * * in order to buy at least * * * * of yours from the market and my order is good until the market volume reaches * * SWOBL using my signature * *.",
+            "I am * * at least * * * * of yours from the market in order to sell exactly * * * * of mine from my address * * and my order is good until the market volume reaches * * SWOBL using my signature * *."
         };
 
         private static IntentionWeb demo = new IntentionWeb("i want to", new List<IntentionWeb>
