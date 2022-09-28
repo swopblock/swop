@@ -303,6 +303,7 @@ public class SimulationStates
 
     public static SimulationStates ParseFromIntention(string intention)
     {
+
         // figure out which patterns are matched
 
         foreach (string pattern in DemoWeb.Patterns)
@@ -323,11 +324,11 @@ public class SimulationStates
 
         state.LiquidityStreamState = new LiquidityStreamStates(0, 0, 0, 0);
 
-        state.AssetStreamState = new AssetStreamStates(0, 0, 0, 0, 0, 0);
+        state.AssetStreamState = AssetStreamStates.ParseFromIntention(intention);
 
-        state.ContractStreamState = new ContractStreamStates(0, 0, 0, 0, 0, 0);
+        state.ContractStreamState = ContractStreamStates.ParseFromIntention(intention);
 
-        state.LiquidityTransferState = new ContractTransferStates(0, 0, 0, 0, 0, 0);
+        state.LiquidityTransferState = ContractTransferStates.ParseFromIntention(intention);
 
         state.ConsensusState = new ConsensusStates(0, 0, 0, 0, 0, 0);
 
@@ -380,6 +381,12 @@ public record AssetStreamStates(int AssetId, decimal CashSupply, decimal CashDem
         return $"{AssetId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
     }
 
+    public static AssetStreamStates ParseFromIntention(string intention)
+    {
+        // replace this line with correct code
+        return AssetStreamStates.ParseFromTabbedLine(ref intention);
+    }
+
     public static AssetStreamStates ParseFromTabbedLine(ref string line)
     {
         var fields = line.Split('\t', 7);
@@ -407,6 +414,12 @@ public record ContractStreamStates(int ContractId, decimal CashSupply, decimal C
     public string ParseToTabbedLine()
     {
         return $"{ContractId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
+    }
+
+    public static ContractStreamStates ParseFromIntention(string intention)
+    { 
+        // replace this line with correct code
+        return ContractStreamStates.ParseFromTabbedLine(ref intention);
     }
 
     public static ContractStreamStates ParseFromTabbedLine(ref string line)
@@ -439,6 +452,12 @@ public record ContractTransferStates(int TransferId, decimal CashSupply, decimal
         return $"{TransferId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
     }
 
+
+    public static ContractTransferStates ParseFromIntention(string intention)
+    {
+        // replace this line with correct code
+        return ContractTransferStates.ParseFromTabbedLine(ref intention);
+    }
     public static ContractTransferStates ParseFromTabbedLine(ref string line)
     {
         var fields = line.Split('\t', 7);

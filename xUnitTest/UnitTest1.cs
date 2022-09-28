@@ -152,5 +152,78 @@ namespace ProgramUnitTesting
             Assert.True(SimulationStates.CheckTabbedLineFormat(tabbedLine));
         }
 
+        string[] asset = new[] { "SWOBL", "BTC", "ETH" };
+
+        string[] transfer = new[] { "buy", "sell" };
+
+        string[] contracting = new[] { "bidding", "asking" };
+
+        [Theory]
+        [InlineData(1, 150, 1, 10, 5000, 59999)]
+        [InlineData(2, 260, 1, 20, 6000, 69999)]
+        [InlineData(1, 370, 2, 30, 7000, 79999)]
+        [InlineData(2, 480, 2, 40, 8000, 89999)]
+
+        public void TestSimulationStateFromIntention(int assetId, int contractId, int transferId, decimal valueOfMine, decimal valueOfYours, decimal expirationVolume)
+        {
+            var ofMine = $"exactly {valueOfMine} SWOBL of mine from my address {contractId}";
+
+            var ofYours = $"at least {valueOfYours} {asset[assetId]} of yours from the market";
+
+            var expiration = $"and my order is good until the market volume reaches {expirationVolume} SWOBL";
+
+            var signature = $"using my signature {transferId}.";
+
+            string contracting;
+
+            string intention = null;
+
+            decimal cashSupply = 0, cashDemand = 0, cashLock = expirationVolume, assetSupply = 0, assetDemand = 0;
+
+            if (transferId == 1) //buy
+            {
+                contracting = $"bidding {ofMine} in order to buy {ofYours}";
+
+                intention = $"I am {contracting} {expiration} {signature}";
+
+                cashSupply = valueOfMine; 
+
+                assetSupply = valueOfYours; 
+            }
+
+            if (transferId == 2) //sell
+            {
+                contracting = $"asking {ofYours} in order to sell {ofMine}";
+
+                intention = $"I am {contracting} {expiration} {signature}";
+
+                cashSupply = valueOfYours;
+
+                assetSupply = valueOfMine;
+            }
+
+            else
+            {
+                Assert.True(false);
+            }
+
+            var stateA = SimulationStates.ParseFromIntention(intention);
+
+            var stateB = new SimulationStates();
+
+            stateB.LiquidityStreamState = new LiquidityStreamStates(0, 0, 0, 0);
+
+            stateB.AssetStreamState = new AssetStreamStates(assetId, 0, 0, 0, 0, 0);
+
+            stateB.ContractStreamState = new ContractStreamStates(contractId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
+
+            stateB.LiquidityTransferState = new ContractTransferStates(transferId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
+
+            stateB.ConsensusState = new ConsensusStates(0, 0, 0, 0, 0, 0);
+
+
+            Assert.True(stateA.IsEqual(stateB));
+
+        }
     }
 }
