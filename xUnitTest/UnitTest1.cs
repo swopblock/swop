@@ -64,6 +64,25 @@ namespace ConsensusUnitTesting
 
             Assert.Empty(consensusArgs);
         }
+
+        //[Fact]
+        //public void TestStepState()
+        //{
+        //    var consensus = new ConsensusModule(null);
+
+        //    var input = SimulationStates.FromTest();
+
+
+        //    var expected = SimulationStates.FromRandom();
+
+        //    SimulationStates actual;
+
+        //    var stepState = consensus.StepState(input, out actual);
+
+
+        //    Assert.Equal(expected, actual);
+        //}
+
     }
 }
 
@@ -100,6 +119,24 @@ namespace ExecutionUnitTesting
             var sim = new ExecutionModule(executionArgs);
 
             Assert.Empty(executionArgs);
+        }
+
+        [Fact]
+        public void TestStepState()
+        {
+            var execution = new ExecutionModule(null);
+
+            var input = SimulationStates.FromTest();
+
+
+            var expected = SimulationStates.FromRandom();
+
+            SimulationStates actual;
+
+            var stepState = execution.StepState(input, out actual);
+
+
+            Assert.Equal(expected, actual);
         }
     }
 }

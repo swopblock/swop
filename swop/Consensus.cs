@@ -14,5 +14,12 @@ namespace Swopblock
         {
             return state;
         }
+
+        public int StepState(SimulationStates input, out SimulationStates output)
+        {
+            output = input;
+
+            return 0;
+        }
     }
 }

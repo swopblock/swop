@@ -79,6 +79,15 @@ namespace Swopblock
             return exit;
         }
 
+        public int StepState(SimulationStates input, out SimulationStates output)
+        {
+            consensus.StepState(input, out output);
+
+            execution.StepState(input, out output);
+
+            return 0;
+        }
+
         #region Non-Public Members
 
 
