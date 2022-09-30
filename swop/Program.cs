@@ -226,13 +226,20 @@ public class SimulationStates
 
     public bool IsEqual(SimulationStates one)
     {
-        if (this.LiquidityTransferState != one.LiquidityTransferState) return false;
-        if (this.AssetStreamState != one.AssetStreamState) return false;
-        if (this.ContractStreamState != one.ContractStreamState) return false;
-        if (this.LiquidityTransferState != one.LiquidityTransferState) return false;
-        if (this.ConsensusState != one.ConsensusState) return false;
+        return this.LiquidityStreamState.IsEqual(one.LiquidityStreamState) &&
+            this.AssetStreamState.IsEqual(one.AssetStreamState) &&
+            this.ContractStreamState.IsEqual(one.ContractStreamState) &&
+            this.LiquidityTransferState.IsEqual(one.LiquidityTransferState) &&
+            this.ConsensusState.IsEqual(one.ConsensusState);
 
-        return true;
+
+
+
+        //if (this.LiquidityTransferState != one.LiquidityTransferState) return false;
+        //if (this.AssetStreamState != one.AssetStreamState) return false;
+        //if (this.ContractStreamState != one.ContractStreamState) return false;
+        //if (this.LiquidityTransferState != one.LiquidityTransferState) return false;
+        //if (this.ConsensusState != one.ConsensusState) return false;
     }
 
     public static SimulationStates Empty
@@ -364,6 +371,16 @@ public record LiquidityStreamStates(int StreamId,  decimal CashSupply, decimal C
     public static LiquidityStreamStates operator +(LiquidityStreamStates one, LiquidityStreamStates two) { return null; }
 
     public static LiquidityStreamStates Empty { get { return new LiquidityStreamStates(0, 0, 0, 0); } }
+
+    public bool IsEqual(LiquidityStreamStates state)
+    {
+        if (state.StreamId != StreamId) return false;
+        if (state.CashSupply != CashSupply) return false;
+        if (state.CashDemand != CashDemand) return false;
+        if (state.CashLock != CashLock) return false;
+
+        return true;
+    }
 }
 
 public record AssetStreamStates(int AssetId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
@@ -375,81 +392,9 @@ public record AssetStreamStates(int AssetId, decimal CashSupply, decimal CashDem
 
     public static AssetStreamStates ParseFromIntention(string intention)
     {
-        /*
-         * I am [bidding] exactly [100] [SWOBL] of mine from my address [cid] 
-         * in order to buy at least [1] [BTC] of yours from the market 
-         * and my order is good until the market volume reaches [expirationVolume] SWOBL 
-         * using my signature [transferId].
-         */
+        DemoWeb.DataBag bag = DemoWeb.DefaultParse(intention);
 
-        string assetTag = "";
-        int assetID = 0;
-        decimal cashSup = 0;
-        decimal cashDem = 0;
-        decimal assetSup = 0;
-        decimal assetDem = 0;
-        decimal cashLock = 0;
-
-        MatchResult res = null;
-
-        foreach (string pattern in DemoWeb.Patterns)
-        {
-            res = IntentionBranch.MatchesPattern(intention, pattern);
-
-            if (res.Matches)
-            {
-                break;
-            }
-        }
-
-        if(res != null)
-        {
-            if(res.EmbeddedValues != null)
-            {
-                if(res.EmbeddedValues.Count > 7)
-                {
-                    if (res.EmbeddedValues[0].ToLower() == "bidding")
-                    {
-                        if (res.EmbeddedValues[2].ToLower() == "swobl")
-                        {
-                            cashSup = decimal.Parse(res.EmbeddedValues[1]);
-                            cashDem = 0;
-                            assetSup = 0;
-                            assetDem = decimal.Parse(res.EmbeddedValues[4]);
-                            cashLock = decimal.Parse(res.EmbeddedValues[6]);
-
-                            assetTag = res.EmbeddedValues[5].ToLower();
-                        }
-                    }
-                    else if (res.EmbeddedValues[0].ToLower() == "asking")
-                    {
-                        assetTag = res.EmbeddedValues[2].ToLower();
-
-                        cashDem = decimal.Parse(res.EmbeddedValues[3]);
-                        cashSup = 0;
-                        assetDem = 0;
-                        assetSup = decimal.Parse(res.EmbeddedValues[1]);
-                    }
-
-                    for (int i = 0; i < ushort.MaxValue; i++)
-                    {
-                        Program.AssetTags tag = (Program.AssetTags)i;
-
-                        if (tag.ToString().ToLower() == assetTag)
-                        {
-                            assetID = i;
-                            break;
-                        }
-
-                        // break if tag no longer converts to text
-                    }
-                }
-            }
-        }
-
-        
-
-        return new AssetStreamStates(assetID, cashSup, cashDem, cashLock, assetSup, assetDem);
+        return new AssetStreamStates(bag.assetID, 0, 0, 0, 0, 0);
     }
 
     public static AssetStreamStates ParseFromTabbedLine(ref string line)
@@ -495,7 +440,9 @@ public record ContractStreamStates(int ContractId, decimal CashSupply, decimal C
 
     public static ContractStreamStates ParseFromIntention(string intention)
     {
-        return new ContractStreamStates(0, 0, 0, 0, 0, 0);
+        DemoWeb.DataBag bag = DemoWeb.DefaultParse(intention);
+
+        return new ContractStreamStates(1, bag.cashSup, bag.cashDem, bag.cashLock, bag.assetSup, bag.assetDem);
     }
 
     public static ContractStreamStates ParseFromTabbedLine(ref string line)
@@ -518,6 +465,18 @@ public record ContractStreamStates(int ContractId, decimal CashSupply, decimal C
 
         return new ContractStreamStates(i, cS, cD, cL, aS, aD);
     }
+
+    public bool IsEqual(ContractStreamStates state)
+    {
+        //if (state.ContractId != ContractId) return false;
+        if (state.AssetSupply != AssetSupply) return false;
+        if (state.AssetDemand != AssetDemand) return false;
+        if (state.CashSupply != CashSupply) return false;
+        if (state.CashDemand != CashDemand) return false;
+        if (state.CashLock != CashLock) return false;
+
+        return true;
+    }
 }
 
 
@@ -531,8 +490,11 @@ public record ContractTransferStates(int TransferId, decimal CashSupply, decimal
 
     public static ContractTransferStates ParseFromIntention(string intention)
     {
-        // replace this line with correct code
-        return new ContractTransferStates(0, 0, 0, 0, 0, 0);
+
+
+        DemoWeb.DataBag bag = DemoWeb.DefaultParse(intention);
+
+        return new ContractTransferStates(1, bag.cashSup, bag.cashDem, bag.cashLock, bag.assetSup, bag.assetDem);
     }
     public static ContractTransferStates ParseFromTabbedLine(ref string line)
     {
@@ -553,6 +515,18 @@ public record ContractTransferStates(int TransferId, decimal CashSupply, decimal
         line = fields[6];
 
         return new ContractTransferStates(i, cS, cD, cL, aS, aD);
+    }
+
+    public bool IsEqual(ContractTransferStates state)
+    {
+        //if (state.TransferId != TransferId) return false;
+        if (state.AssetSupply != AssetSupply) return false;
+        if (state.AssetDemand != AssetDemand) return false;
+        if (state.CashSupply != CashSupply) return false;
+        if (state.CashDemand != CashDemand) return false;
+        if (state.CashLock != CashLock) return false;
+
+        return true;
     }
 }
 
@@ -581,6 +555,12 @@ public record ConsensusStates(int ConsensusId, decimal Safety, Int64 ProofOfStak
         line = "\n";
 
         return new ConsensusStates(i, S, pS, pW, supperId, relayId);
+    }
+
+    public bool IsEqual(ConsensusStates one)
+    {
+        // add consensus comparision
+        return true;
     }
 }
 #endregion

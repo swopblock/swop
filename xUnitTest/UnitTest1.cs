@@ -231,19 +231,19 @@ namespace ProgramUnitTesting
                 // asset demand wasnt set so i fixed it
                 assetDemand = valueOfYours;
             }
-            if (transferId == 2) //sell
+            else if (transferId == 2) //sell
             {
                 contracting = $"asking {ofYours} in order to sell {ofMine}";
 
                 intention = $"I am {contracting} {expiration} {signature}";
 
-                cashSupply = 0;
+                cashSupply = valueOfMine;
                 // cash demand wasnt set so i fixed it
-                cashDemand = valueOfYours;
+                cashDemand = 0;
 
-                assetSupply = valueOfMine;
+                assetSupply = 0;
 
-                assetDemand = 0;
+                assetDemand = valueOfYours;
             }
             else
             {
@@ -264,7 +264,10 @@ namespace ProgramUnitTesting
 
             stateB.ConsensusState = new ConsensusStates(0, 0, 0, 0, 0, 0);
 
+            Assert.True(stateA.LiquidityStreamState.IsEqual(stateB.LiquidityStreamState));
             Assert.True(stateA.AssetStreamState.IsEqual(stateB.AssetStreamState));
+            Assert.True(stateA.ContractStreamState.IsEqual(stateB.ContractStreamState));
+            Assert.True(stateA.LiquidityTransferState.IsEqual(stateB.LiquidityTransferState));
 
             Assert.True(stateA.IsEqual(stateB));
 
