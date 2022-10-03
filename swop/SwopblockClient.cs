@@ -81,9 +81,11 @@ namespace Swopblock
 
         public int StepState(SimulationStates input, out SimulationStates output)
         {
-            consensus.StepState(input, out output);
+            SimulationStates pipe;
 
-            execution.StepState(input, out output);
+            consensus.StepState(input, out pipe);
+
+            execution.StepState(pipe, out output);
 
             return 0;
         }

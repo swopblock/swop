@@ -254,20 +254,20 @@ namespace ProgramUnitTesting
 
             var stateB = new SimulationStates();
 
-            stateB.LiquidityStreamState = new LiquidityStreamStates(0, 0, 0, 0);
+            stateB.MainStreamState = new MainStreamStates(0, 0, 0, 0);
 
-            stateB.AssetStreamState = new AssetStreamStates(assetId, 0, 0, 0, 0, 0);
+            stateB.BranchStreamState = new BranchStreamStates(assetId, 0, 0, 0, 0, 0);
 
             stateB.ContractStreamState = new ContractStreamStates(contractId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
 
-            stateB.LiquidityTransferState = new ContractTransferStates(transferId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
+            stateB.SignatureStreamTransfers = new SignatureStreamTransfers(transferId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
 
             stateB.ConsensusState = new ConsensusStates(0, 0, 0, 0, 0, 0);
 
-            Assert.True(stateA.LiquidityStreamState.IsEqual(stateB.LiquidityStreamState));
-            Assert.True(stateA.AssetStreamState.IsEqual(stateB.AssetStreamState));
+            Assert.True(stateA.MainStreamState.IsEqual(stateB.MainStreamState));
+            Assert.True(stateA.BranchStreamState.IsEqual(stateB.BranchStreamState));
             Assert.True(stateA.ContractStreamState.IsEqual(stateB.ContractStreamState));
-            Assert.True(stateA.LiquidityTransferState.IsEqual(stateB.LiquidityTransferState));
+            Assert.True(stateA.SignatureStreamTransfers.IsEqual(stateB.SignatureStreamTransfers));
 
             Assert.True(stateA.IsEqual(stateB));
 

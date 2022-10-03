@@ -26,6 +26,8 @@ namespace Swopblock
         {
             stop = start;
 
+            //start.BranchStreamState
+
             return 0;
         }
     }
@@ -54,7 +56,7 @@ namespace Swopblock
 
     public class RelayListOfOrders
     {
-        List<Orders> Orders;
+        List<Contracts> Orders;
 
         public int Id;
 
@@ -77,28 +79,43 @@ namespace Swopblock
         public decimal stopCashDemand;
         public decimal stopCashLock;
 
-        public Assets startAsset;
+        public Branches startAsset;
 
-        public List<Assets> Assets; 
+        public List<Branches> Branches; 
 
         public StreamListOfSupers Suppers;
 
         public void SetState(SimulationStates state)
         {
-            startStreamId = state.LiquidityStreamState.StreamId;
-            startCashSupply = state.LiquidityStreamState.CashSupply;
-            startCashDemand = state.LiquidityStreamState.CashDemand;
-            startCashLock = state.LiquidityStreamState.CashLock;
+            startStreamId = state.MainStreamState.StreamId;
+            startCashSupply = state.MainStreamState.CashSupply;
+            startCashDemand = state.MainStreamState.CashDemand;
+            startCashLock = state.MainStreamState.CashLock;
 
-            startAsset = Assets[state.AssetStreamState.AssetId];
+            startAsset = Branches[state.BranchStreamState.AssetId];
 
-            // I AM HERE.
+            
 
+        }
+
+        public void UpdateState()
+        {
+            foreach (var branch in Branches)
+            {
+                foreach(var contract in branch.Contracts)
+                {
+                    foreach(var transfer in contract.Transfers)
+                    {
+                        ;
+                    }
+                }
+            }
         }
     }
 
-    public class Assets
+    public class Branches
     {
+        public List<Contracts> Contracts;
         // Start
         public static int startAssetId;
         public static decimal startCashSupply;
@@ -108,44 +125,113 @@ namespace Swopblock
         public static decimal startAssetSupply;
         public static decimal startAssetDemand;
 
-        public Orders startOrder;
+        public Contracts startOrder;
 
         // Stop
         public int stopAssetId;
         public decimal stopCashSupply;
         public decimal stopCashDemand;
         public decimal stopCashLock;
-        public Orders stopOrder;
+        public Contracts stopOrder;
 
 
-        public void SetState(AssetStreamStates state)
+        public void SetState(BranchStreamStates state)
         {
             startAssetId = state.AssetId;
             startCashSupply = state.CashSupply;
             startCashDemand= state.CashDemand;
             
         }
+
+        public void UpdateState()
+        {
+            stopAssetId = startAssetId;
+        }
+
+        public BranchStreamStates GetState()
+        {
+            return null;  //stopState;
+        }
     }
 
-    public class BTC : Assets { }
+    public class BTC : Branches { }
 
-    public class ETH : Assets { }
+    public class ETH : Branches { }
 
 
-    public class Orders
+    public class Contracts
     {
-        // Genesis
-        public static int GenesisAssetId;
-        public static decimal GenesisCashSupply;
-        public static decimal GenesisCashDemand;
-        public static decimal GenesisCashLock;
+        public List<Transfers> Transfers;
 
-        // Current
-        public int CurrentAssetId;
-        public decimal CurrentCashSupply;
-        public decimal CurrentCashDemand;
-        public decimal CurrentCashLock;
+        public static int startAssetId;
+        public static decimal startCashSupply;
+        public static decimal startCashDemand;
+        public static decimal startCashLock;
 
-        public Orders CurrentOrder;
+        public static decimal startAssetSupply;
+        public static decimal startAssetDemand;
+
+        public Contracts CurrentOrder;
+    }
+
+    public class Transfers
+    {
+        // start
+        public static int sourceAssetId;
+        public static decimal sourceCashSupplyTransfer;
+        public static decimal sourceCashDemandTransfer;
+        public static decimal sourceCashExpiration;
+
+        public static decimal sourceAssetSupplyTransfer;
+        public static decimal sourceAssetDemandTransfer;
+
+        // stop
+        public static int sinkAssetId;
+        public static decimal sinkCashSupplyTransfer;
+        public static decimal sinkCashDemandTransfer;
+        public static decimal sinkCashExpiration;
+
+        public static decimal sinkAssetSupplyTransfer;
+        public static decimal sinkAssetDemandTransfer;
+
+        public void UpdateState()
+        {
+            //if (sourceCashSupplyTransfer == )
+        }
+
+        public void BidUpdate()
+        {
+
+        }
+
+        public bool IsBid()
+        {
+            return false;
+        }
+
+        public bool IsAsk()
+        {
+            return false;
+        }
+
+        public bool IsSell()
+        {
+            return false;
+        }
+
+        public bool IsBuy()
+        {
+            return false;
+        }
+        
+        public bool IsInvest()
+        {
+            return false;
+        }
+
+        public bool IsDivest()
+        {
+            return true;
+        }
     }
 }
