@@ -188,7 +188,7 @@ public class SimulationStates
 
     public ContractStreamStates ContractStreamState;
 
-    public SignatureStreamTransfers SignatureStreamTransfers;
+    public SignatureStreamTransfers SignatureStreamTransfer;
 
     public ConsensusStates ConsensusState;
 
@@ -209,10 +209,10 @@ public class SimulationStates
         get
         {
             return new SimulationStates(
-                LiquidityStreamStates.Empty,
-                AssetStreamStates.Empty,
+                MainStreamStates.Empty,
+                BranchStreamStates.Empty,
                 ContractStreamStates.Empty,
-                ContractTransferStates.Empty,
+                SignatureStreamTransfers.Empty,
                 ConsensusStates.Empty);
         }
     }
@@ -227,7 +227,7 @@ public class SimulationStates
         MainStreamState = liquidityStreamState;
         BranchStreamState = assetStreamState;
         ContractStreamState = contractStreamState;
-        SignatureStreamTransfers = liquidityTransferState;
+        SignatureStreamTransfer = liquidityTransferState;
         ConsensusState = consensusState;
     }
 
@@ -243,7 +243,7 @@ public class SimulationStates
         return this.MainStreamState.IsEqual(one.MainStreamState) &&
             this.BranchStreamState.IsEqual(one.BranchStreamState) &&
             this.ContractStreamState.IsEqual(one.ContractStreamState) &&
-            this.SignatureStreamTransfers.IsEqual(one.SignatureStreamTransfers) &&
+            this.SignatureStreamTransfer.IsEqual(one.SignatureStreamTransfer) &&
             this.ConsensusState.IsEqual(one.ConsensusState);
     }
 
@@ -251,11 +251,13 @@ public class SimulationStates
     {
         SimulationStates nState = new SimulationStates();
 
-        nState.AssetStreamState = this.AssetStreamState.Add(state.AssetStreamState);
+        nState.BranchStreamState = this.BranchStreamState.Add(state.BranchStreamState);
         nState.ContractStreamState = this.ContractStreamState.Add(state.ContractStreamState);
-        nState.LiquidityTransferState = this.LiquidityTransferState.Add(state.LiquidityTransferState);
+        nState.MainStreamState = this.MainStreamState.Add(state.MainStreamState);
         nState.ConsensusState = this.ConsensusState.Add(state.ConsensusState);
-        nState.LiquidityStreamState = this.LiquidityStreamState.Add(state.LiquidityStreamState);
+        nState.SignatureStreamTransfer = this.SignatureStreamTransfer.Add(state.SignatureStreamTransfer);
+
+        return nState;
     }
 
     public static SimulationStates FromTest()
@@ -302,7 +304,7 @@ public class SimulationStates
 
         state.ContractStreamState = ContractStreamStates.ParseFromTabbedLine(ref line);
 
-        state.SignatureStreamTransfers = SignatureStreamTransfers.ParseFromTabbedLine(ref line);
+        state.SignatureStreamTransfer = SignatureStreamTransfers.ParseFromTabbedLine(ref line);
 
         state.ConsensusState = ConsensusStates.ParseFromTabbedLine(ref line);
 
@@ -318,7 +320,7 @@ public class SimulationStates
 
         line += ContractStreamState.ParseToTabbedLine();
 
-        line += SignatureStreamTransfers.ParseToTabbedLine();
+        line += SignatureStreamTransfer.ParseToTabbedLine();
 
         line += ConsensusState.ParseToTabbedLine();
 
@@ -329,13 +331,13 @@ public class SimulationStates
     {
         var state = new SimulationStates();
 
-        state.LiquidityStreamState = LiquidityStreamStates.Empty;
+        state.MainStreamState = MainStreamStates.Empty;
 
         state.BranchStreamState = BranchStreamStates.ParseFromIntention(intention);
 
         state.ContractStreamState = ContractStreamStates.ParseFromIntention(intention);
 
-        state.SignatureStreamTransfers = SignatureStreamTransfers.ParseFromIntention(intention);
+        state.SignatureStreamTransfer = SignatureStreamTransfers.ParseFromIntention(intention);
 
         state.ConsensusState = ConsensusStates.Empty;
 
@@ -354,7 +356,7 @@ public class SimulationStates
 // top level
 public record MainStreamStates(int StreamId,  decimal CashSupply, decimal CashDemand, decimal CashLock)
 {
-    public static LiquidityStreamStates Empty { get { return new LiquidityStreamStates(0, 0, 0, 0); } }
+    public static MainStreamStates Empty { get { return new MainStreamStates(0, 0, 0, 0); } }
     public string ParseToTabbedLine()
     {
         return $"{StreamId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t";
@@ -377,9 +379,9 @@ public record MainStreamStates(int StreamId,  decimal CashSupply, decimal CashDe
         return new MainStreamStates(i, s, d, l);
     }
 
-    public LiquidityStreamStates Add(LiquidityStreamStates state)
+    public MainStreamStates Add(MainStreamStates state)
     {
-        return new LiquidityStreamStates
+        return new MainStreamStates
             (
             state.StreamId + this.StreamId, 
             state.CashSupply + this.CashSupply, 
@@ -401,7 +403,7 @@ public record MainStreamStates(int StreamId,  decimal CashSupply, decimal CashDe
 
 public record BranchStreamStates(int AssetId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
 {
-    public static AssetStreamStates Empty { get { return new AssetStreamStates(0, 0, 0, 0, 0, 0); } }
+    public static BranchStreamStates Empty { get { return new BranchStreamStates(0, 0, 0, 0, 0, 0); } }
     public string ParseToTabbedLine()
     {
         return $"{AssetId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
@@ -435,13 +437,13 @@ public record BranchStreamStates(int AssetId, decimal CashSupply, decimal CashDe
         return new BranchStreamStates(i, cS, cD, cL, aS, aD);
     }
 
-    public AssetStreamStates Add(AssetStreamStates state)
+    public BranchStreamStates Add(BranchStreamStates state)
     {
         if (this.AssetId != state.AssetId) return this;
 
         // remember to check if cashlocks are compatable
 
-        return new AssetStreamStates
+        return new BranchStreamStates
             (
                 state.AssetId,
                 state.CashSupply + this.CashSupply,
@@ -452,7 +454,7 @@ public record BranchStreamStates(int AssetId, decimal CashSupply, decimal CashDe
             );
     }
 
-    public bool IsEqual(AssetStreamStates state)
+    public bool IsEqual(BranchStreamStates state)
     {
         if (state.AssetId != AssetId) return false;
         if (state.AssetSupply != AssetSupply) return false;
@@ -529,7 +531,7 @@ public record ContractStreamStates(int ContractId, decimal CashSupply, decimal C
 
 public record SignatureStreamTransfers(int TransferId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
 {
-    public static ContractTransferStates Empty { get { return new ContractTransferStates(0, 0, 0, 0, 0, 0); } }
+    public static SignatureStreamTransfers Empty { get { return new SignatureStreamTransfers(0, 0, 0, 0, 0, 0); } }
     public string ParseToTabbedLine()
     {
         return $"{TransferId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
@@ -576,9 +578,9 @@ public record SignatureStreamTransfers(int TransferId, decimal CashSupply, decim
         return true;
     }
 
-    public ContractTransferStates Add(ContractTransferStates state)
+    public SignatureStreamTransfers Add(SignatureStreamTransfers state)
     {
-        return new ContractTransferStates
+        return new SignatureStreamTransfers
             (
                 state.TransferId,
                 state.CashSupply + this.CashSupply,

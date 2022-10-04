@@ -254,20 +254,20 @@ namespace ProgramUnitTesting
 
             var stateB = new SimulationStates();
 
-            stateB.LiquidityStreamState = LiquidityStreamStates.Empty;
+            stateB.MainStreamState = MainStreamStates.Empty;
 
             stateB.BranchStreamState = new BranchStreamStates(assetId, 0, 0, 0, 0, 0);
 
             stateB.ContractStreamState = new ContractStreamStates(contractId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
 
-            stateB.SignatureStreamTransfers = new SignatureStreamTransfers(transferId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
+            stateB.SignatureStreamTransfer = new SignatureStreamTransfers(transferId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
 
             stateB.ConsensusState = ConsensusStates.Empty;
 
             Assert.True(stateA.MainStreamState.IsEqual(stateB.MainStreamState));
             Assert.True(stateA.BranchStreamState.IsEqual(stateB.BranchStreamState));
             Assert.True(stateA.ContractStreamState.IsEqual(stateB.ContractStreamState));
-            Assert.True(stateA.SignatureStreamTransfers.IsEqual(stateB.SignatureStreamTransfers));
+            Assert.True(stateA.SignatureStreamTransfer.IsEqual(stateB.SignatureStreamTransfer));
 
             Assert.True(stateA.IsEqual(stateB));
 
