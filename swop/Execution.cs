@@ -7,10 +7,18 @@ namespace Swopblock
 {
     public class ExecutionModule
     {
-        Stream Stream;
+        //**********************************//
+        //* execution structure ************//
 
+        MainStreams MainStream;
 
+        //* execution structure ************//
+        //**********************************//
 
+        public void AddTransfer(TransferStates transfer)
+        {
+
+        }
 
         public ExecutionModule(params string[] args)
         {
@@ -65,8 +73,18 @@ namespace Swopblock
         public static decimal GenesisCashLock;
     }
 
-    public class Stream
+    public class MainStreams
     {
+        //**********************************//
+        //* execution structure ************//
+
+        ExecutionModule OfExecutionModule;
+
+        public List<BranchStreams> Branches;
+
+        //* execution structure ************//
+        //**********************************//
+
         // Genesis
         public static int startStreamId;
         public static decimal startCashSupply;
@@ -79,9 +97,8 @@ namespace Swopblock
         public decimal stopCashDemand;
         public decimal stopCashLock;
 
-        public Branches startAsset;
+        public BranchStreams startAsset;
 
-        public List<Branches> Branches; 
 
         public StreamListOfSupers Suppers;
 
@@ -113,9 +130,18 @@ namespace Swopblock
         }
     }
 
-    public class Branches
+    public class BranchStreams
     {
+        //**********************************//
+        //* execution structure ************//
+
+        public BranchStreams OfMainStream;
+
         public List<Contracts> Contracts;
+
+        //* execution structure ************//
+        //**********************************//
+
         // Start
         public static int startAssetId;
         public static decimal startCashSupply;
@@ -154,14 +180,22 @@ namespace Swopblock
         }
     }
 
-    public class BTC : Branches { }
+    public class BTC : BranchStreams { }
 
-    public class ETH : Branches { }
+    public class ETH : BranchStreams { }
 
 
     public class Contracts
     {
+        //**********************************//
+        //* execution structure ************//
+
+        public BranchStreams OfBranchStream;
+
         public List<Transfers> Transfers;
+
+        //* execution structure ************//
+        //**********************************//
 
         public static int startAssetId;
         public static decimal startCashSupply;
@@ -176,6 +210,15 @@ namespace Swopblock
 
     public class Transfers
     {
+        //**********************************//
+        //* execution structure ************//
+
+        public Contracts OfContract;
+
+        //* execution structure ************//
+        //**********************************//
+
+
         // start
         public static int sourceAssetId;
         public static decimal sourceCashSupplyTransfer;

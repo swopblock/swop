@@ -260,7 +260,7 @@ namespace ProgramUnitTesting
 
             stateB.ContractStreamState = new ContractStreamStates(contractId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
 
-            stateB.SignatureStreamTransfer = new SignatureStreamTransfers(transferId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
+            stateB.SignatureStreamTransfer = new TransferStates(transferId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
 
             stateB.ConsensusState = ConsensusStates.Empty;
 
