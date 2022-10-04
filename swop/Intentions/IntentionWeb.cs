@@ -220,6 +220,10 @@ namespace Swopblock.Intentions
                                                 new IntentionWeb("of yours",null),
                                                 new IntentionWeb("value", null)
                                             }),
+                                            new IntentionWeb("and my order is good until the market volume reaches", new List<IntentionWeb>
+                                            {
+                                                new IntentionWeb("value", null),
+                                            }),
                                         }, DataType.StringValue),
                                     }),
                                 }),
@@ -227,49 +231,55 @@ namespace Swopblock.Intentions
                                 {
                                     new IntentionWeb("at address", new List<IntentionWeb>
                                     {
-                                       
+
                                     }),
                                 }),
                             }),
-                            
+
                             new IntentionWeb("SWOBL", new List<IntentionWeb>
                             {
-                                 new IntentionWeb("of yours", new List<IntentionWeb>
+                                new IntentionWeb("of yours", new List<IntentionWeb>
                                 {
-  
+
                                 }),
                                 new IntentionWeb("of mine", new List<IntentionWeb>
                                 {
-                                    
+
                                 }),
+                                new IntentionWeb("using", null)
                             }),
                             new IntentionWeb("ETH", new List<IntentionWeb>
                             {
                                  new IntentionWeb("of yours", new List<IntentionWeb>
                                 {
-                                   
+
                                 }),
                                 new IntentionWeb("of mine", new List<IntentionWeb>
                                 {
-                                   
+
                                 }),
                             }),
                             new IntentionWeb("BTC", new List<IntentionWeb>
                             {
                                  new IntentionWeb("of yours", new List<IntentionWeb>
                                 {
-                                    
+
                                 }),
                                 new IntentionWeb("of mine", new List<IntentionWeb>
                                 {
-                                   
+
                                 }),
                             }),
                         }, DataType.StringValue)
                     }),
+                    new IntentionWeb("exactly", new List<IntentionWeb>
+                    {
+                         new IntentionWeb("value", null)
+                    }),
                 }),
                 new IntentionWeb("ordering", new List<IntentionWeb>
                 {
+                    new IntentionWeb("exactly", null),
                     new IntentionWeb("at least", new List<IntentionWeb>
                     {
                         new IntentionWeb("value", new List<IntentionWeb>
@@ -484,13 +494,15 @@ namespace Swopblock.Intentions
                 }),
                 new IntentionWeb("bidding", new List<IntentionWeb>
                 {
+                    new IntentionWeb("exactly", null),
                     new IntentionWeb("at least", null)
                 }),
                 new IntentionWeb("selling", new List<IntentionWeb>
                 {
+                    new IntentionWeb("exactly", null),
                     new IntentionWeb("at least", null)
                 }),
-                new IntentionWeb("Using", new List<IntentionWeb>
+                new IntentionWeb("using", new List<IntentionWeb>
                 {
                     new IntentionWeb("my signature", new List<IntentionWeb>
                     {

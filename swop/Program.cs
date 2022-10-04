@@ -45,6 +45,12 @@ namespace Swopblock
 
             simulation.BuildSimultion(1, 1, 1, 1, 1, 1);
 
+            ///////////////////////////////////////////////////////////
+            DemoPrompt dp = new DemoPrompt();
+            dp.Run();
+            ///////////////////////////////////////////////////////////
+            
+
             SimulationStates simulationState;
 
             string line = Console.ReadLine();
@@ -256,6 +262,8 @@ public class SimulationStates
         nState.LiquidityTransferState = this.LiquidityTransferState.Add(state.LiquidityTransferState);
         nState.ConsensusState = this.ConsensusState.Add(state.ConsensusState);
         nState.LiquidityStreamState = this.LiquidityStreamState.Add(state.LiquidityStreamState);
+
+        return nState;
     }
 
     public static SimulationStates FromTest()

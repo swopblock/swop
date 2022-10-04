@@ -13,7 +13,7 @@ namespace Swopblock.Intentions
         
         public IntentionTree()
         {
-            
+            Serializer = new IntentionSerializer(IntentionWeb.DefaultStructure());
         }
 
         public IntentionTree(IntentionSerializer CustomSerializer)
@@ -41,6 +41,8 @@ namespace Swopblock.Intentions
                     byte[] serial = Serializer.Serialize(intention);
 
                     string result = Serializer.Deserialize(serial);
+
+                    Console.WriteLine(result);
 
                     return intention.ToLower().Trim() == result.ToLower().Trim();
                 }
