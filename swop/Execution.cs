@@ -10,14 +10,40 @@ namespace Swopblock
         //**********************************//
         //* execution structure ************//
 
-        MainStreams MainStream;
+        Streams Stream;
 
         //* execution structure ************//
         //**********************************//
 
-        public void AddTransfer(TransferStates transfer)
+        public void SetTransferState(TransferStates transfer)
         {
 
+        }
+
+        public void SetContractState(ContractStates contract)
+        {
+
+        }
+
+        public void SetBranchState(BranchStates branch)
+        {
+
+        }
+
+        public void SetStreamState(StreamStates stream)
+        {
+            //Stream.SetState()
+        }
+
+        public void SetState(StreamStates streamState, BranchStates branchState, ContractStates contractState, TransferStates transferState)
+        {
+            SetStreamState(streamState);
+
+            SetBranchState(branchState);
+
+            SetContractState(contractState);
+
+            SetTransferState(transferState);
         }
 
         public ExecutionModule(params string[] args)
@@ -73,7 +99,7 @@ namespace Swopblock
         public static decimal GenesisCashLock;
     }
 
-    public class MainStreams
+    public class Streams
     {
         //**********************************//
         //* execution structure ************//
@@ -86,10 +112,10 @@ namespace Swopblock
         //**********************************//
 
         // Genesis
-        public static int startStreamId;
-        public static decimal startCashSupply;
-        public static decimal startCashDemand;
-        public static decimal startCashLock;
+        public int startStreamId;
+        public decimal startCashSupply;
+        public decimal startCashDemand;
+        public decimal startCashLock;
         
         //Current
         public int stopStreamId;
@@ -97,22 +123,13 @@ namespace Swopblock
         public decimal stopCashDemand;
         public decimal stopCashLock;
 
-        public Branches startAsset;
-
-
         public StreamListOfSupers Suppers;
 
-        public void SetState(SimulationStates state)
+        public void SetState(StreamStates state)
         {
-            startStreamId = state.MainStreamState.StreamId;
-            startCashSupply = state.MainStreamState.CashSupply;
-            startCashDemand = state.MainStreamState.CashDemand;
-            startCashLock = state.MainStreamState.CashLock;
-
-            startAsset = Branches[state.BranchStreamState.AssetId];
-
-            
-
+            startCashSupply = state.CashSupply;
+            startCashDemand = state.CashDemand;
+            startCashLock = state.CashLock;
         }
 
         public void UpdateState()
@@ -143,15 +160,13 @@ namespace Swopblock
         //**********************************//
 
         // Start
-        public static int startAssetId;
-        public static decimal startCashSupply;
-        public static decimal startCashDemand;
-        public static decimal startCashLock;
+        public int startAssetId;
+        public decimal startCashSupply;
+        public decimal startCashDemand;
+        public decimal startCashLock;
 
-        public static decimal startAssetSupply;
-        public static decimal startAssetDemand;
-
-        public Contracts startOrder;
+        public decimal startAssetSupply;
+        public decimal startAssetDemand;
 
         // Stop
         public int stopAssetId;
@@ -164,9 +179,13 @@ namespace Swopblock
         public void SetState(BranchStates state)
         {
             startAssetId = state.AssetId;
+
             startCashSupply = state.CashSupply;
-            startCashDemand= state.CashDemand;
-            
+            startCashDemand = state.CashDemand;
+            startCashLock = state.CashLock;
+
+            startAssetSupply = state.AssetSupply;
+            startAssetDemand = state.AssetDemand;
         }
 
         public void UpdateState()
@@ -197,15 +216,22 @@ namespace Swopblock
         //* execution structure ************//
         //**********************************//
 
-        public static int startAssetId;
-        public static decimal startCashSupply;
-        public static decimal startCashDemand;
-        public static decimal startCashLock;
+        public int startAssetId;
+        public decimal startCashSupply;
+        public decimal startCashDemand;
+        public decimal startCashLock;
 
-        public static decimal startAssetSupply;
-        public static decimal startAssetDemand;
+        public decimal startAssetSupply;
+        public decimal startAssetDemand;
 
         public Contracts CurrentOrder;
+
+        public void SetState(ContractStates state)
+        {
+            //startAssetId = ?
+            //
+            startAssetSupply = state.AssetSupply;
+        }
     }
 
     public class Transfers
@@ -213,29 +239,34 @@ namespace Swopblock
         //**********************************//
         //* execution structure ************//
 
-        public Contracts OfContract;
+        public Contracts InputContract, TransferContract, OutputContract;
 
         //* execution structure ************//
         //**********************************//
 
 
         // start
-        public static int sourceAssetId;
-        public static decimal sourceCashSupplyTransfer;
-        public static decimal sourceCashDemandTransfer;
-        public static decimal sourceCashExpiration;
+        public int inputContractId;
+        public decimal inputCashSupplyTransfer;
+        public decimal inputCashDemandTransfer;
+        public decimal inputCashExpiration;
 
-        public static decimal sourceAssetSupplyTransfer;
-        public static decimal sourceAssetDemandTransfer;
+        public decimal inputAssetSupplyTransfer;
+        public decimal inputAssetDemandTransfer;
 
         // stop
-        public static int sinkAssetId;
-        public static decimal sinkCashSupplyTransfer;
-        public static decimal sinkCashDemandTransfer;
-        public static decimal sinkCashExpiration;
+        public int outputContractId;
+        public decimal outputCashSupplyTransfer;
+        public decimal outputCashDemandTransfer;
+        public decimal outputCashExpiration;
 
-        public static decimal sinkAssetSupplyTransfer;
-        public static decimal sinkAssetDemandTransfer;
+        public decimal outputAssetSupplyTransfer;
+        public decimal outputAssetDemandTransfer;
+
+        public void SetState(TransferStates state)
+        {
+
+        }
 
         public void UpdateState()
         {
