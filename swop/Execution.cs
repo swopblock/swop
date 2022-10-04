@@ -80,7 +80,7 @@ namespace Swopblock
 
         ExecutionModule OfExecutionModule;
 
-        public List<BranchStreams> Branches;
+        public List<Branches> Branches;
 
         //* execution structure ************//
         //**********************************//
@@ -97,7 +97,7 @@ namespace Swopblock
         public decimal stopCashDemand;
         public decimal stopCashLock;
 
-        public BranchStreams startAsset;
+        public Branches startAsset;
 
 
         public StreamListOfSupers Suppers;
@@ -130,12 +130,12 @@ namespace Swopblock
         }
     }
 
-    public class BranchStreams
+    public class Branches
     {
         //**********************************//
         //* execution structure ************//
 
-        public BranchStreams OfMainStream;
+        public Branches OfMainStream;
 
         public List<Contracts> Contracts;
 
@@ -180,9 +180,9 @@ namespace Swopblock
         }
     }
 
-    public class BTC : BranchStreams { }
+    public class BTC : Branches { }
 
-    public class ETH : BranchStreams { }
+    public class ETH : Branches { }
 
 
     public class Contracts
@@ -190,7 +190,7 @@ namespace Swopblock
         //**********************************//
         //* execution structure ************//
 
-        public BranchStreams OfBranchStream;
+        public Branches OfBranchStream;
 
         public List<Transfers> Transfers;
 
