@@ -19,6 +19,12 @@ namespace Swopblock
 
         public static DataBag DefaultParse(string intention)
         {
+            /*
+           * I am [bidding] exactly [100] [SWOBL] of mine at address [cid] 
+           * in order to buy at least [1] [BTC] of yours at address [address]
+           * and my order is good until the market volume reaches [expirationVolume] SWOBL 
+           * using my signature [transferId].
+           */
 
             /*
              * I am [bidding] exactly [100] [SWOBL] of mine from my address [cid] 

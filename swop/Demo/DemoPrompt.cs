@@ -14,17 +14,27 @@ namespace Swopblock.Demo
         SimulationStates simulationStates = SimulationStates.Empty;
         public void Run()
         {
-            Console.Write("intent: ");
+            Console.WriteLine();
+            Console.Write("Intent: ");
 
             string intention = Console.ReadLine();
 
-            if(Tree.Validate(intention))
+            if (intention.ToLower() != "exit")
             {
-                SimulationStates nState = SimulationStates.ParseFromIntention(intention);
+                if (Tree.Validate(intention))
+                {
+                    SimulationStates nState = SimulationStates.ParseFromIntention(intention);
 
-                simulationStates.Add(nState);
+                    simulationStates.Add(nState);
 
-                Console.WriteLine(simulationStates.ParseToTabbedLine());
+                    Console.WriteLine(simulationStates.ParseToTabbedLine());
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Input");                    
+                }
+
+                Run();
             }
         }
     }

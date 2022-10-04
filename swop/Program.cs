@@ -45,6 +45,12 @@ namespace Swopblock
 
             simulation.BuildSimultion(1, 1, 1, 1, 1, 1);
 
+            ///////////////////////////////////////////////////////////
+            DemoPrompt dp = new DemoPrompt();
+            dp.Run();
+            ///////////////////////////////////////////////////////////
+            
+
             SimulationStates simulationState;
 
             string line = Console.ReadLine();
