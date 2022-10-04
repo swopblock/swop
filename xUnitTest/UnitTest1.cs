@@ -258,7 +258,7 @@ namespace ProgramUnitTesting
 
             stateB.BranchStreamState = new BranchStreamStates(assetId, 0, 0, 0, 0, 0);
 
-            stateB.ContractStreamState = new ContractStreamStates(contractId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
+            stateB.ContractStreamState = new ContractStates(contractId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
 
             stateB.SignatureStreamTransfer = new TransferStates(transferId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
 
