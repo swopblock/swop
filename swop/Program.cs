@@ -188,7 +188,7 @@ public record DigitalValue(DigitalCash cash, DigitalAsset asset) : DigitalEntry(
 
 public class SimulationStates
 {
-    public MainStreamStates MainStreamState;
+    public MainStates MainStreamState;
 
     public BranchStates BranchStreamState;
 
@@ -215,7 +215,7 @@ public class SimulationStates
         get
         {
             return new SimulationStates(
-                MainStreamStates.Empty,
+                MainStates.Empty,
                 BranchStates.Empty,
                 ContractStates.Empty,
                 TransferStates.Empty,
@@ -228,7 +228,7 @@ public class SimulationStates
 
     }
 
-    public SimulationStates(MainStreamStates liquidityStreamState, BranchStates assetStreamState, ContractStates contractStreamState, TransferStates liquidityTransferState, ConsensusStates consensusState)
+    public SimulationStates(MainStates liquidityStreamState, BranchStates assetStreamState, ContractStates contractStreamState, TransferStates liquidityTransferState, ConsensusStates consensusState)
     {
         MainStreamState = liquidityStreamState;
         BranchStreamState = assetStreamState;
@@ -268,7 +268,7 @@ public class SimulationStates
 
     public static SimulationStates FromTest()
     {
-        var LiquidityStreamState = new MainStreamStates(1, 2, 3, 4);
+        var LiquidityStreamState = new MainStates(1, 2, 3, 4);
 
         var AssetStreamState = new BranchStates(5, 6, 7, 8, 9, 10);
 
@@ -285,7 +285,7 @@ public class SimulationStates
 
     public static SimulationStates FromRandom()
     {
-        var LiquidityStreamState = new MainStreamStates(R.Next(NumberOfLiquityStreams), R.Next(), R.Next(), R.Next());
+        var LiquidityStreamState = new MainStates(R.Next(NumberOfLiquityStreams), R.Next(), R.Next(), R.Next());
 
         var AssetStreamState = new BranchStates(R.Next(NumberOfAssetStreams), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
@@ -304,7 +304,7 @@ public class SimulationStates
     {
         var state = new SimulationStates();
 
-        state.MainStreamState = MainStreamStates.ParseFromTabbedLine(ref line);
+        state.MainStreamState = MainStates.ParseFromTabbedLine(ref line);
 
         state.BranchStreamState = BranchStates.ParseFromTabbedLine(ref line);
 
@@ -337,7 +337,7 @@ public class SimulationStates
     {
         var state = new SimulationStates();
 
-        state.MainStreamState = MainStreamStates.Empty;
+        state.MainStreamState = MainStates.Empty;
 
         state.BranchStreamState = BranchStates.ParseFromIntention(intention);
 
@@ -360,15 +360,15 @@ public class SimulationStates
 }
 
 // top level
-public record MainStreamStates(int StreamId,  decimal CashSupply, decimal CashDemand, decimal CashLock)
+public record MainStates(int StreamId,  decimal CashSupply, decimal CashDemand, decimal CashLock)
 {
-    public static MainStreamStates Empty { get { return new MainStreamStates(0, 0, 0, 0); } }
+    public static MainStates Empty { get { return new MainStates(0, 0, 0, 0); } }
     public string ParseToTabbedLine()
     {
         return $"{StreamId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t";
     }
 
-    public static MainStreamStates ParseFromTabbedLine(ref string line)
+    public static MainStates ParseFromTabbedLine(ref string line)
     {
         var fields = line.Split('\t', 5);
 
@@ -382,12 +382,12 @@ public record MainStreamStates(int StreamId,  decimal CashSupply, decimal CashDe
 
         line = fields[4];
 
-        return new MainStreamStates(i, s, d, l);
+        return new MainStates(i, s, d, l);
     }
 
-    public MainStreamStates Add(MainStreamStates state)
+    public MainStates Add(MainStates state)
     {
-        return new MainStreamStates
+        return new MainStates
             (
             state.StreamId + this.StreamId, 
             state.CashSupply + this.CashSupply, 
@@ -396,7 +396,7 @@ public record MainStreamStates(int StreamId,  decimal CashSupply, decimal CashDe
             );       
     }
 
-    public bool IsEqual(MainStreamStates state)
+    public bool IsEqual(MainStates state)
     {
         if (state.StreamId != StreamId) return false;
         if (state.CashSupply != CashSupply) return false;

@@ -254,7 +254,7 @@ namespace ProgramUnitTesting
 
             var stateB = new SimulationStates();
 
-            stateB.MainStreamState = MainStreamStates.Empty;
+            stateB.MainStreamState = MainStates.Empty;
 
             stateB.BranchStreamState = new BranchStates(assetId, 0, 0, 0, 0, 0);
 
