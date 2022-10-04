@@ -9,29 +9,23 @@ namespace Swopblock.Demo
 {
     public class DemoPrompt
     {
-        IntentionTree Tree = DemoWeb.GetTree();
+        IntentionTree Tree = new IntentionTree();
 
-        SwopblockModule client = new SwopblockModule(null, null);
+        SimulationStates simulationStates = SimulationStates.Empty;
         public void Run()
         {
-            //SimulationStates state;
+            Console.Write("intent: ");
 
-            Console.WriteLine("Commands:");
-            Console.WriteLine("Run - Runs a simulation.");
-            Console.WriteLine("Trade - Simulates a specific trade.");
-            Console.WriteLine("Enter a command:");
+            string intention = Console.ReadLine();
 
-            string command = Console.ReadLine();
-
-            if (false) //(client.CaptureIntention(command))
+            if(Tree.Validate(intention))
             {
-                Console.WriteLine("Congratz! Your request has been accepted by the Swopblock Network!");
-                    
-                //state = client.ConsensusProcessor.GetNetworkState();
+                SimulationStates nState = SimulationStates.ParseFromIntention(intention);
 
-                //Console.WriteLine("Cash Volume: " + state.Contract.ContractCashVolume);
-                //Console.WriteLine("Asset Volume: " + state.Contract.ContractAssetVolume);
-            }           
+                simulationStates.Add(nState);
+
+                Console.WriteLine(simulationStates.ParseToTabbedLine());
+            }
         }
     }
 }
