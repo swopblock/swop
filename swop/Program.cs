@@ -190,7 +190,7 @@ public class SimulationStates
 {
     public MainStreamStates MainStreamState;
 
-    public BranchStreamStates BranchStreamState;
+    public BranchStates BranchStreamState;
 
     public ContractStates ContractStreamState;
 
@@ -216,7 +216,7 @@ public class SimulationStates
         {
             return new SimulationStates(
                 MainStreamStates.Empty,
-                BranchStreamStates.Empty,
+                BranchStates.Empty,
                 ContractStates.Empty,
                 TransferStates.Empty,
                 ConsensusStates.Empty);
@@ -228,7 +228,7 @@ public class SimulationStates
 
     }
 
-    public SimulationStates(MainStreamStates liquidityStreamState, BranchStreamStates assetStreamState, ContractStates contractStreamState, TransferStates liquidityTransferState, ConsensusStates consensusState)
+    public SimulationStates(MainStreamStates liquidityStreamState, BranchStates assetStreamState, ContractStates contractStreamState, TransferStates liquidityTransferState, ConsensusStates consensusState)
     {
         MainStreamState = liquidityStreamState;
         BranchStreamState = assetStreamState;
@@ -270,7 +270,7 @@ public class SimulationStates
     {
         var LiquidityStreamState = new MainStreamStates(1, 2, 3, 4);
 
-        var AssetStreamState = new BranchStreamStates(5, 6, 7, 8, 9, 10);
+        var AssetStreamState = new BranchStates(5, 6, 7, 8, 9, 10);
 
         var ContractStreamState = new ContractStates(11, 12, 13, 14, 15, 16);
 
@@ -287,7 +287,7 @@ public class SimulationStates
     {
         var LiquidityStreamState = new MainStreamStates(R.Next(NumberOfLiquityStreams), R.Next(), R.Next(), R.Next());
 
-        var AssetStreamState = new BranchStreamStates(R.Next(NumberOfAssetStreams), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
+        var AssetStreamState = new BranchStates(R.Next(NumberOfAssetStreams), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
         var ContractStreamState = new ContractStates(R.Next(NumberOfContractStreamStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
@@ -306,7 +306,7 @@ public class SimulationStates
 
         state.MainStreamState = MainStreamStates.ParseFromTabbedLine(ref line);
 
-        state.BranchStreamState = BranchStreamStates.ParseFromTabbedLine(ref line);
+        state.BranchStreamState = BranchStates.ParseFromTabbedLine(ref line);
 
         state.ContractStreamState = ContractStates.ParseFromTabbedLine(ref line);
 
@@ -339,7 +339,7 @@ public class SimulationStates
 
         state.MainStreamState = MainStreamStates.Empty;
 
-        state.BranchStreamState = BranchStreamStates.ParseFromIntention(intention);
+        state.BranchStreamState = BranchStates.ParseFromIntention(intention);
 
         state.ContractStreamState = ContractStates.ParseFromIntention(intention);
 
@@ -407,22 +407,22 @@ public record MainStreamStates(int StreamId,  decimal CashSupply, decimal CashDe
     }
 }
 
-public record BranchStreamStates(int AssetId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
+public record BranchStates(int AssetId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
 {
-    public static BranchStreamStates Empty { get { return new BranchStreamStates(0, 0, 0, 0, 0, 0); } }
+    public static BranchStates Empty { get { return new BranchStates(0, 0, 0, 0, 0, 0); } }
     public string ParseToTabbedLine()
     {
         return $"{AssetId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
     }
 
-    public static BranchStreamStates ParseFromIntention(string intention)
+    public static BranchStates ParseFromIntention(string intention)
     {
         DemoWeb.DataBag bag = DemoWeb.DefaultParse(intention);
 
-        return new BranchStreamStates(bag.assetID, 0, 0, 0, 0, 0);
+        return new BranchStates(bag.assetID, 0, 0, 0, 0, 0);
     }
 
-    public static BranchStreamStates ParseFromTabbedLine(ref string line)
+    public static BranchStates ParseFromTabbedLine(ref string line)
     {
         var fields = line.Split('\t', 7);
 
@@ -440,16 +440,16 @@ public record BranchStreamStates(int AssetId, decimal CashSupply, decimal CashDe
 
         line = fields[6];
 
-        return new BranchStreamStates(i, cS, cD, cL, aS, aD);
+        return new BranchStates(i, cS, cD, cL, aS, aD);
     }
 
-    public BranchStreamStates Add(BranchStreamStates state)
+    public BranchStates Add(BranchStates state)
     {
         if (this.AssetId != state.AssetId) return this;
 
         // remember to check if cashlocks are compatable
 
-        return new BranchStreamStates
+        return new BranchStates
             (
                 state.AssetId,
                 state.CashSupply + this.CashSupply,
@@ -460,7 +460,7 @@ public record BranchStreamStates(int AssetId, decimal CashSupply, decimal CashDe
             );
     }
 
-    public bool IsEqual(BranchStreamStates state)
+    public bool IsEqual(BranchStates state)
     {
         if (state.AssetId != AssetId) return false;
         if (state.AssetSupply != AssetSupply) return false;

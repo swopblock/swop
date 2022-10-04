@@ -161,7 +161,7 @@ namespace Swopblock
         public Contracts stopOrder;
 
 
-        public void SetState(BranchStreamStates state)
+        public void SetState(BranchStates state)
         {
             startAssetId = state.AssetId;
             startCashSupply = state.CashSupply;
@@ -174,7 +174,7 @@ namespace Swopblock
             stopAssetId = startAssetId;
         }
 
-        public BranchStreamStates GetState()
+        public BranchStates GetState()
         {
             return null;  //stopState;
         }
