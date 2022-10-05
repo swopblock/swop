@@ -255,13 +255,21 @@ public class SimulationStates
 
     public SimulationStates Add(SimulationStates state)
     {
+        Report rpt = new Report();
+
         SimulationStates nState = new SimulationStates();
 
         nState.BranchState = this.BranchState.Add(state.BranchState);
         nState.ContractState = this.ContractState.Add(state.ContractState);
         nState.StreamState = this.StreamState.Add(state.StreamState);
-        nState.ConsensusState = this.ConsensusState.Add(state.ConsensusState);
+        nState.ConsensusState = this.ConsensusState.Add(state.ConsensusState, state.ContractState.CashSupply);
         nState.SignatureStreamTransfer = this.SignatureStreamTransfer.Add(state.SignatureStreamTransfer);
+
+        //return new DemoWeb.StateBag
+        //{
+        //    Report = rpt,
+        //    nState = nState
+        //};
 
         return nState;
     }
@@ -599,10 +607,12 @@ public record TransferStates(int TransferId, decimal CashSupply, decimal CashDem
 }
 
 public record ConsensusStates(int ConsensusId, decimal Safety, Int64 ProofOfStake, Int64 ProofOfWork, int SuperConsensusId, int RelayConsensusId)
-{    public static ConsensusStates Empty { get { return new ConsensusStates(0, 0, 0, 0, 0, 0); } }
+{
+    public decimal MarketCashVolume = 0;
+    public static ConsensusStates Empty { get { return new ConsensusStates(0, 0, 0, 0, 0, 0); } }
     public string ParseToTabbedLine()
     {
-        return $"{ConsensusId}\t{Safety}\t{ProofOfStake}\t{ProofOfWork}\t{SuperConsensusId}\t{RelayConsensusId}\n";
+        return $"{ConsensusId}\t{Safety}\t{ProofOfStake}\t{ProofOfWork}\t{SuperConsensusId}\t{RelayConsensusId}\t{MarketCashVolume}\n";
     }
     public static ConsensusStates ParseFromTabbedLine(ref string line)
     {
@@ -620,6 +630,8 @@ public record ConsensusStates(int ConsensusId, decimal Safety, Int64 ProofOfStak
 
         var relayId = int.Parse(fields[5]);
 
+        var vol = decimal.Parse(fields[6]);
+
         line = "\n";
 
         return new ConsensusStates(i, S, pS, pW, supperId, relayId);
@@ -631,8 +643,10 @@ public record ConsensusStates(int ConsensusId, decimal Safety, Int64 ProofOfStak
         return true;
     }
 
-    public ConsensusStates Add(ConsensusStates state)
+    public ConsensusStates Add(ConsensusStates state, decimal volume)
     {
+        this.MarketCashVolume += volume;
+
         return this; // needs to be expanded
     }
 }

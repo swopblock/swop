@@ -226,6 +226,10 @@ namespace Swopblock.Intentions
                                             }),
                                         }, DataType.StringValue),
                                     }),
+                                    new IntentionWeb("from the market", new List<IntentionWeb>
+                                    {
+                                        new IntentionWeb("and my order is good until the market volume reaches", null)
+                                })
                                 }),
                                 new IntentionWeb("of mine", new List<IntentionWeb>
                                 {
@@ -233,6 +237,10 @@ namespace Swopblock.Intentions
                                     {
 
                                     }),
+                                    new IntentionWeb("from the market", new List<IntentionWeb>
+                                    { 
+
+                                    })
                                 }),
                             }),
 
@@ -240,7 +248,7 @@ namespace Swopblock.Intentions
                             {
                                 new IntentionWeb("of yours", new List<IntentionWeb>
                                 {
-
+                                    
                                 }),
                                 new IntentionWeb("of mine", new List<IntentionWeb>
                                 {

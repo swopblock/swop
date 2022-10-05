@@ -19,15 +19,24 @@ namespace Swopblock.Demo
 
             string intention = Console.ReadLine();
 
-            if (intention.ToLower() != "exit")
+            intention = intention.ToLower();
+
+            if (intention != "exit")
             {
                 if (Tree.Validate(intention))
                 {
                     SimulationStates nState = SimulationStates.ParseFromIntention(intention);
 
-                    simulationStates.Add(nState);
+                    if (simulationStates.ConsensusState.MarketCashVolume < nState.ContractState.CashLock)
+                    {
+                        simulationStates = simulationStates.Add(nState);
 
-                    Console.WriteLine(simulationStates.ParseToTabbedLine());
+                        Console.WriteLine(simulationStates.ParseToTabbedLine());
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nTx Expired After Volume: " + nState.ContractState.CashLock);
+                    }
                 }
                 else
                 {

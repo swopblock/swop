@@ -272,5 +272,39 @@ namespace ProgramUnitTesting
             Assert.True(stateA.IsEqual(stateB));
 
         }
+
+        [Fact]
+        public void TestIfSimulationStatesAddProperly()
+        {
+            SimulationStates stateOne = new SimulationStates
+                (
+                new StreamStates(0, 0, 0, 0),
+                new BranchStates(0, 0, 0, 0, 0, 0),
+                new ContractStates(0, 0, 0, 0, 0, 0),
+                new TransferStates(0, 0, 0, 0, 0, 0),
+                new ConsensusStates(0, 0, 0, 0, 0, 0)
+                );
+
+            SimulationStates stateTwo = new SimulationStates
+                (
+                new StreamStates(0, 0, 0, 0),
+                new BranchStates(0, 0, 0, 0, 0, 0),
+                new ContractStates(0, 0, 0, 0, 0, 0),
+                new TransferStates(0, 0, 0, 0, 0, 0),
+                new ConsensusStates(0, 0, 0, 0, 0, 0)
+                );
+
+
+            SimulationStates stateResult = new SimulationStates
+                (
+                new StreamStates(0, 0, 0, 0),
+                new BranchStates(0, 0, 0, 0, 0, 0),
+                new ContractStates(0, 0, 0, 0, 0, 0),
+                new TransferStates(0, 0, 0, 0, 0, 0),
+                new ConsensusStates(0, 0, 0, 0, 0, 0)
+                );
+
+            Assert.True(stateOne.Add(stateTwo).IsEqual(stateResult));
+        }
     }
 }
