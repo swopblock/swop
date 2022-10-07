@@ -203,7 +203,7 @@ namespace ProgramUnitTesting
         //I am [bidding] exactly [100] [SWOBL] of mine from my address [cid] in order to buy at least [1] [BTC] of yours from the market and my order is good until the market volume reaches [expirationVolume] SWOBL using my signature [transferId].
         public void TestSimulationStateFromIntention(int assetId, int contractId, int transferId, decimal valueOfMine, decimal valueOfYours, decimal expirationVolume)
         {
-            var ofMine = $"exactly {valueOfMine} SWOBL of mine from my address {contractId}";
+            var ofMine = $"exactly {valueOfMine} SWOBL of mine at address {contractId}";
 
             var ofYours = $"at least {valueOfYours} {asset[assetId]} of yours from the market";
 
@@ -271,6 +271,95 @@ namespace ProgramUnitTesting
 
             Assert.True(stateA.IsEqual(stateB));
 
+        }
+
+        [Fact]
+        public void TestIfSimulationStatesAddProperly()
+        {
+            SimulationStates stateOne = new SimulationStates
+                (
+                new StreamStates(0, 0, 0, 0),
+                new BranchStates(0, 0, 0, 0, 0, 0),
+                new ContractStates(0, 0, 0, 0, 0, 0),
+                new TransferStates(0, 0, 0, 0, 0, 0),
+                new ConsensusStates(0, 0, 0, 0, 0, 0)
+                );
+
+            SimulationStates stateTwo = new SimulationStates
+                (
+                new StreamStates(0, 0, 0, 0),
+                new BranchStates(0, 0, 0, 0, 0, 0),
+                new ContractStates(0, 0, 0, 0, 0, 0),
+                new TransferStates(0, 0, 0, 0, 0, 0),
+                new ConsensusStates(0, 0, 0, 0, 0, 0)
+                );
+
+
+            SimulationStates stateResult = new SimulationStates
+                (
+                new StreamStates(0, 0, 0, 0),
+                new BranchStates(0, 0, 0, 0, 0, 0),
+                new ContractStates(0, 0, 0, 0, 0, 0),
+                new TransferStates(0, 0, 0, 0, 0, 0),
+                new ConsensusStates(0, 0, 0, 0, 0, 0)
+                );
+
+            Assert.True(stateOne.Add(stateTwo).IsEqual(stateResult));
+        }
+
+        [Fact]
+        public void TestIfIndividualStatesAddProperly()
+        {
+            //streamstates
+            {
+                StreamStates stateOne = new StreamStates(0, 0, 0, 0);
+
+                StreamStates stateTwo = new StreamStates(0, 0, 0, 0);
+
+                StreamStates stateResult = new StreamStates(0, 0, 0, 0);
+
+                Assert.True(stateOne.Add(stateTwo).IsEqual(stateResult));
+            }
+            //branchstates
+            {
+                BranchStates stateOne = new BranchStates(0, 0, 0, 0, 0, 0);
+
+                BranchStates stateTwo = new BranchStates(0, 0, 0, 0, 0, 0);
+
+                BranchStates stateResult = new BranchStates(0, 0, 0, 0, 0, 0);
+
+                Assert.True(stateOne.Add(stateTwo).IsEqual(stateResult));
+            }
+            //contractstates
+            {
+                ContractStates stateOne = new ContractStates(0, 0, 0, 0, 0, 0);
+
+                ContractStates stateTwo = new ContractStates(0, 0, 0, 0, 0, 0);
+
+                ContractStates stateResult = new ContractStates(0, 0, 0, 0, 0, 0);
+
+                Assert.True(stateOne.Add(stateTwo).IsEqual(stateResult));
+            }
+            //transferstates
+            {
+                TransferStates stateOne = new TransferStates(0, 0, 0, 0, 0, 0);
+
+                TransferStates stateTwo = new TransferStates(0, 0, 0, 0, 0, 0);
+
+                TransferStates stateResult = new TransferStates(0, 0, 0, 0, 0, 0);
+
+                Assert.True(stateOne.Add(stateTwo).IsEqual(stateResult));
+            }
+            //consensusstates
+            {
+                ConsensusStates stateOne = new ConsensusStates(0, 0, 0, 0, 0, 0);
+
+                ConsensusStates stateTwo = new ConsensusStates(0, 0, 0, 0, 0, 0);
+
+                ConsensusStates stateResult = new ConsensusStates(0, 0, 0, 0, 0, 0);
+
+                Assert.True(stateOne.Add(stateTwo, stateTwo.MarketCashVolume).IsEqual(stateResult));
+            }
         }
     }
 }

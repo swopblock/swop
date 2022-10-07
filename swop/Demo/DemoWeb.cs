@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Swopblock.Intentions;
+using System.Net;
+using System.Security.Cryptography;
 
 namespace Swopblock
 {
@@ -12,8 +14,10 @@ namespace Swopblock
     {
         public static List<string> Patterns = new List<string> 
         {
-            "I am * * exactly * * * * of mine from my address * * in order to buy at least * * * * of yours from the market and my order is good until the market volume reaches * * SWOBL using my signature * *.",
-            "I am * * at least * * * * of yours from the market in order to sell exactly * * * * of mine from my address * * and my order is good until the market volume reaches * * SWOBL using my signature * *."
+            "i am * * exactly * * * * of mine at address * * in order to * * at least * * * * of yours at address * * and my order is good until the market volume reaches * * swobl using my signature * *.",
+            "i am * * exactly * * * * of mine at address * * in order to * * at least * * * * of yours from the market and my order is good until the market volume reaches * * swobl using my signature * *.",
+            "i am * * at least * * * * of yours at address * * in order to * * exactly * * * * of mine at address * * and my order is good until the market volume reaches * * swobl using my signature * *.",
+            "i am * * at least * * * * of yours from the market in order to * * exactly * * * * of mine at address * * and my order is good until the market volume reaches * * swobl using my signature * *."
         };
 
 
@@ -25,13 +29,6 @@ namespace Swopblock
            * and my order is good until the market volume reaches [expirationVolume] SWOBL 
            * using my signature [transferId].
            */
-
-            /*
-             * I am [bidding] exactly [100] [SWOBL] of mine from my address [cid] 
-             * in order to buy at least [1] [BTC] of yours from the market 
-             * and my order is good until the market volume reaches [expirationVolume] SWOBL 
-             * using my signature [transferId].
-             */
 
             /*
              * I am [asking] at least [7000] [BTC] of yours from the market in order to
@@ -52,7 +49,7 @@ namespace Swopblock
 
             foreach (string pattern in DemoWeb.Patterns)
             {
-                res = IntentionBranch.MatchesPattern(intention, pattern);
+                res = IntentionBranch.MatchesPattern(intention.ToLower(), pattern);
 
                 if (res.Matches)
                 {
@@ -62,7 +59,7 @@ namespace Swopblock
 
             if (res != null)
             {
-                if (res.EmbeddedValues != null)
+                if (res.EmbeddedValues != null && res.Matches)
                 {
                     if (res.EmbeddedValues.Count > 7)
                     {
@@ -73,10 +70,10 @@ namespace Swopblock
                                 cashSup = decimal.Parse(res.EmbeddedValues[1]);
                                 cashDem = 0;
                                 assetSup = 0;
-                                assetDem = decimal.Parse(res.EmbeddedValues[4]);
-                                cashLock = decimal.Parse(res.EmbeddedValues[6]);
+                                assetDem = decimal.Parse(res.EmbeddedValues[5]);
+                                cashLock = decimal.Parse(res.EmbeddedValues[7]);
 
-                                assetTag = res.EmbeddedValues[5].ToLower();
+                                assetTag = res.EmbeddedValues[6].ToLower();
                             }
                         }
                         else if (res.EmbeddedValues[0].ToLower() == "asking")
@@ -86,9 +83,9 @@ namespace Swopblock
                             if (assetTag.ToLower() != "swobl")
                             {
                                 cashDem = 0;
-                                cashSup = decimal.Parse(res.EmbeddedValues[3]);
+                                cashSup = decimal.Parse(res.EmbeddedValues[4]);
                                 assetDem = decimal.Parse(res.EmbeddedValues[1]);
-                                cashLock = decimal.Parse(res.EmbeddedValues[6]);
+                                cashLock = decimal.Parse(res.EmbeddedValues[7]);
                                 assetSup = 0;
                             }
                         }
@@ -128,7 +125,13 @@ namespace Swopblock
             public decimal cashLock = 0;
         }
 
-        private static IntentionWeb demo = new IntentionWeb("i want to", new List<IntentionWeb>
+        public class StateBag
+        {
+            public SimulationStates nState { get; set; }
+            public Report Report { get; set; }
+        }
+
+        /*private static IntentionWeb demo = new IntentionWeb("i want to", new List<IntentionWeb>
         {
         new IntentionWeb("bid", new List<IntentionWeb>
         {
@@ -187,6 +190,6 @@ namespace Swopblock
         public static IntentionTree GetTree()
         {
             return new IntentionTree(demo);
-        }
+        }*/
     }
 }
