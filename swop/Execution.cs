@@ -130,6 +130,8 @@ namespace Swopblock
             startCashSupply = state.CashSupply;
             startCashDemand = state.CashDemand;
             startCashLock = state.CashLock;
+
+            startStreamId = state.StreamId;
         }
 
         public void UpdateState()
