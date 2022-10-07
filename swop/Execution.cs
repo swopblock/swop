@@ -90,7 +90,7 @@ namespace Swopblock
 
     public class RelayListOfOrders
     {
-        List<Contracts> Orders;
+        List<Address> Orders;
 
         public int Id;
 
@@ -156,7 +156,7 @@ namespace Swopblock
 
         public BlockChain OfMainStream;
 
-        public List<Contracts> Contracts;
+        public List<Address> Contracts;
 
         //* execution structure ************//
         //**********************************//
@@ -175,7 +175,7 @@ namespace Swopblock
         public decimal stopCashSupply;
         public decimal stopCashDemand;
         public decimal stopCashLock;
-        public Contracts stopOrder;
+        public Address stopOrder;
 
 
         public void SetState(BranchStates state)
@@ -206,7 +206,7 @@ namespace Swopblock
     public class ETH : BlockChain { }
 
 
-    public class Contracts
+    public class Address
     {
         //**********************************//
         //* execution structure ************//
@@ -226,7 +226,7 @@ namespace Swopblock
         public decimal startAssetSupply;
         public decimal startAssetDemand;
 
-        public Contracts CurrentOrder;
+        public Address CurrentOrder;
 
         public void SetState(ContractStates state)
         {
@@ -241,7 +241,7 @@ namespace Swopblock
         //**********************************//
         //* execution structure ************//
 
-        public Contracts InputContract, TransferContract, OutputContract;
+        public Address InputContract, TransferContract, OutputContract;
 
         //* execution structure ************//
         //**********************************//
