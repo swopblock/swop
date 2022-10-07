@@ -12,6 +12,8 @@ namespace Swopblock
 {
     internal class DemoWeb
     {
+        public static IntentionTree GetTree() { return null; }
+
         public static List<string> Patterns = new List<string> 
         {
             "i am * * exactly * * * * of mine at address * * in order to * * at least * * * * of yours at address * * and my order is good until the market volume reaches * * swobl using my signature * *.",
