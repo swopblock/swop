@@ -10,7 +10,7 @@ namespace Swopblock
         //**********************************//
         //* execution structure ************//
 
-        Streams Stream;
+        RelayChain Stream;
 
         //* execution structure ************//
         //**********************************//
@@ -37,7 +37,7 @@ namespace Swopblock
 
         public void SetState(StreamStates streamState, BranchStates branchState, ContractStates contractState, TransferStates transferState)
         {
-            SetStreamState(streamState);
+            Stream.SetState(streamState);
 
             SetBranchState(branchState);
 
@@ -99,14 +99,14 @@ namespace Swopblock
         public static decimal GenesisCashLock;
     }
 
-    public class Streams
+    public class RelayChain
     {
         //**********************************//
         //* execution structure ************//
 
         ExecutionModule OfExecutionModule;
 
-        public List<Branches> Branches;
+        public List<BlockChain> Branches;
 
         //* execution structure ************//
         //**********************************//
@@ -149,12 +149,12 @@ namespace Swopblock
         }
     }
 
-    public class Branches
+    public class BlockChain
     {
         //**********************************//
         //* execution structure ************//
 
-        public Branches OfMainStream;
+        public BlockChain OfMainStream;
 
         public List<Contracts> Contracts;
 
@@ -201,9 +201,9 @@ namespace Swopblock
         }
     }
 
-    public class BTC : Branches { }
+    public class BTC : BlockChain { }
 
-    public class ETH : Branches { }
+    public class ETH : BlockChain { }
 
 
     public class Contracts
@@ -211,7 +211,7 @@ namespace Swopblock
         //**********************************//
         //* execution structure ************//
 
-        public Branches OfBranchStream;
+        public BlockChain OfBranchStream;
 
         public List<Transfers> Transfers;
 
