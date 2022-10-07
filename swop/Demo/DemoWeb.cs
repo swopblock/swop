@@ -49,7 +49,7 @@ namespace Swopblock
 
             foreach (string pattern in DemoWeb.Patterns)
             {
-                res = IntentionBranch.MatchesPattern(intention, pattern);
+                res = IntentionBranch.MatchesPattern(intention.ToLower(), pattern);
 
                 if (res.Matches)
                 {
@@ -59,7 +59,7 @@ namespace Swopblock
 
             if (res != null)
             {
-                if (res.EmbeddedValues != null)
+                if (res.EmbeddedValues != null && res.Matches)
                 {
                     if (res.EmbeddedValues.Count > 7)
                     {
@@ -71,7 +71,7 @@ namespace Swopblock
                                 cashDem = 0;
                                 assetSup = 0;
                                 assetDem = decimal.Parse(res.EmbeddedValues[5]);
-                                cashLock = decimal.Parse(res.EmbeddedValues[8]);
+                                cashLock = decimal.Parse(res.EmbeddedValues[7]);
 
                                 assetTag = res.EmbeddedValues[6].ToLower();
                             }
@@ -83,9 +83,9 @@ namespace Swopblock
                             if (assetTag.ToLower() != "swobl")
                             {
                                 cashDem = 0;
-                                cashSup = decimal.Parse(res.EmbeddedValues[3]);
+                                cashSup = decimal.Parse(res.EmbeddedValues[4]);
                                 assetDem = decimal.Parse(res.EmbeddedValues[1]);
-                                cashLock = decimal.Parse(res.EmbeddedValues[8]);
+                                cashLock = decimal.Parse(res.EmbeddedValues[7]);
                                 assetSup = 0;
                             }
                         }
@@ -131,7 +131,7 @@ namespace Swopblock
             public Report Report { get; set; }
         }
 
-        private static IntentionWeb demo = new IntentionWeb("i want to", new List<IntentionWeb>
+        /*private static IntentionWeb demo = new IntentionWeb("i want to", new List<IntentionWeb>
         {
         new IntentionWeb("bid", new List<IntentionWeb>
         {
@@ -190,6 +190,6 @@ namespace Swopblock
         public static IntentionTree GetTree()
         {
             return new IntentionTree(demo);
-        }
+        }*/
     }
 }
