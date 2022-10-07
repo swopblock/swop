@@ -106,7 +106,7 @@ namespace Swopblock
 
         ExecutionModule OfExecutionModule;
 
-        public List<BlockChain> Branches;
+        public List<BlockChain> Chains;
 
         //* execution structure ************//
         //**********************************//
@@ -136,7 +136,7 @@ namespace Swopblock
 
         public void UpdateState()
         {
-            foreach (var branch in Branches)
+            foreach (var branch in Chains)
             {
                 foreach(var contract in branch.Contracts)
                 {
