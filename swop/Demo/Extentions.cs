@@ -8,7 +8,7 @@ namespace swop.Demo
 {
     public static class Extentions
     {
-        public static ContractStates Add(this ContractStates obj, ContractStates two)
+        public static OrderStates Add(this OrderStates obj, OrderStates two)
         {
             //ContractStreamStates cState = new ContractStreamStates(
             //    0,

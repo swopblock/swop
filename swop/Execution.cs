@@ -10,7 +10,13 @@ namespace Swopblock
         //**********************************//
         //* execution structure ************//
 
-        RelayChain Stream;
+        RelayChains ProcessingRelayChain = new RelayChains();
+
+        BlockChains ProcessingBlockChain = new BlockChains();
+
+        Addresses ProcessingAddress = new Addresses();
+
+        Transfers ProcessingTransfer = new Transfers();
 
         //* execution structure ************//
         //**********************************//
@@ -20,7 +26,7 @@ namespace Swopblock
 
         }
 
-        public void SetContractState(ContractStates contract)
+        public void SetContractState(OrderStates contract)
         {
 
         }
@@ -35,15 +41,15 @@ namespace Swopblock
             //Stream.SetState()
         }
 
-        public void SetState(StreamStates streamState, BranchStates branchState, ContractStates contractState, TransferStates transferState)
+        public void SetState(StreamStates streamState, BranchStates branchState, OrderStates orderState, TransferStates transferState)
         {
-            Stream.SetState(streamState);
+            ProcessingRelayChain.SetState(streamState);
 
-            SetBranchState(branchState);
+            ProcessingBlockChain.SetState(branchState);
 
-            SetContractState(contractState);
+            ProcessingAddress.SetState(orderState);
 
-            SetTransferState(transferState);
+            ProcessingTransfer.SetState(transferState);
         }
 
         public ExecutionModule(params string[] args)
@@ -90,7 +96,7 @@ namespace Swopblock
 
     public class RelayListOfOrders
     {
-        List<Address> Orders;
+        List<Addresses> Orders;
 
         public int Id;
 
@@ -99,14 +105,14 @@ namespace Swopblock
         public static decimal GenesisCashLock;
     }
 
-    public class RelayChain
+    public class RelayChains
     {
         //**********************************//
         //* execution structure ************//
 
         ExecutionModule OfExecutionModule;
 
-        public List<BlockChain> Chains;
+        public List<BlockChains> Chains;
 
         //* execution structure ************//
         //**********************************//
@@ -149,14 +155,14 @@ namespace Swopblock
         }
     }
 
-    public class BlockChain
+    public class BlockChains
     {
         //**********************************//
         //* execution structure ************//
 
-        public BlockChain OfMainStream;
+        public BlockChains OfMainStream;
 
-        public List<Address> Contracts;
+        public List<Addresses> Contracts;
 
         //* execution structure ************//
         //**********************************//
@@ -175,7 +181,7 @@ namespace Swopblock
         public decimal stopCashSupply;
         public decimal stopCashDemand;
         public decimal stopCashLock;
-        public Address stopOrder;
+        public Addresses stopOrder;
 
 
         public void SetState(BranchStates state)
@@ -201,17 +207,17 @@ namespace Swopblock
         }
     }
 
-    public class BTC : BlockChain { }
+    public class BTC : BlockChains { }
 
-    public class ETH : BlockChain { }
+    public class ETH : BlockChains { }
 
 
-    public class Address
+    public class Addresses
     {
         //**********************************//
         //* execution structure ************//
 
-        public BlockChain OfBranchStream;
+        public BlockChains OfBranchStream;
 
         public List<Transfers> Transfers;
 
@@ -226,9 +232,9 @@ namespace Swopblock
         public decimal startAssetSupply;
         public decimal startAssetDemand;
 
-        public Address CurrentOrder;
+        public Addresses CurrentOrder;
 
-        public void SetState(ContractStates state)
+        public void SetState(OrderStates state)
         {
             //startAssetId = ?
             //
@@ -241,7 +247,7 @@ namespace Swopblock
         //**********************************//
         //* execution structure ************//
 
-        public Address InputContract, TransferContract, OutputContract;
+        public Addresses InputContract, TransferContract, OutputContract;
 
         //* execution structure ************//
         //**********************************//
