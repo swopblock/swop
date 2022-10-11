@@ -124,7 +124,7 @@ namespace ExecutionUnitTesting
         [Fact]
         public void TestStepState()
         {
-            var execution = new ExecutionModule(null);
+            var execution = new ExecutionModule("");
 
             var input = SimulationStates.FromTest();
 
@@ -258,7 +258,7 @@ namespace ProgramUnitTesting
 
             stateB.BranchState = new BranchStates(assetId, 0, 0, 0, 0, 0);
 
-            stateB.ContractState = new OrderStates(contractId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
+            stateB.ContractState = new AddressStates(contractId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
 
             stateB.SignatureStreamTransfer = new TransferStates(transferId, cashSupply, cashDemand, cashLock, assetSupply, assetDemand);
 
@@ -280,7 +280,7 @@ namespace ProgramUnitTesting
                 (
                 new StreamStates(0, 0, 0, 0),
                 new BranchStates(0, 0, 0, 0, 0, 0),
-                new OrderStates(0, 0, 0, 0, 0, 0),
+                new AddressStates(0, 0, 0, 0, 0, 0),
                 new TransferStates(0, 0, 0, 0, 0, 0),
                 new ConsensusStates(0, 0, 0, 0, 0, 0)
                 );
@@ -289,7 +289,7 @@ namespace ProgramUnitTesting
                 (
                 new StreamStates(0, 0, 0, 0),
                 new BranchStates(0, 0, 0, 0, 0, 0),
-                new OrderStates(0, 0, 0, 0, 0, 0),
+                new AddressStates(0, 0, 0, 0, 0, 0),
                 new TransferStates(0, 0, 0, 0, 0, 0),
                 new ConsensusStates(0, 0, 0, 0, 0, 0)
                 );
@@ -299,7 +299,7 @@ namespace ProgramUnitTesting
                 (
                 new StreamStates(0, 0, 0, 0),
                 new BranchStates(0, 0, 0, 0, 0, 0),
-                new OrderStates(0, 0, 0, 0, 0, 0),
+                new AddressStates(0, 0, 0, 0, 0, 0),
                 new TransferStates(0, 0, 0, 0, 0, 0),
                 new ConsensusStates(0, 0, 0, 0, 0, 0)
                 );
@@ -332,11 +332,11 @@ namespace ProgramUnitTesting
             }
             //contractstates
             {
-                OrderStates stateOne = new OrderStates(0, 0, 0, 0, 0, 0);
+                AddressStates stateOne = new AddressStates(0, 0, 0, 0, 0, 0);
 
-                OrderStates stateTwo = new OrderStates(0, 0, 0, 0, 0, 0);
+                AddressStates stateTwo = new AddressStates(0, 0, 0, 0, 0, 0);
 
-                OrderStates stateResult = new OrderStates(0, 0, 0, 0, 0, 0);
+                AddressStates stateResult = new AddressStates(0, 0, 0, 0, 0, 0);
 
                 Assert.True(stateOne.Add(stateTwo).IsEqual(stateResult));
             }

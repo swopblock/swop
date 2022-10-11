@@ -192,7 +192,7 @@ public class SimulationStates
 
     public BranchStates BranchState;
 
-    public OrderStates ContractState;
+    public AddressStates ContractState;
 
     public TransferStates SignatureStreamTransfer;
 
@@ -217,7 +217,7 @@ public class SimulationStates
             return new SimulationStates(
                 StreamStates.Empty,
                 BranchStates.Empty,
-                OrderStates.Empty,
+                AddressStates.Empty,
                 TransferStates.Empty,
                 ConsensusStates.Empty);
         }
@@ -228,7 +228,7 @@ public class SimulationStates
 
     }
 
-    public SimulationStates(StreamStates liquidityStreamState, BranchStates assetStreamState, OrderStates contractStreamState, TransferStates liquidityTransferState, ConsensusStates consensusState)
+    public SimulationStates(StreamStates liquidityStreamState, BranchStates assetStreamState, AddressStates contractStreamState, TransferStates liquidityTransferState, ConsensusStates consensusState)
     {
         StreamState = liquidityStreamState;
         BranchState = assetStreamState;
@@ -280,7 +280,7 @@ public class SimulationStates
 
         var AssetStreamState = new BranchStates(5, 6, 7, 8, 9, 10);
 
-        var ContractStreamState = new OrderStates(11, 12, 13, 14, 15, 16);
+        var ContractStreamState = new AddressStates(11, 12, 13, 14, 15, 16);
 
         var LiquidityTransferState = new TransferStates(17, 18, 19, 20, 21, 22);
 
@@ -297,7 +297,7 @@ public class SimulationStates
 
         var AssetStreamState = new BranchStates(R.Next(NumberOfAssetStreams), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
-        var ContractStreamState = new OrderStates(R.Next(NumberOfContractStreamStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
+        var ContractStreamState = new AddressStates(R.Next(NumberOfContractStreamStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
         var LiquidityTransferState = new TransferStates(R.Next(NumberOfContractTransferStates), R.Next(), R.Next(), R.Next(), R.Next(), R.Next());
 
@@ -316,7 +316,7 @@ public class SimulationStates
 
         state.BranchState = BranchStates.ParseFromTabbedLine(ref line);
 
-        state.ContractState = OrderStates.ParseFromTabbedLine(ref line);
+        state.ContractState = AddressStates.ParseFromTabbedLine(ref line);
 
         state.SignatureStreamTransfer = TransferStates.ParseFromTabbedLine(ref line);
 
@@ -349,7 +349,7 @@ public class SimulationStates
 
         state.BranchState = BranchStates.ParseFromIntention(intention);
 
-        state.ContractState = OrderStates.ParseFromIntention(intention);
+        state.ContractState = AddressStates.ParseFromIntention(intention);
 
         state.SignatureStreamTransfer = TransferStates.ParseFromIntention(intention);
 
@@ -415,12 +415,12 @@ public record StreamStates(int StreamId,  decimal CashSupply, decimal CashDemand
     }
 }
 
-public record BranchStates(int AssetId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
+public record BranchStates(int BranchId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
 {
     public static BranchStates Empty { get { return new BranchStates(0, 0, 0, 0, 0, 0); } }
     public string ParseToTabbedLine()
     {
-        return $"{AssetId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
+        return $"{BranchId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
     }
 
     public static BranchStates ParseFromIntention(string intention)
@@ -453,13 +453,13 @@ public record BranchStates(int AssetId, decimal CashSupply, decimal CashDemand, 
 
     public BranchStates Add(BranchStates state)
     {
-        if (this.AssetId != state.AssetId) return this;
+        if (this.BranchId != state.BranchId) return this;
 
         // remember to check if cashlocks are compatable
 
         return new BranchStates
             (
-                state.AssetId,
+                state.BranchId,
                 state.CashSupply + this.CashSupply,
                 state.CashDemand + this.CashDemand,
                 state.CashLock,
@@ -470,7 +470,7 @@ public record BranchStates(int AssetId, decimal CashSupply, decimal CashDemand, 
 
     public bool IsEqual(BranchStates state)
     {
-        if (state.AssetId != AssetId) return false;
+        if (state.BranchId != BranchId) return false;
         if (state.AssetSupply != AssetSupply) return false;
         if (state.AssetDemand != AssetDemand) return false;
         if (state.CashSupply != CashSupply) return false;
@@ -481,22 +481,22 @@ public record BranchStates(int AssetId, decimal CashSupply, decimal CashDemand, 
     }
 }
 
-public record OrderStates(int ContractId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
+public record AddressStates(int AddressId, decimal CashSupply, decimal CashDemand, decimal CashLock, decimal AssetSupply, decimal AssetDemand)
 {
-    public static OrderStates Empty { get { return new OrderStates(0, 0, 0, 0, 0, 0); } }
+    public static AddressStates Empty { get { return new AddressStates(0, 0, 0, 0, 0, 0); } }
     public string ParseToTabbedLine()
     {
-        return $"{ContractId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
+        return $"{AddressId}\t{CashSupply}\t{CashDemand}\t{CashLock}\t{AssetSupply}\t{AssetDemand}\t";
     }
 
-    public static OrderStates ParseFromIntention(string intention)
+    public static AddressStates ParseFromIntention(string intention)
     {
         DemoWeb.DataBag bag = DemoWeb.DefaultParse(intention);
 
-        return new OrderStates(1, bag.cashSup, bag.cashDem, bag.cashLock, bag.assetSup, bag.assetDem);
+        return new AddressStates(1, bag.cashSup, bag.cashDem, bag.cashLock, bag.assetSup, bag.assetDem);
     }
 
-    public static OrderStates ParseFromTabbedLine(ref string line)
+    public static AddressStates ParseFromTabbedLine(ref string line)
     {
         var fields = line.Split('\t', 7);
 
@@ -514,10 +514,10 @@ public record OrderStates(int ContractId, decimal CashSupply, decimal CashDemand
 
         line = fields[6];
 
-        return new OrderStates(i, cS, cD, cL, aS, aD);
+        return new AddressStates(i, cS, cD, cL, aS, aD);
     }
 
-    public bool IsEqual(OrderStates state)
+    public bool IsEqual(AddressStates state)
     {
         //if (state.ContractId != ContractId) return false;
         if (state.AssetSupply != AssetSupply) return false;
@@ -529,11 +529,11 @@ public record OrderStates(int ContractId, decimal CashSupply, decimal CashDemand
         return true;
     }
 
-    public OrderStates Add(OrderStates state)
+    public AddressStates Add(AddressStates state)
     {
-        return new OrderStates
+        return new AddressStates
             (
-            state.ContractId,
+            state.AddressId,
             state.CashSupply + this.CashSupply,
             state.CashDemand + this.CashDemand,
             state.CashLock + this.CashLock,

@@ -2,6 +2,7 @@
 // See https://github.com/swopblock
 
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Swopblock
 {
@@ -10,47 +11,55 @@ namespace Swopblock
         //**********************************//
         //* execution structure ************//
 
-        RelayChains ProcessingRelayChain = new RelayChains();
+        public ConsensusModule MyConsensusModule;
 
-        BlockChains ProcessingBlockChain = new BlockChains();
+        public Streams GenesisStream, MyStream;
 
-        Addresses ProcessingAddress = new Addresses();
-
-        Transfers ProcessingTransfer = new Transfers();
+        public List<Streams> MyStreams;
 
         //* execution structure ************//
         //**********************************//
 
-        public void SetTransferState(TransferStates transfer)
+        public ExecutionModule(ConsensusModule myConsensusModule)
         {
+            MyConsensusModule = myConsensusModule;
 
+            GenesisStream = MyStream = new Streams(this);
+            
+            MyStreams = new List<Streams>();    
+
+            MyStreams.Add(GenesisStream);
         }
 
-        public void SetContractState(OrderStates contract)
+        public void SetState(StreamStates streamState, BranchStates branchState, AddressStates addressState, TransferStates transferState)
         {
+            var stream = MyStreams[streamState.StreamId];
 
+            var branch = stream.MyBranches[branchState.BranchId];
+
+            var address = branch.MyAddresses[addressState.AddressId];
+
+            var transfer = address.MyTransfers[transferState.TransferId];
+
+            
+            stream.SetState(streamState);
+
+            branch.SetState(branchState);
+
+            address.SetState(addressState);
+
+            transfer.SetState(transferState);
         }
 
-        public void SetBranchState(BranchStates branch)
+        public void UpdateState()
         {
-
+            MyStream.UpdateState();
         }
 
-        public void SetStreamState(StreamStates stream)
-        {
-            //Stream.SetState()
-        }
+        //public void GetState(out StreamStates streamState, out BranchStates branchState, out AddressStates orderState, out TransferStates transferState)
+        //{
 
-        public void SetState(StreamStates streamState, BranchStates branchState, OrderStates orderState, TransferStates transferState)
-        {
-            ProcessingRelayChain.SetState(streamState);
-
-            ProcessingBlockChain.SetState(branchState);
-
-            ProcessingAddress.SetState(orderState);
-
-            ProcessingTransfer.SetState(transferState);
-        }
+        //}
 
         public ExecutionModule(params string[] args)
         {
@@ -72,64 +81,42 @@ namespace Swopblock
         }
     }
 
-    public class StreamListOfSupers
-    {
-        List<SuperListOfRelays> Supers;
-
-        int StreamId;
-
-        int CurrentSuperId;
-        decimal GenesisCashSupply, CurrentCashSupply;
-        decimal GenesisCashDemand, CurrentCashDemand;
-        decimal GenesisCashLock, CurrentCashLock;
-    }
-    public class SuperListOfRelays
-    {
-        List<RelayListOfOrders> Relays;
-
-        public int GenesisAssetId;
-
-        public static decimal GenesisCashSupply;
-        public static decimal GenesisCashDemand;
-        public static decimal GenesisCashLock;
-    }
-
-    public class RelayListOfOrders
-    {
-        List<Addresses> Orders;
-
-        public int Id;
-
-        public static decimal GenesisCashSupply;
-        public static decimal GenesisCashDemand;
-        public static decimal GenesisCashLock;
-    }
-
-    public class RelayChains
+    public class Streams
     {
         //**********************************//
         //* execution structure ************//
 
-        ExecutionModule OfExecutionModule;
+        public ExecutionModule MyExecutionModule;
 
-        public List<BlockChains> Chains;
+        public Branches GenesisBranch, MyBranch;
+
+        public List<Branches> MyBranches;
 
         //* execution structure ************//
         //**********************************//
 
-        // Genesis
+        public Streams(ExecutionModule myExecutionModule)
+        {
+            MyExecutionModule = myExecutionModule;
+
+            GenesisBranch = MyBranch = new Branches(this);
+
+            MyBranches = new List<Branches>();
+
+            MyBranches.Add(GenesisBranch);
+        }
+
+        // start state
         public int startStreamId;
         public decimal startCashSupply;
         public decimal startCashDemand;
         public decimal startCashLock;
         
-        //Current
+        // stop state
         public int stopStreamId;
         public decimal stopCashSupply;
         public decimal stopCashDemand;
         public decimal stopCashLock;
-
-        public StreamListOfSupers Suppers;
 
         public void SetState(StreamStates state)
         {
@@ -142,30 +129,34 @@ namespace Swopblock
 
         public void UpdateState()
         {
-            foreach (var branch in Chains)
-            {
-                foreach(var contract in branch.Contracts)
-                {
-                    foreach(var transfer in contract.Transfers)
-                    {
-                        ;
-                    }
-                }
-            }
+            MyBranch.UpdateState();
         }
     }
-
-    public class BlockChains
+    
+    public class Branches
     {
         //**********************************//
         //* execution structure ************//
 
-        public BlockChains OfMainStream;
+        public Streams MyStream;
 
-        public List<Addresses> Contracts;
+        public Addresses GenesisAddress, MyAddress;
+
+        public List<Addresses> MyAddresses;
 
         //* execution structure ************//
         //**********************************//
+
+        public Branches(Streams myStream)
+        {
+            MyStream = myStream;
+
+            GenesisAddress = MyAddress = new Addresses(this);
+
+            MyAddresses = new List<Addresses>();
+
+            MyAddresses.Add(GenesisAddress);
+        }
 
         // Start
         public int startAssetId;
@@ -181,12 +172,13 @@ namespace Swopblock
         public decimal stopCashSupply;
         public decimal stopCashDemand;
         public decimal stopCashLock;
-        public Addresses stopOrder;
 
+        public decimal stopAssetSupply;
+        public decimal stopAssetDemand;
 
         public void SetState(BranchStates state)
         {
-            startAssetId = state.AssetId;
+            startAssetId = state.BranchId;
 
             startCashSupply = state.CashSupply;
             startCashDemand = state.CashDemand;
@@ -198,7 +190,7 @@ namespace Swopblock
 
         public void UpdateState()
         {
-            stopAssetId = startAssetId;
+            MyAddress.UpdateState();
         }
 
         public BranchStates GetState()
@@ -207,22 +199,30 @@ namespace Swopblock
         }
     }
 
-    public class BTC : BlockChains { }
-
-    public class ETH : BlockChains { }
-
-
     public class Addresses
     {
         //**********************************//
         //* execution structure ************//
 
-        public BlockChains OfBranchStream;
+        public Branches MyBranch;
 
-        public List<Transfers> Transfers;
+        public Transfers GenesisTransfer, MyTransfer;
+
+        public List<Transfers> MyTransfers;
 
         //* execution structure ************//
         //**********************************//
+
+        public Addresses(Branches myBranch)
+        {
+            MyBranch = myBranch;
+
+            GenesisTransfer = MyTransfer = new Transfers(this);
+
+            MyTransfers = new List<Transfers>();
+
+            MyTransfers.Add(GenesisTransfer);
+        }
 
         public int startAssetId;
         public decimal startCashSupply;
@@ -232,13 +232,30 @@ namespace Swopblock
         public decimal startAssetSupply;
         public decimal startAssetDemand;
 
-        public Addresses CurrentOrder;
+        public int stopAssetId;
+        public decimal stopCashSupply;
+        public decimal stopCashDemand;
+        public decimal stopCashLock;
 
-        public void SetState(OrderStates state)
+        public decimal stopAssetSupply;
+        public decimal stopAssetDemand;
+
+        public void SetState(AddressStates state)
         {
-            //startAssetId = ?
-            //
+            startAssetId = state.AddressId;
+
+            startCashSupply = state.CashSupply;
+            startCashDemand = state.CashDemand;
+            startCashLock = state.CashLock;
+            
+            
             startAssetSupply = state.AssetSupply;
+            startAssetDemand = state.AssetDemand;
+        }
+
+        public void UpdateState()
+        {
+            MyTransfer.UpdateState();
         }
     }
 
@@ -247,38 +264,57 @@ namespace Swopblock
         //**********************************//
         //* execution structure ************//
 
-        public Addresses InputContract, TransferContract, OutputContract;
+        public Addresses MyAddress;
 
         //* execution structure ************//
         //**********************************//
 
+        public Transfers(Addresses myAddress)
+        {
+            MyAddress = myAddress;
+        }
 
-        // start
-        public int inputContractId;
-        public decimal inputCashSupplyTransfer;
-        public decimal inputCashDemandTransfer;
-        public decimal inputCashExpiration;
+        // start state
+        public int myAddressId, myTransferId;
 
-        public decimal inputAssetSupplyTransfer;
-        public decimal inputAssetDemandTransfer;
+        public decimal startCashLock;
+        public decimal startCashSupply;
+        public decimal startAssetSupply;
 
-        // stop
-        public int outputContractId;
-        public decimal outputCashSupplyTransfer;
-        public decimal outputCashDemandTransfer;
-        public decimal outputCashExpiration;
-
-        public decimal outputAssetSupplyTransfer;
-        public decimal outputAssetDemandTransfer;
+        public decimal stopAssetDemand;
+        public decimal stopCashDemand;
+        public decimal stopCashLock;
 
         public void SetState(TransferStates state)
         {
-
+            myTransferId = state.TransferId;
+            startCashLock = state.CashLock;
+            startCashSupply = state.CashSupply;
+            startAssetSupply = state.AssetSupply;
         }
 
         public void UpdateState()
         {
-            //if (sourceCashSupplyTransfer == )
+            var C = MyAddress.MyBranch.MyStream.startCashSupply + MyAddress.MyBranch.startCashSupply + MyAddress.startCashSupply + startCashSupply;
+
+            var A = MyAddress.MyBranch.startAssetSupply + MyAddress.startAssetSupply + startAssetSupply;
+
+            var dC = startCashSupply;
+
+            var dA = A - (C - dC) * A / C;
+
+            stopCashDemand = dC;
+            stopAssetDemand = dA;
+
+            MyAddress.stopCashSupply -= dC;
+            MyAddress.stopAssetSupply -= dA;
+
+            MyAddress.MyBranch.stopCashSupply -= dC;
+            MyAddress.MyBranch.stopAssetSupply -= dA;
+
+            MyAddress.MyBranch.MyStream.stopCashSupply -= dC;
+            MyAddress.MyBranch.MyStream.stopCashSupply -= dA;
+
         }
 
         public void BidUpdate()
@@ -316,4 +352,21 @@ namespace Swopblock
             return true;
         }
     }
+
+
+
+    //public class RelayChain : Streams { }
+
+    //public class BlockChain : Branches { }
+
+    //public class Orders { Addresses Address; Transfers Transfer; }
+
+    //public class Filling : Transfers { }
+
+    //public class Fills : Addresses { }
+
+    //public class BTC : BlockChain { }
+
+    //public class ETH : BlockChain { }
+
 }

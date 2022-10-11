@@ -122,7 +122,7 @@ namespace Swopblock
             return false;
         }
 
-        OrderStates WriteContract(string intention)
+        AddressStates WriteContract(string intention)
         {
             //UserInput.CommitIntention(intention);
 
@@ -131,36 +131,36 @@ namespace Swopblock
             return null;
         }
 
-        void WriteBidContract(OrderStates contract)
+        void WriteBidContract(AddressStates contract)
         {
 
         }
 
-        void WriteAskContract(OrderStates contract)
+        void WriteAskContract(AddressStates contract)
         {
 
         }
 
-        void WriteSellContract(OrderStates contract)
+        void WriteSellContract(AddressStates contract)
         {
 
         }
-        void WriteBuyContract(OrderStates contract)
-        {
-
-        }
-
-        void WriteSellAndBuyContract(OrderStates contract)
+        void WriteBuyContract(AddressStates contract)
         {
 
         }
 
-        bool SignContract(OrderStates State)
+        void WriteSellAndBuyContract(AddressStates contract)
+        {
+
+        }
+
+        bool SignContract(AddressStates State)
         {
             return false;
         }
 
-        bool BroadcastContract(OrderStates State)
+        bool BroadcastContract(AddressStates State)
         {
             return false;
         }
@@ -290,7 +290,7 @@ namespace Swopblock
 
         }
 
-        OrderStates Convert(string intention)
+        AddressStates Convert(string intention)
         {
             //return UserInput.Convert(intention);
             return null;
