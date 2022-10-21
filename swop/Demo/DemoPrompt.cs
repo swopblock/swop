@@ -27,16 +27,16 @@ namespace Swopblock.Demo
                 {
                     SimulationStates nState = SimulationStates.ParseFromIntention(intention);
 
-                    if (simulationStates.ConsensusState.MarketCashVolume < nState.ContractState.CashLock)
-                    {
-                        simulationStates = simulationStates.Add(nState);
+                    //if (simulationStates.ConsensusState.MarketCashVolume < nState.AddressState.CashLock)
+                    //{
+                    //    simulationStates = simulationStates.Add(nState);
 
-                        Console.WriteLine(simulationStates.ParseToTabbedLine());
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nTx Expired After Volume: " + nState.ContractState.CashLock);
-                    }
+                    //    Console.WriteLine(simulationStates.ParseToTabbedLine());
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("\nTx Expired After Volume: " + nState.AddressState.CashLock);
+                    //}
                 }
                 else
                 {

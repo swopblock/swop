@@ -1,9 +1,6 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC
 // See https://github.com/swopblock
 
-using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
-
 namespace Swopblock
 {
     public class ExecutionModule
@@ -13,7 +10,7 @@ namespace Swopblock
 
         public ConsensusModule MyConsensusModule;
 
-        public Streams GenesisStream, MyStream;
+        public Streams MyStream;
 
         public List<Streams> MyStreams;
 
@@ -24,11 +21,11 @@ namespace Swopblock
         {
             MyConsensusModule = myConsensusModule;
 
-            GenesisStream = MyStream = new Streams(this);
+            MyStream = new Streams(this);
             
             MyStreams = new List<Streams>();    
 
-            MyStreams.Add(GenesisStream);
+            MyStreams.Add(MyStream);
         }
 
         public void SetState(StreamStates streamState, BranchStates branchState, AddressStates addressState, TransferStates transferState)
@@ -88,7 +85,7 @@ namespace Swopblock
 
         public ExecutionModule MyExecutionModule;
 
-        public Branches GenesisBranch, MyBranch;
+        public Branches MyBranch;
 
         public List<Branches> MyBranches;
 
@@ -99,37 +96,29 @@ namespace Swopblock
         {
             MyExecutionModule = myExecutionModule;
 
-            GenesisBranch = MyBranch = new Branches(this);
+            MyBranch = new Branches(this);
 
             MyBranches = new List<Branches>();
 
-            MyBranches.Add(GenesisBranch);
+            MyBranches.Add(MyBranch);
         }
 
         // start state
-        public int startStreamId;
-        public decimal startCashSupply;
-        public decimal startCashDemand;
-        public decimal startCashLock;
-        
-        // stop state
-        public int stopStreamId;
-        public decimal stopCashSupply;
-        public decimal stopCashDemand;
-        public decimal stopCashLock;
+        public StreamStates Start, Stop;
 
         public void SetState(StreamStates state)
         {
-            startCashSupply = state.CashSupply;
-            startCashDemand = state.CashDemand;
-            startCashLock = state.CashLock;
-
-            startStreamId = state.StreamId;
+            Start = state;
         }
 
         public void UpdateState()
         {
             MyBranch.UpdateState();
+        }
+
+        public StreamStates GetState()
+        {
+            return Stop;
         }
     }
     
@@ -140,7 +129,7 @@ namespace Swopblock
 
         public Streams MyStream;
 
-        public Addresses GenesisAddress, MyAddress;
+        public Addresses MyAddress;
 
         public List<Addresses> MyAddresses;
 
@@ -151,41 +140,19 @@ namespace Swopblock
         {
             MyStream = myStream;
 
-            GenesisAddress = MyAddress = new Addresses(this);
+            MyAddress = new Addresses(this);
 
             MyAddresses = new List<Addresses>();
 
-            MyAddresses.Add(GenesisAddress);
+            MyAddresses.Add(MyAddress);
         }
 
         // Start
-        public int startAssetId;
-        public decimal startCashSupply;
-        public decimal startCashDemand;
-        public decimal startCashLock;
-
-        public decimal startAssetSupply;
-        public decimal startAssetDemand;
-
-        // Stop
-        public int stopAssetId;
-        public decimal stopCashSupply;
-        public decimal stopCashDemand;
-        public decimal stopCashLock;
-
-        public decimal stopAssetSupply;
-        public decimal stopAssetDemand;
+        public BranchStates Start, Stop;
 
         public void SetState(BranchStates state)
         {
-            startAssetId = state.BranchId;
-
-            startCashSupply = state.CashSupply;
-            startCashDemand = state.CashDemand;
-            startCashLock = state.CashLock;
-
-            startAssetSupply = state.AssetSupply;
-            startAssetDemand = state.AssetDemand;
+            Start = state;
         }
 
         public void UpdateState()
@@ -195,7 +162,7 @@ namespace Swopblock
 
         public BranchStates GetState()
         {
-            return null;  //stopState;
+            return Stop;
         }
     }
 
@@ -206,7 +173,7 @@ namespace Swopblock
 
         public Branches MyBranch;
 
-        public Transfers GenesisTransfer, MyTransfer;
+        public Transfers MyTransfer;
 
         public List<Transfers> MyTransfers;
 
@@ -217,45 +184,28 @@ namespace Swopblock
         {
             MyBranch = myBranch;
 
-            GenesisTransfer = MyTransfer = new Transfers(this);
+            MyTransfer = new Transfers(this);
 
             MyTransfers = new List<Transfers>();
 
-            MyTransfers.Add(GenesisTransfer);
+            MyTransfers.Add(MyTransfer);
         }
 
-        public int startAssetId;
-        public decimal startCashSupply;
-        public decimal startCashDemand;
-        public decimal startCashLock;
-
-        public decimal startAssetSupply;
-        public decimal startAssetDemand;
-
-        public int stopAssetId;
-        public decimal stopCashSupply;
-        public decimal stopCashDemand;
-        public decimal stopCashLock;
-
-        public decimal stopAssetSupply;
-        public decimal stopAssetDemand;
+        public AddressStates Start, Stop;
 
         public void SetState(AddressStates state)
         {
-            startAssetId = state.AddressId;
-
-            startCashSupply = state.CashSupply;
-            startCashDemand = state.CashDemand;
-            startCashLock = state.CashLock;
-            
-            
-            startAssetSupply = state.AssetSupply;
-            startAssetDemand = state.AssetDemand;
+            Start = state;
         }
 
         public void UpdateState()
         {
             MyTransfer.UpdateState();
+        }
+
+        public AddressStates GetState()
+        {
+            return Stop;
         }
     }
 
@@ -274,99 +224,92 @@ namespace Swopblock
             MyAddress = myAddress;
         }
 
-        // start state
-        public int myAddressId, myTransferId;
 
-        public decimal startCashLock;
-        public decimal startCashSupply;
-        public decimal startAssetSupply;
-
-        public decimal stopAssetDemand;
-        public decimal stopCashDemand;
-        public decimal stopCashLock;
+        TransferStates Start, Stop;
 
         public void SetState(TransferStates state)
         {
-            myTransferId = state.TransferId;
-            startCashLock = state.CashLock;
-            startCashSupply = state.CashSupply;
-            startAssetSupply = state.AssetSupply;
+            Start = state;
+        }
+
+        public TransferStates GetState()
+        {
+            return Stop;
         }
 
         public void UpdateState()
         {
-            var C = MyAddress.MyBranch.MyStream.startCashSupply + MyAddress.MyBranch.startCashSupply + MyAddress.startCashSupply + startCashSupply;
+            int ErrorCode = 0;
 
-            var A = MyAddress.MyBranch.startAssetSupply + MyAddress.startAssetSupply + startAssetSupply;
+            // determine expiration
+            if (MyAddress.Start.CashLockExpiration < (MyAddress.MyBranch.MyStream.Start.CashVolume + MyAddress.Start.CashLocked))
+            {
+                ErrorCode |= 1;
+            }
 
-            var dC = startCashSupply;
+            // determine cash imbalances
+            if (MyAddress.Start.CashBalance > MyAddress.Start.CashLocked)
+            {
+                ErrorCode |= 2;
+            }
 
-            var dA = A - (C - dC) * A / C;
+            // determine asset imbalances
+            if (MyAddress.Start.AssetBalance > MyAddress.Start.AssetReserved)
+            {
+                ErrorCode |= 4;
+            }
 
-            stopCashDemand = dC;
-            stopAssetDemand = dA;
+            // determine cash transfer imbalance
+            if (MyAddress.Start.CashLocked < Start.CashUnlocked)
+            {
+                ErrorCode |= 8;
+            }
 
-            MyAddress.stopCashSupply -= dC;
-            MyAddress.stopAssetSupply -= dA;
+            // determine asset transfer imbalance
+            if (MyAddress.Start.AssetReserved < Start.AssetRelease)
+            {
+                ErrorCode |= 16;
+            }
 
-            MyAddress.MyBranch.stopCashSupply -= dC;
-            MyAddress.MyBranch.stopAssetSupply -= dA;
+            // determine stream cash imbalance
+            if (MyAddress.MyBranch.MyStream.Start.CashBalance < 1)
+            {
+                ErrorCode |= 32;
+            }
 
-            MyAddress.MyBranch.MyStream.stopCashSupply -= dC;
-            MyAddress.MyBranch.MyStream.stopCashSupply -= dA;
+            // determine branch asset imbalance
+            if (MyAddress.MyBranch.Start.AssetBalance < 1)
+            {
+                ErrorCode |= 32;
+            }
 
-        }
+            // determine cash available
+            var C = MyAddress.MyBranch.MyStream.Start.CashBalance;
 
-        public void BidUpdate()
-        {
+            // determine cash locked
+            var cI = MyAddress.Start.CashLocked;
 
-        }
+            // determine cash unlocked
+            var cO = Start.CashUnlocked;
 
-        public bool IsBid()
-        {
-            return false;
-        }
+            // determine asset available
+            var A = MyAddress.MyBranch.Start.AssetBalance;
 
-        public bool IsAsk()
-        {
-            return false;
-        }
+            // determine asset reserve
+            var aI = MyAddress.Start.AssetReserved;
 
-        public bool IsSell()
-        {
-            return false;
-        }
+            // determine asset release
+            var aO = Start.AssetRelease;
 
-        public bool IsBuy()
-        {
-            return false;
-        }
-        
-        public bool IsInvest()
-        {
-            return false;
-        }
+            // determine valid cash unlocked and asset released 
+            if ((C * cI) * (A * aI) != (C * cO) * (A * aO))
+            {
+                ErrorCode |= 64;
+            }
 
-        public bool IsDivest()
-        {
-            return true;
+            Stop = Start with { ErrorCode = ErrorCode };
+
+            return;
         }
     }
-
-
-
-    //public class RelayChain : Streams { }
-
-    //public class BlockChain : Branches { }
-
-    //public class Orders { Addresses Address; Transfers Transfer; }
-
-    //public class Filling : Transfers { }
-
-    //public class Fills : Addresses { }
-
-    //public class BTC : BlockChain { }
-
-    //public class ETH : BlockChain { }
-
 }
