@@ -6,51 +6,37 @@ using Swopblock.Swopping;
 
 namespace Swopblock.Application
 {
+    public enum Offering
+    {
+        Cash,
+        Asset,
+    }
+
     public interface APP : IApplication
     {
         public decimal CashBalance { get; set; }
 
         public decimal CashVolume { get; set; }
 
-        public bool CaptureIntention(string intention)
-        {
-            Bidding(0, (IBranch)null, 0);
-
-            Asking(0, (IBranch)null, 0);
-
-            return false;
-        }
-
-        bool Bidding(decimal Bid, IBranch Buy, decimal Expiration);
-
-        bool Asking(decimal Ask, IBranch Sell, decimal Expiration);
-
-        public IOrder GetReport();
-
         public IAccount[] Accounts { get; set; }
 
-        public void Save(Stream stream)
-        {
+        public IOrder CaptureIntention(string intention);
 
-        }
-
-        public void Load(Stream stream)
-        {
-
-        }
+        public IReport SubmitOrder(IOrder Order);
     }
 
     public interface CORE : IApplication
     {
         public IMain Main { get; set; }
 
-        public CARRIERS[] CARRIERS { get; set; }
+        IReport SubmitOrder(IOrder Order);
     }
 
     public interface CARRIERS : IApplication
     {
-
+        IReport SubmitOrder(IOrder Order);
     }
 
     public interface IApplication { }
+
 }

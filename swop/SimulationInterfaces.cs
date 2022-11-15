@@ -15,16 +15,6 @@ namespace Swopblock.Simulation
         public CARRIERS[] CARRIERS { get; set; }
 
         public INetworking Network { get; set; }
-
-        void Save(string path)
-        {
-
-        }
-
-        void Load(string path)
-        {
-
-        }
     }
 
     public interface INetworking : ISimulation
@@ -36,10 +26,6 @@ namespace Swopblock.Simulation
         public ISettling Settlement { get; set; }
 
         public INode[] Nodes { get; set; }
-
-        void Save(string path);
-
-        void Load(string path);
     }
 
     public interface ISimulation { }

@@ -38,4 +38,6 @@ namespace Swopblock.Swopping
     public interface IBlock { }
 
     public interface IFill { }
+
+    public interface IReport { }
 }
