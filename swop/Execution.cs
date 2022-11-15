@@ -1,6 +1,9 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC
 // See https://github.com/swopblock
 
+using System.Runtime.CompilerServices;
+using System.Threading;
+
 namespace Swopblock
 {
     public class ExecutionModule
@@ -239,37 +242,42 @@ namespace Swopblock
 
         public void UpdateState()
         {
+            CheckUpdateState();
+        }
+
+        public void CheckUpdateState()
+        {
             int ErrorCode = 0;
 
-            // determine expiration
+            // determine offer expiration
             if (MyAddress.Start.CashLockExpiration < (MyAddress.MyBranch.MyStream.Start.CashVolume + MyAddress.Start.CashLocked))
             {
                 ErrorCode |= 1;
             }
 
-            // determine cash imbalances
+            // determine cash overdraft
             if (MyAddress.Start.CashBalance > MyAddress.Start.CashLocked)
             {
                 ErrorCode |= 2;
             }
 
-            // determine asset imbalances
+            // determine asset overdraft
             if (MyAddress.Start.AssetBalance > MyAddress.Start.AssetReserved)
             {
                 ErrorCode |= 4;
             }
 
             // determine cash transfer imbalance
-            if (MyAddress.Start.CashLocked < Start.CashUnlocked)
-            {
-                ErrorCode |= 8;
-            }
+            //if Start.OutputCashBalance == (MyAddress.MyBranch.MyStream.Start.CashBalance + MyAddress))
+            //{
+            //    ErrorCode |= 8;
+            //}
 
             // determine asset transfer imbalance
-            if (MyAddress.Start.AssetReserved < Start.AssetRelease)
-            {
-                ErrorCode |= 16;
-            }
+            //if (MyAddress.Start.AssetReserved < Start.AssetRelease)
+            //{
+            //    ErrorCode |= 16;
+            //}
 
             // determine stream cash imbalance
             if (MyAddress.MyBranch.MyStream.Start.CashBalance < 1)
@@ -290,7 +298,7 @@ namespace Swopblock
             var cI = MyAddress.Start.CashLocked;
 
             // determine cash unlocked
-            var cO = Start.CashUnlocked;
+            //var cO = Start.CashUnlocked;
 
             // determine asset available
             var A = MyAddress.MyBranch.Start.AssetBalance;
@@ -299,13 +307,13 @@ namespace Swopblock
             var aI = MyAddress.Start.AssetReserved;
 
             // determine asset release
-            var aO = Start.AssetRelease;
+            //var aO = Start.AssetRelease;
 
             // determine valid cash unlocked and asset released 
-            if ((C * cI) * (A * aI) != (C * cO) * (A * aO))
-            {
-                ErrorCode |= 64;
-            }
+            //if ((C * cI) * (A * aI) != (C * cO) * (A * aO))
+            //{
+            //    ErrorCode |= 64;
+            //}
 
             Stop = Start with { ErrorCode = ErrorCode };
 

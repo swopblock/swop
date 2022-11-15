@@ -405,12 +405,12 @@ public record StreamStates(int StreamId,  decimal CashBalance, decimal CashVolum
     }
 }
 
-public record BranchStates(int BranchId, decimal AssetBalance)
+public record BranchStates(int BranchId, decimal AssetBalance, decimal AssetVolume)
 {
-    public static BranchStates Empty { get { return new BranchStates(0, 0); } }
+    public static BranchStates Empty { get { return new BranchStates(0, 0, 0); } }
     public string ParseToTabbedLine()
     {
-        return $"{BranchId}\t{AssetBalance}\t";
+        return $"{BranchId}\t{AssetBalance}\t{AssetVolume}";
     }
 
     public static BranchStates ParseFromIntention(string intention)
@@ -429,7 +429,10 @@ public record BranchStates(int BranchId, decimal AssetBalance)
         return new BranchStates
         (
             int.Parse(fields[0]),
-            decimal.Parse(fields[1])
+
+            decimal.Parse(fields[1]),
+
+            decimal.Parse(fields[2])
         );
     }
 
@@ -524,12 +527,12 @@ public record AddressStates(int AddressId, decimal CashBalance, decimal CashLock
     }
 }
 
-public record TransferStates(int TransferId, decimal CashUnlocked, decimal AssetRelease, int ErrorCode)
+public record TransferStates(int TransferId, decimal OutputCashBalance, decimal OutputCashVolume, decimal OutputAssetBalance, decimal OutputAssetVolume, int ErrorCode)
 {
-    public static TransferStates Empty { get { return new TransferStates(0, 0, 0, 0); } }
+    public static TransferStates Empty { get { return new TransferStates(0, 0, 0, 0, 0, 0); } }
     public string ParseToTabbedLine()
     {
-        return $"{TransferId}\t{CashUnlocked}\t{AssetRelease}\t{ErrorCode}\t";
+        return $"{TransferId}\t{OutputCashBalance}\t{OutputCashVolume}\t{OutputAssetBalance}\t{OutputAssetVolume}\t{ErrorCode}\t";
     }
 
     public static TransferStates ParseFromIntention(string intention)
@@ -554,7 +557,11 @@ public record TransferStates(int TransferId, decimal CashUnlocked, decimal Asset
 
             decimal.Parse(fields[2]),
 
-            int.Parse(fields[3])
+            decimal.Parse(fields[3]),
+
+            decimal.Parse(fields[4]),
+
+            int.Parse(fields[5])
         );
     }
 
