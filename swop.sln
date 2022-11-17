@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "swop", "swop\swop.csproj", "{4645EB2A-CBF1-47BF-BC2E-960B2F76EB11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xUnitTest", "xUnitTest\xUnitTest.csproj", "{D1C9B2E4-4220-4487-9ABC-0A563D25E582}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulationTesting", "xUnitTest\SimulationTesting.csproj", "{D1C9B2E4-4220-4487-9ABC-0A563D25E582}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

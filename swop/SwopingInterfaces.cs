@@ -33,11 +33,17 @@ namespace Swopblock.Swopping
 
     public interface ISwopping { }
 
-    public interface IOrder { }
+    public interface IOrder 
+    { 
+        public string Intention { get; set; }
+    }
 
     public interface IBlock { }
 
     public interface IFill { }
 
-    public interface IReport { }
+    public interface IReport 
+    {
+        public string Report { get; set; }
+    }
 }

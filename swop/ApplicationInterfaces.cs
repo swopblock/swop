@@ -20,9 +20,7 @@ namespace Swopblock.Application
 
         public IAccount[] Accounts { get; set; }
 
-        public IOrder CaptureIntention(string intention);
-
-        public IReport SubmitOrder(IOrder Order);
+        public IReport SubmitIntention(IOrder Order);
     }
 
     public interface CORE : IApplication
