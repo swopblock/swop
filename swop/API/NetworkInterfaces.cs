@@ -1,12 +1,12 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC
 // See https://github.com/swopblock
 
-using Swopblock.Swopping;
-using Swopblock.Application;
+using Swopblock.API.Swopping;
+using Swopblock.API.Application;
 
-namespace Swopblock.Simulation
+namespace Swopblock.API.Network
 {
-    public interface INode : ISimulation
+    public interface INode : INetwork
     {
         public APP APP { get; set; }
 
@@ -17,7 +17,7 @@ namespace Swopblock.Simulation
         public INetworking Network { get; set; }
     }
 
-    public interface INetworking : ISimulation
+    public interface INetworking : INetwork
     {
         public IConsenting Consensus { get; set; }
 
@@ -28,5 +28,5 @@ namespace Swopblock.Simulation
         public INode[] Nodes { get; set; }
     }
 
-    public interface ISimulation { }
+    public interface INetwork { }
 }

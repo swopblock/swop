@@ -4,18 +4,18 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
-using Swopblock.Application;
-using Swopblock.Liquidity;
-using Swopblock.Simulation;
-using Swopblock.Swopping;
+using Swopblock.API.Application;
+using Swopblock.API.Liquidity;
+using Swopblock.API.Network;
+using Swopblock.API.Swopping;
 
-namespace xUnitTest.TestSimulation
+namespace SimulationTesting.TestAPI
 {
     public class TestAPP : APP
     {
         decimal test;
 
-        public decimal CashBalance 
+        public decimal CashBalance
         {
             [Fact]
             get
@@ -62,16 +62,16 @@ namespace xUnitTest.TestSimulation
             [Fact]
             get
             {
-                Accounts = (IAccount[])null;
+                Accounts = null;
 
                 Assert.Null(testAcounts);
 
-                return (IAccount[])null;
+                return null;
             }
 
             set
             {
-                testAcounts = (IAccount[])value;
+                testAcounts = value;
             }
         }
 
@@ -83,40 +83,40 @@ namespace xUnitTest.TestSimulation
 
     public class TestINode : INode
     {
-        public APP APP 
-        { 
-            [Fact] 
-            get => throw new NotImplementedException();
-
-            [Fact]
-            set => throw new NotImplementedException(); 
-        }
-
-        public CORE CORE 
+        public APP APP
         {
             [Fact]
             get => throw new NotImplementedException();
 
             [Fact]
-            set => throw new NotImplementedException(); 
+            set => throw new NotImplementedException();
         }
 
-        public CARRIERS[] CARRIERS 
+        public CORE CORE
         {
             [Fact]
             get => throw new NotImplementedException();
 
             [Fact]
-            set => throw new NotImplementedException(); 
+            set => throw new NotImplementedException();
         }
 
-        public INetworking Network 
+        public CARRIERS[] CARRIERS
         {
             [Fact]
             get => throw new NotImplementedException();
 
             [Fact]
-            set => throw new NotImplementedException(); 
+            set => throw new NotImplementedException();
+        }
+
+        public INetworking Network
+        {
+            [Fact]
+            get => throw new NotImplementedException();
+
+            [Fact]
+            set => throw new NotImplementedException();
         }
 
         [Fact]
@@ -126,10 +126,10 @@ namespace xUnitTest.TestSimulation
             Assert.NotNull(this);
         }
 
-        [Fact] 
+        [Fact]
         void TestNew()
         {
-            var sim = new TestINode(); 
+            var sim = new TestINode();
 
             Assert.NotNull(sim);
         }
@@ -144,6 +144,6 @@ namespace xUnitTest.TestSimulation
 
 
 
-        
+
     }
 }

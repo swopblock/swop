@@ -1,17 +1,11 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC
 // See https://github.com/swopblock
 
-using Swopblock.Liquidity;
-using Swopblock.Swopping;
+using Swopblock.API.Liquidity;
+using Swopblock.API.Swopping;
 
-namespace Swopblock.Application
+namespace Swopblock.API.Application
 {
-    public enum Offering
-    {
-        Cash,
-        Asset,
-    }
-
     public interface APP : IApplication
     {
         public decimal CashBalance { get; set; }

@@ -1,7 +1,7 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC
 // See https://github.com/swopblock
 
-namespace Swopblock.Liquidity
+namespace Swopblock.API.Liquidity
 {
     public interface IMain : IBranches, ILiquidity
     {
