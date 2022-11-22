@@ -2,7 +2,7 @@
 // See https://github.com/swopblock
 
 using Swopblock;
-using SimulationUnitTesting;
+//using SimulationUnitTesting;
 using Swopblock.Intentions;
 using Swopblock.Intentions.Utilities;
 using System.Globalization;
@@ -12,6 +12,8 @@ using System.Data.Common;
 using System.Diagnostics.Contracts;
 using static Swopblock.Program;
 using System.Runtime.CompilerServices;
+using Swopblock.Stack.IncentiveLayer;
+using Swopblock.Simulation;
 
 namespace Swopblock
 {

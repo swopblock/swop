@@ -1,10 +1,11 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC
 // See https://github.com/swopblock
 
+using Swopblock.Stack.ConsensusLayer;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace Swopblock
+namespace Swopblock.Stack.IncentiveLayer
 {
     public class ExecutionModule
     {
@@ -25,8 +26,8 @@ namespace Swopblock
             MyConsensusModule = myConsensusModule;
 
             MyStream = new Streams(this);
-            
-            MyStreams = new List<Streams>();    
+
+            MyStreams = new List<Streams>();
 
             MyStreams.Add(MyStream);
         }
@@ -41,7 +42,7 @@ namespace Swopblock
 
             var transfer = address.MyTransfers[transferState.TransferId];
 
-            
+
             stream.SetState(streamState);
 
             branch.SetState(branchState);
@@ -124,7 +125,7 @@ namespace Swopblock
             return Stop;
         }
     }
-    
+
     public class Branches
     {
         //**********************************//
@@ -250,7 +251,7 @@ namespace Swopblock
             int ErrorCode = 0;
 
             // determine offer expiration
-            if (MyAddress.Start.CashLockExpiration < (MyAddress.MyBranch.MyStream.Start.CashVolume + MyAddress.Start.CashLocked))
+            if (MyAddress.Start.CashLockExpiration < MyAddress.MyBranch.MyStream.Start.CashVolume + MyAddress.Start.CashLocked)
             {
                 ErrorCode |= 1;
             }

@@ -1,4 +1,7 @@
+using Swopblock.Simulation;
 using Swopblock;
+using Swopblock.Stack.ConsensusLayer;
+using Swopblock.Stack.IncentiveLayer;
 
 namespace SimulationUnitTesting
 {
@@ -87,7 +90,7 @@ namespace ConsensusUnitTesting
 }
 
 namespace ExecutionUnitTesting
-{ 
+{
 
     public class UnitTestExecutionModule
     {

@@ -1,4 +1,5 @@
-﻿using Swopblock;
+﻿using Swopblock.Simulation;
+using Swopblock;
 using System;
 using System.Collections.Generic;
 using System.Linq;

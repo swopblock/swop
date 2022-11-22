@@ -8,11 +8,11 @@ namespace Swopblock.API.Network
 {
     public interface INode : INetwork
     {
-        public APP APP { get; set; }
+        public IApp APP { get; set; }
 
-        public CORE CORE { get; set; }
+        public ICore CORE { get; set; }
 
-        public CARRIERS[] CARRIERS { get; set; }
+        public ICarriers[] CARRIERS { get; set; }
 
         public INetworking Network { get; set; }
     }

@@ -6,7 +6,7 @@ using Swopblock.API.Swopping;
 
 namespace Swopblock.API.Application
 {
-    public interface APP : IApplication
+    public interface IApp : IApplication
     {
         public decimal CashBalance { get; set; }
 
@@ -17,14 +17,14 @@ namespace Swopblock.API.Application
         public IReport SubmitIntention(IOrder Order);
     }
 
-    public interface CORE : IApplication
+    public interface ICore : IApplication
     {
         public IMain Main { get; set; }
 
         IReport SubmitOrder(IOrder Order);
     }
 
-    public interface CARRIERS : IApplication
+    public interface ICarriers : IApplication
     {
         IReport SubmitOrder(IOrder Order);
     }

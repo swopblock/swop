@@ -11,7 +11,7 @@ using Swopblock.API.Swopping;
 
 namespace SimulationTesting.TestAPI
 {
-    public class TestAPP : APP
+    public class TestAPP : IApp
     {
         decimal test;
 
@@ -81,69 +81,14 @@ namespace SimulationTesting.TestAPI
         }
     }
 
-    public class TestINode : INode
+    public class TestCORE : ICore
     {
-        public APP APP
+        public IMain Main { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public IReport SubmitOrder(IOrder Order)
         {
-            [Fact]
-            get => throw new NotImplementedException();
-
-            [Fact]
-            set => throw new NotImplementedException();
+            throw new NotImplementedException();
         }
-
-        public CORE CORE
-        {
-            [Fact]
-            get => throw new NotImplementedException();
-
-            [Fact]
-            set => throw new NotImplementedException();
-        }
-
-        public CARRIERS[] CARRIERS
-        {
-            [Fact]
-            get => throw new NotImplementedException();
-
-            [Fact]
-            set => throw new NotImplementedException();
-        }
-
-        public INetworking Network
-        {
-            [Fact]
-            get => throw new NotImplementedException();
-
-            [Fact]
-            set => throw new NotImplementedException();
-        }
-
-        [Fact]
-        public void TestTestINode()
-        {
-
-            Assert.NotNull(this);
-        }
-
-        [Fact]
-        void TestNew()
-        {
-            var sim = new TestINode();
-
-            Assert.NotNull(sim);
-        }
-
-        [Fact]
-        void TestNext()
-        {
-            var sim = new TestINode();
-
-            sim.APP = APP;
-        }
-
-
-
-
     }
+
 }
