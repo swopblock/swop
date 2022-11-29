@@ -4,25 +4,22 @@ namespace Swopblock.API
 {
     public interface IAppAPI
     {
-        public static IAppAPI NewInterface()
-        {
-            return new AppAPI();
-        }
+        public ISigning Subsribe(IOrderAPI Order);
 
-        public ISigning Subsribe(ILiveAPI Client);
-
-        public IConfirming Subscribe(ICoreAPI Client);
+        public IConfirming Subscribe(ICoreAPI LiveCore);
     }
 
     public class AppAPI : IAppAPI, ISigning, IConfirming
     {
+        private IOrderAPI[] Input, InputOutput;
+
         private ILiveAPI LiveAPI;
 
         private ICoreAPI CoreAPI;
 
-        private IOrderAPI[] Signed;
+        private IOrderAPI[] Signed = new IOrderAPI[1024];
 
-        private IConfirmationAPI[] Confirmed;
+        private IConfirmationAPI[] Confirmed = new IConfirmationAPI[1024];
 
         public void Confirm(IConfirmationAPI Confirmation)
         {
@@ -32,13 +29,19 @@ namespace Swopblock.API
         public void Sign(string OrderIntention)
         {
             Signed[0] = IOrderAPI.Parse(OrderIntention);
+
         }
 
-        public IConfirming Subscribe(ICoreAPI Client)
+        public IConfirming Subscribe(ILiveCoreAPI Client)
         {
-            CoreAPI = Client;
+            //CoreAPI = Client;
 
             return (IConfirming)this;
+        }
+
+        public IConfirming Subscribe(ICoreAPI LiveCore)
+        {
+            throw new NotImplementedException();
         }
 
         public ISigning Subsribe(ILiveAPI Client)
@@ -46,6 +49,11 @@ namespace Swopblock.API
             LiveAPI = Client;
 
             return (ISigning)this;
+        }
+
+        public ISigning Subsribe(IOrderAPI Order)
+        {
+            throw new NotImplementedException();
         }
     }
 
