@@ -1,9 +1,10 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC
-// Modified November 29, 2022 3:51 PM ET by Jeff Hilde, jeff@swopblock.org
+// Created November 29, 2022 3:51 PM ET by Jeff Hilde, jeff@swopblock.org
 
-namespace Swopblock.Stack
+using Swopblock.DataAPI;
+
+namespace Swopblock.ProcessAPI
 {
-
     public interface IAPP : IUser, IAuto
     {
         ICORE[] CORE { get; set; }
@@ -23,7 +24,7 @@ namespace Swopblock.Stack
     {
         IOrderQueue OrderingQueue { get; }
 
-        void Order(IOrder order)
+        void Order(IOrdering order)
         {
             OrderingQueue.Enqueue(order);
         }
@@ -33,7 +34,7 @@ namespace Swopblock.Stack
     {
         IOrderQueue ConfirmingQueue { get; }
 
-        void Confirm(IOrder order)
+        void Confirm(IOrdering order)
         {
             ConfirmingQueue.Enqueue(order);
         }
@@ -62,27 +63,23 @@ namespace Swopblock.Stack
             }
         }
 
-        bool ProcessOrder(IOrder order)
+        bool ProcessOrder(IOrdering order)
         {
             return order == null ? false : true;
         }
 
-        bool ProcessConfirmation(IOrder confirmation)
+        bool ProcessConfirmation(IOrdering confirmation)
         {
             return confirmation == null ? false : true;
         }
     }
 
-    public interface IOrder
-    {
-
-    }
 
     public interface IBroadcasting : IUser
     {
         IUser[] User { get; set; }
 
-        void Broadcast(IOrder order)
+        void Broadcast(IOrdering order)
         {
             foreach (var user in User)
             {
@@ -95,7 +92,7 @@ namespace Swopblock.Stack
     {
         IAuto Auto { get; set; }
 
-        void Validate(IOrder order)
+        void Validate(IOrdering order)
         {
             Auto.Confirm(order);
         }
@@ -146,8 +143,8 @@ namespace Swopblock.Stack
 
     public interface IOrderQueue
     {
-        void Enqueue(IOrder order);
+        void Enqueue(IOrdering order);
 
-        IOrder Dequeue();
+        IOrdering Dequeue();
     }
 }
