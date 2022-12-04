@@ -10,14 +10,14 @@ using Swopblock.Demo;
 using swop.Demo;
 using System.Data.Common;
 using System.Diagnostics.Contracts;
-using static Swopblock.Program;
 using System.Runtime.CompilerServices;
 using Swopblock.Stack.IncentiveLayer;
 using Swopblock.Simulation;
+using Swopblock.API;
 
 namespace Swopblock
 {
-    public class Program
+      public class Program 
     {
         public static string[] programAgrs;
 

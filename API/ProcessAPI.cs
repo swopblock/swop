@@ -5,41 +5,6 @@ using Swopblock.API.Data;
 
 namespace Swopblock.API.Process
 {
-    public interface IAPP : IUser, IAuto
-    {
-        ICORE[] CORE { get; set; }
-    }
-
-    public interface ICORE : IUser, IAuto, ILayer
-    {
-        ICARRIER[] CARRIER { get; set; }
-    }
-
-    public interface ICARRIER : IUser, IAuto, ILayer
-    {
-        ILayer[] Layers { get; set; }
-    }
-
-    public interface IUser
-    {
-        IOrderQueue OrderingQueue { get; }
-
-        void Order(IOrdering order)
-        {
-            OrderingQueue.Enqueue(order);
-        }
-    }
-
-    public interface IAuto
-    {
-        IOrderQueue ConfirmingQueue { get; }
-
-        void Confirm(IOrdering order)
-        {
-            ConfirmingQueue.Enqueue(order);
-        }
-    }
-
     public interface ILayer : IBroadcasting, IValidating
     {
         void Run()
