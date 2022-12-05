@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Swopblock.Intentions;
 using System.Net;
 using System.Security.Cryptography;
+using Swopblock.Simulation;
 
 namespace Swopblock
 {
@@ -130,7 +131,7 @@ namespace Swopblock
         public class StateBag
         {
             public SimulationStates nState { get; set; }
-            public Report Report { get; set; }
+            //public Report Report { get; set; }
         }
 
         /*private static IntentionWeb demo = new IntentionWeb("i want to", new List<IntentionWeb>

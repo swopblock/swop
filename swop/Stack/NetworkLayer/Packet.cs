@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Swopblock.Intentions.Utilities;
 
-namespace Swopblock.Net
+namespace Swopblock.Stack.NetworkLayer
 {
     public class Packet
     {
@@ -15,14 +15,15 @@ namespace Swopblock.Net
         public byte[] rawData { get; set; }
         public byte[] data { get; set; }
 
-        public string Readable 
-        {   get
+        public string Readable
+        {
+            get
             {
-                return Heading 
-                    + " " 
-                    + Length 
-                    + " " 
-                    + Utility.ConvertToReadable(data) 
+                return Heading
+                    + " "
+                    + Length
+                    + " "
+                    + Utility.ConvertToReadable(data)
                     + " "
                     + Checksum;
             }
@@ -52,10 +53,10 @@ namespace Swopblock.Net
         {
             Packet packet = null;
 
-            if(data.Length > 8)
+            if (data.Length > 8)
             {
                 string header = Utility.ConvertToString(Utility.GetNextByteSet(data, 0, head.Length));
-                
+
                 if (header == head)
                 {
                     int len = BitConverter.ToInt32(data, head.Length);
@@ -84,7 +85,7 @@ namespace Swopblock.Net
         {
             double value = 0;
 
-            for(int i = 0; i < data.Length; i++)
+            for (int i = 0; i < data.Length; i++)
             {
                 value += data[i];
                 value *= 53.97;

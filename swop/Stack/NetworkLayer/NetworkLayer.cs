@@ -8,7 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Diagnostics;
 
-namespace Swopblock.Net
+namespace Swopblock.Stack.NetworkLayer
 {
     public class Network
     {
@@ -27,7 +27,7 @@ namespace Swopblock.Net
         public Network(List<string> peers)
         {
             Peers = peers;
-            RecievedPackets = new ConcurrentQueue<Packet>();    
+            RecievedPackets = new ConcurrentQueue<Packet>();
         }
 
         public void Setup()
@@ -59,13 +59,13 @@ namespace Swopblock.Net
 
             int attempt = 0;
 
-            while(count < data.Length)
+            while (count < data.Length)
             {
                 byte[] rawPack = Packet.PackBytes(data);
 
                 count = client.Send(rawPack, rawPack.Length);
 
-                if(attempt++ > resendAttempts)
+                if (attempt++ > resendAttempts)
                 {
                     break;
                 }

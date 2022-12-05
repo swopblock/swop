@@ -1,5 +1,4 @@
-﻿using Swopblock;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 //JJH
 
-namespace SimulationUnitTesting
+namespace Swopblock.Simulation
 {
     public class SimulationModule
     {
@@ -114,7 +113,7 @@ namespace SimulationUnitTesting
     }
 
     public class SimulationSwopblockClients
-    {     
+    {
         public SwopblockModule ActualSwopblockClient;
 
         public SimulationSwopblockClients()

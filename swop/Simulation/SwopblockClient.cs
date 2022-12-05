@@ -4,8 +4,10 @@
 using Swopblock;
 using Swopblock.Intentions;
 using System.Net.Http.Headers;
+using Swopblock.Stack.ConsensusLayer;
+using Swopblock.Stack.IncentiveLayer;
 
-namespace Swopblock
+namespace Swopblock.Simulation
 {
     public record Intention();
 
@@ -18,11 +20,11 @@ namespace Swopblock
     {
         public SimulationStates entry;
 
-        public Swopblock.ConsensusModule consensus;
+        public ConsensusModule consensus;
 
         public SimulationStates pipe;
 
-        public Swopblock.ExecutionModule execution;
+        public ExecutionModule execution;
 
         public SimulationStates exit;
 
@@ -231,56 +233,56 @@ namespace Swopblock
 
         //string ParseToTabbedTextLine(SimulationStates state)
         //{
-            //string line = string.Empty;
+        //string line = string.Empty;
 
-            ////Process States
-            //int StateId = state.StateId;
-            //line += $"{StateId}";
+        ////Process States
+        //int StateId = state.StateId;
+        //line += $"{StateId}";
 
-            ////CashStreams
-            //int CashId = state.Stream.CashId;
-            //decimal StreamCashVolume = state.Stream.StreamCashVolume;
-            //decimal StreamCashInventory = state.Stream.StreamCashInventory;
-            //line += $"\t{CashId}\t{StreamCashVolume}\t{StreamCashInventory}";
+        ////CashStreams
+        //int CashId = state.Stream.CashId;
+        //decimal StreamCashVolume = state.Stream.StreamCashVolume;
+        //decimal StreamCashInventory = state.Stream.StreamCashInventory;
+        //line += $"\t{CashId}\t{StreamCashVolume}\t{StreamCashInventory}";
 
-            ////StreamAssets
-            //int AssetId = state.Asset.AssetId;
-            //decimal AssetCashVolume = state.Asset.AssetCashVolume;
-            //decimal AssetCashInventory = state.Asset.AssetCashInventory;
-            //decimal AssetAssetVolume = state.Asset.AssetAssetVolume;
-            //decimal AssetAssetInventory = state.Asset.AssetAssetInventory;
-            //AssetStreamStates asset = new AssetStreamStates(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
-            //line += $"\t{AssetId}\t{AssetCashVolume}\t{AssetCashInventory}\t{AssetAssetVolume}\t{AssetAssetInventory}";
+        ////StreamAssets
+        //int AssetId = state.Asset.AssetId;
+        //decimal AssetCashVolume = state.Asset.AssetCashVolume;
+        //decimal AssetCashInventory = state.Asset.AssetCashInventory;
+        //decimal AssetAssetVolume = state.Asset.AssetAssetVolume;
+        //decimal AssetAssetInventory = state.Asset.AssetAssetInventory;
+        //AssetStreamStates asset = new AssetStreamStates(AssetId, AssetCashVolume, AssetCashInventory, AssetAssetVolume, AssetAssetInventory);
+        //line += $"\t{AssetId}\t{AssetCashVolume}\t{AssetCashInventory}\t{AssetAssetVolume}\t{AssetAssetInventory}";
 
-            ////AssetContracts
-            //int ContractId = state.Contract.ContractId;
-            //decimal ContractCashVolume = state.Contract.ContractCashVolume;
-            //decimal ContractCashInventory = state.Contract.ContractCashInventory;
-            //decimal ContractAssetVolume = state.Contract.ContractAssetVolume;
-            //decimal ContractAssetInventory = state.Contract.ContractAssetInventory;
-            //ContractStreamStates contract = new ContractStreamStates(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
-            //line += $"\t{ContractId}\t{ContractCashVolume}\t{ContractCashInventory}\t{ContractAssetVolume}\t{ContractAssetInventory}";
+        ////AssetContracts
+        //int ContractId = state.Contract.ContractId;
+        //decimal ContractCashVolume = state.Contract.ContractCashVolume;
+        //decimal ContractCashInventory = state.Contract.ContractCashInventory;
+        //decimal ContractAssetVolume = state.Contract.ContractAssetVolume;
+        //decimal ContractAssetInventory = state.Contract.ContractAssetInventory;
+        //ContractStreamStates contract = new ContractStreamStates(ContractId, ContractCashVolume, ContractCashInventory, ContractAssetVolume, ContractAssetInventory);
+        //line += $"\t{ContractId}\t{ContractCashVolume}\t{ContractCashInventory}\t{ContractAssetVolume}\t{ContractAssetInventory}";
 
-            ////ContractTransfers
-            //int TransferId = state.Transfer.TransferId;
-            //decimal TransferCashVolume = state.Transfer.TransferCashVolume;
-            //decimal TransferCashInventory = state.Transfer.TransferCashInventory;
-            //decimal TransferAssetVolume = state.Transfer.TransferAssetVolume;
-            //decimal TransferAssetInventory = state.Transfer.TransferAssetInventory;
-            //LiquidityTransferStates transfer = new LiquidityTransferStates(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
-            //line += $"\t{TransferId}\t{TransferCashVolume}\t{TransferCashInventory}\t{TransferAssetVolume}\t{TransferAssetInventory}";
+        ////ContractTransfers
+        //int TransferId = state.Transfer.TransferId;
+        //decimal TransferCashVolume = state.Transfer.TransferCashVolume;
+        //decimal TransferCashInventory = state.Transfer.TransferCashInventory;
+        //decimal TransferAssetVolume = state.Transfer.TransferAssetVolume;
+        //decimal TransferAssetInventory = state.Transfer.TransferAssetInventory;
+        //LiquidityTransferStates transfer = new LiquidityTransferStates(TransferId, TransferCashVolume, TransferCashInventory, TransferAssetVolume, TransferAssetInventory);
+        //line += $"\t{TransferId}\t{TransferCashVolume}\t{TransferCashInventory}\t{TransferAssetVolume}\t{TransferAssetInventory}";
 
-            ////TransferProofs
-            //int ProofId = state.Proof.ProofId;
-            //decimal ProofDifficulty = state.Proof.ProofDifficulty;
-            //decimal ProofStake = state.Proof.ProofStake;
-            //decimal ProofWork = state.Proof.ProofWork;
-            //int ProofCandidateProofId = state.Proof.ProofSuperProofId;
-            //int ProofRelayProofId = state.Proof.ProofRelayProofId;
-            //ConsensusStates proof = new ConsensusStates(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
-            //line += $"\t{ProofId}\t{ProofDifficulty}\t{ProofStake}\t{ProofWork}\t{ProofCandidateProofId}\t{ProofRelayProofId}";
+        ////TransferProofs
+        //int ProofId = state.Proof.ProofId;
+        //decimal ProofDifficulty = state.Proof.ProofDifficulty;
+        //decimal ProofStake = state.Proof.ProofStake;
+        //decimal ProofWork = state.Proof.ProofWork;
+        //int ProofCandidateProofId = state.Proof.ProofSuperProofId;
+        //int ProofRelayProofId = state.Proof.ProofRelayProofId;
+        //ConsensusStates proof = new ConsensusStates(ProofId, ProofDifficulty, ProofStake, ProofWork, ProofCandidateProofId, ProofRelayProofId);
+        //line += $"\t{ProofId}\t{ProofDifficulty}\t{ProofStake}\t{ProofWork}\t{ProofCandidateProofId}\t{ProofRelayProofId}";
 
-            //return line;
+        //return line;
 
         //    return null;
         //}
