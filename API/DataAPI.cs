@@ -5,7 +5,7 @@
 namespace Swopblock.API.Data
 {
 
-    public interface IOrdering
+    public interface IMessage
     {
         IOffer Offer { get; set; }
 

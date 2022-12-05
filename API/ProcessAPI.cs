@@ -9,13 +9,13 @@ namespace Swopblock.API.Process
     {
         void Run()
         {
-            var order = OrderingQueue.Dequeue();
+            var order = SigningQueue.Dequeue();
 
             while (ProcessOrder(order))
             {
                 Broadcast(order);
 
-                order = OrderingQueue.Dequeue();
+                order = SigningQueue.Dequeue();
             }
 
             var confirmation = ConfirmingQueue.Dequeue();
@@ -28,12 +28,12 @@ namespace Swopblock.API.Process
             }
         }
 
-        bool ProcessOrder(IOrdering order)
+        bool ProcessOrder(IMessage order)
         {
             return order == null ? false : true;
         }
 
-        bool ProcessConfirmation(IOrdering confirmation)
+        bool ProcessConfirmation(IMessage confirmation)
         {
             return confirmation == null ? false : true;
         }
@@ -44,11 +44,11 @@ namespace Swopblock.API.Process
     {
         IUser[] User { get; set; }
 
-        void Broadcast(IOrdering order)
+        void Broadcast(IMessage Call)
         {
             foreach (var user in User)
             {
-                user.Order(order);
+                user.Sign(Call);
             }
         }
     }
@@ -57,9 +57,9 @@ namespace Swopblock.API.Process
     {
         IAuto Auto { get; set; }
 
-        void Validate(IOrdering order)
+        void Validate(IMessage Return)
         {
-            Auto.Confirm(order);
+            Auto.Confirm(Return);
         }
     }
 
@@ -106,10 +106,10 @@ namespace Swopblock.API.Process
         void SetInternetConnection(IInternetConnectionLayer InternetConnection);
     }
 
-    public interface IOrderQueue
+    public interface IMessageQueue
     {
-        void Enqueue(IOrdering order);
+        void Enqueue(IMessage order);
 
-        IOrdering Dequeue();
+        IMessage Dequeue();
     }
 }
