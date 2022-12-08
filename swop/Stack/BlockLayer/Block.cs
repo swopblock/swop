@@ -13,8 +13,9 @@ namespace Swopblock.Stack.BlockLayer
 
         BlockchainTag Tag = BlockchainTag.None;
 
-        List<Transaction> transactions = new List<Transaction>();   
+        List<Transaction> transactions = new List<Transaction>();
 
+        public Block() { }
         public Block(BlockchainTag tag)
         {
             Tag = tag;
@@ -28,7 +29,7 @@ namespace Swopblock.Stack.BlockLayer
 
             bytes.AddRange(BitConverter.GetBytes(transactions.Count));
 
-            foreach(Transaction tx in transactions)
+            foreach (Transaction tx in transactions)
             {
                 byte[] txBt = tx.Serialize();
 
@@ -38,6 +39,43 @@ namespace Swopblock.Stack.BlockLayer
             }
 
             return bytes.ToArray();
+        }
+        public virtual Block Deserialize(byte[] data)
+        {
+            int minLen = 4;
+            int index = 0;
+
+            transactions.Clear();
+
+            if (data != null)
+            {
+                if (data.Length >= minLen)
+                {
+                    int tag = BitConverter.ToInt32(data, index += 4);
+                    int num = BitConverter.ToInt32(data, index += 4);
+
+                    Block blk = new Block((BlockchainTag)tag);
+
+                    int inx = 0;
+
+                    Transaction tx = null;
+
+                    while (inx++ < num)
+                    {
+                        tx = new Transaction();
+
+                        int len = BitConverter.ToInt32(data, index += 4);
+
+                        byte[] dat = Utility.GetNextByteSet(data, index, len);
+
+                        tx.Deserialize(dat);
+
+                        blk.transactions.Add(tx);
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
