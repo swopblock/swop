@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace Swopblock.Stack.NetworkLayer
 {
-    public class Network
+    public class NetworkClient
     {
         public List<string> Peers { get; set; }
 
@@ -24,7 +24,12 @@ namespace Swopblock.Stack.NetworkLayer
 
         UdpClient client = new UdpClient();
 
-        public Network(List<string> peers)
+        public NetworkClient()
+        {
+            Peers = new List<string>();
+            RecievedPackets = new ConcurrentQueue<Packet>();
+        }
+        public NetworkClient(List<string> peers)
         {
             Peers = peers;
             RecievedPackets = new ConcurrentQueue<Packet>();

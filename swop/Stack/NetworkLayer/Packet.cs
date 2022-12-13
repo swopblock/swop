@@ -15,6 +15,8 @@ namespace Swopblock.Stack.NetworkLayer
         public byte[] rawData { get; set; }
         public byte[] data { get; set; }
 
+        private byte[] renderedData { get; set; }
+
         public string Readable
         {
             get
@@ -32,6 +34,16 @@ namespace Swopblock.Stack.NetworkLayer
 
         public int Length = 0;
         public int Checksum = 0;
+
+        public Packet(byte[] data)
+        {
+            renderedData = PackBytes(data);
+        }
+
+        public Packet()
+        {
+
+        }
 
         public static byte[] PackBytes(byte[] data)
         {
@@ -79,6 +91,24 @@ namespace Swopblock.Stack.NetworkLayer
             }
 
             return packet;
+        }
+
+        public byte[] GetDataForSending()
+        {
+            if (renderedData != null)
+            {
+                if (renderedData.Length > 0)
+                {
+                    return renderedData;
+                }
+            }
+
+            return null;
+        }
+
+        public byte[] GetMessageData()
+        {
+            return data;
         }
 
         private static int checksum(byte[] data)
