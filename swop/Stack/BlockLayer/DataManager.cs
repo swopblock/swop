@@ -1,4 +1,5 @@
-﻿using Swopblock.Stack.NetworkLayer;
+﻿using Swopblock.Intentions.Utilities;
+using Swopblock.Stack.NetworkLayer;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,7 +15,11 @@ namespace Swopblock.Stack.BlockLayer
 
         public NetworkClient client = new NetworkClient();
 
+        public SuperBlock CurrentBlock = new SuperBlock();
+
         private List<SuperBlock> unsavedBlocks { get; set; }
+
+        private List<string> logs { get; set; }
 
         private bool running = true;
 
@@ -23,12 +28,17 @@ namespace Swopblock.Stack.BlockLayer
             client.Peers = Settings.NetworkPeers;
             SuperBlocks = new ConcurrentQueue<SuperBlock>();
             unsavedBlocks = new List<SuperBlock>();
+            logs = new List<string>();
+
+            client.ToggleLogging();
         }
 
-        public void RunNetwork()
+        public void StartNetwork()
         {
             new Thread(() =>
             {
+                //Thread.CurrentThread.IsBackground = true;
+
                 client.Setup();
                 client.StartRecieving();
 
@@ -40,6 +50,7 @@ namespace Swopblock.Stack.BlockLayer
                     {
                         if (pks.Count > 0)
                         {
+
                             List<SuperBlock> blocks = ProcessData(pks);
 
                             if (blocks != null)
@@ -59,6 +70,26 @@ namespace Swopblock.Stack.BlockLayer
             }).Start();
         }
 
+        public void AddBlock(Block blk)
+        {
+            CurrentBlock.AddBlock(blk);
+        }
+
+        public void AddTx(Transaction tx, Block.BlockchainTag chain)
+        {
+            CurrentBlock.AddTx(tx, chain);
+        }
+
+        public byte[] Serialize()
+        {
+            return CurrentBlock.Serialize();
+        }
+
+        public void SendPacket(byte[] data, Packet.PacketType pkType)
+        {
+            client.SendData(data, pkType);
+        }
+
         public List<Packet> RecieveData(ConcurrentQueue<Packet> packets)
         {
             List<Packet> pk = new List<Packet>();
@@ -76,15 +107,14 @@ namespace Swopblock.Stack.BlockLayer
             return pk;
         }
 
-        public List<SuperBlock> ProcessData(List<Packet> packets)
+        public List<SuperBlock> ProcessData(List<Packet> messages)
         {
             List<SuperBlock> sblocks = new List<SuperBlock>();
 
-            foreach (Packet packet in packets)
+            foreach (Packet ms in messages)
             {
                 SuperBlock bk = new SuperBlock();
-                bk.Deserialize(packet.GetMessageData());
-                sblocks.Add(bk);
+                sblocks.Add(bk.Deserialize(ms.GetMessageData()));
             }
 
             return sblocks;
@@ -104,12 +134,26 @@ namespace Swopblock.Stack.BlockLayer
         {
             foreach (SuperBlock blk in unsavedBlocks)
             {
-                byte[] bt = blk.Serialize();
+                if (blk != null)
+                {
+                    byte[] bt = blk.Serialize();
 
-                File.WriteAllBytes(Settings.SuperBlockFolder
-                    + "\\SuperBlock:"
-                    + Settings.SuperBlockCount++
-                    + ".blk", bt);
+                    foreach (Block block in blk.Blocks)
+                    {
+                        foreach (Transaction tx in block.transactions)
+                        {
+                            foreach (DataTag dat in tx.ValueData)
+                            {
+                                Console.WriteLine(dat.Name + " : " + Utility.ConvertToReadable(dat.Data));
+                            }
+                        }
+                    }
+                }
+
+                //File.WriteAllBytes(Settings.SuperBlockFolder 
+                //    + "\\SuperBlock:" 
+                //    + Settings.SuperBlockCount++ 
+                //    + ".blk", bt);
             }
 
             unsavedBlocks.Clear();

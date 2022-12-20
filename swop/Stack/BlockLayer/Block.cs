@@ -13,12 +13,26 @@ namespace Swopblock.Stack.BlockLayer
 
         BlockchainTag Tag = BlockchainTag.None;
 
-        List<Transaction> transactions = new List<Transaction>();
+        public List<Transaction> transactions = new List<Transaction>();
 
         public Block() { }
         public Block(BlockchainTag tag)
         {
             Tag = tag;
+        }
+
+        public void AddTx(Transaction tx)
+        {
+            transactions.Add(tx);
+        }
+
+        public void SetTag(BlockchainTag tag)
+        {
+            Tag = tag;
+        }
+        public BlockchainTag GetTag()
+        {
+            return Tag;
         }
 
         public virtual byte[] Serialize()
@@ -40,7 +54,7 @@ namespace Swopblock.Stack.BlockLayer
 
             return bytes.ToArray();
         }
-        public virtual Block Deserialize(byte[] data)
+        public virtual void Deserialize(byte[] data)
         {
             int minLen = 4;
             int index = 0;
@@ -51,10 +65,12 @@ namespace Swopblock.Stack.BlockLayer
             {
                 if (data.Length >= minLen)
                 {
-                    int tag = BitConverter.ToInt32(data, index += 4);
-                    int num = BitConverter.ToInt32(data, index += 4);
+                    int tag = BitConverter.ToInt32(data, index);
+                    index += 4;
+                    int num = BitConverter.ToInt32(data, index);
+                    index += 4;
 
-                    Block blk = new Block((BlockchainTag)tag);
+                    SetTag((BlockchainTag)tag);
 
                     int inx = 0;
 
@@ -64,18 +80,19 @@ namespace Swopblock.Stack.BlockLayer
                     {
                         tx = new Transaction();
 
-                        int len = BitConverter.ToInt32(data, index += 4);
+                        int len = BitConverter.ToInt32(data, index);
+                        index += 4;
 
                         byte[] dat = Utility.GetNextByteSet(data, index, len);
 
+                        index += len;
+
                         tx.Deserialize(dat);
 
-                        blk.transactions.Add(tx);
+                        transactions.Add(tx);
                     }
                 }
             }
-
-            return null;
         }
     }
 }

@@ -16,6 +16,22 @@ namespace Swopblock.Stack.BlockLayer
             ValueData = new List<DataTag>();
         }
 
+        public Transaction(string intentions)
+        {
+            ValueData = new List<DataTag>();
+
+            ValueData.Add(new DataTag
+            {
+                Name = "intention",
+                Data = Utility.ConvertToBytes(intentions)
+            });
+        }
+
+        public void AddValue(DataTag data)
+        {
+            ValueData.Add(data);
+        }
+
         public virtual byte[] Serialize()
         {
             List<byte> bytes = new List<byte>();
@@ -52,13 +68,19 @@ namespace Swopblock.Stack.BlockLayer
 
                     while (index < data.Length - minlen)
                     {
-                        int nameLen = BitConverter.ToInt32(data, index += 4);
+                        int nameLen = BitConverter.ToInt32(data, index);
+
+                        index += 4;
+
                         byte[] namebyt = Utility.GetNextByteSet(data, index, nameLen);
                         string name = Utility.ConvertToString(namebyt);
 
                         index += nameLen;
 
-                        int rawLen = BitConverter.ToInt32(data, index += 4);
+                        int rawLen = BitConverter.ToInt32(data, index);
+
+                        index += 4;
+
                         byte[] raw = Utility.GetNextByteSet(data, index, rawLen);
 
                         index += rawLen;

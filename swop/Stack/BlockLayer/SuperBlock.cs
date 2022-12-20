@@ -13,9 +13,32 @@ namespace Swopblock.Stack.BlockLayer
         public List<Block> Blocks = new List<Block>();
 
         public int Version = 0;
+
+        public void AddBlock(Block blk)
+        {
+            Blocks.Add(blk);
+        }
+
+        public void AddTx(Transaction tx, Block.BlockchainTag chain)
+        {
+            Block selected = Blocks.Where(x => x.GetTag() == chain).FirstOrDefault();
+
+            if (selected != null)
+            {
+                selected.AddTx(tx);
+            }
+            else
+            {
+                Blocks.Add(new Block(chain));
+
+                AddTx(tx, chain);
+            }
+        }
         public virtual byte[] Serialize()
         {
             List<byte> bytes = new List<byte>();
+
+            bytes.AddRange(BitConverter.GetBytes(Version));
 
             bytes.AddRange(BitConverter.GetBytes(Blocks.Count));
 
@@ -43,14 +66,22 @@ namespace Swopblock.Stack.BlockLayer
 
                     int index = 0;
 
-                    int version = BitConverter.ToInt32(data, index += 4);
-                    int count = BitConverter.ToInt32(data, index += 4);
+                    int version = BitConverter.ToInt32(data, index);
+
+                    index += 4;
+
+                    int count = BitConverter.ToInt32(data, index);
+
+                    index += 4;
 
                     block.Version = version;
 
                     for (int x = 0; x < count; x++)
                     {
-                        int len = BitConverter.ToInt32(data, index += 4);
+                        int len = BitConverter.ToInt32(data, index);
+
+                        index += 4;
+
                         byte[] rawBytes = Utility.GetNextByteSet(data, index, len);
 
                         index += len;

@@ -20,18 +20,21 @@ namespace Swopblock.Stack.NetworkLayer
 
         bool watching = true;
 
+        bool logData = true;
+
         int resendAttempts = 10;
 
         UdpClient client = new UdpClient();
 
-        public NetworkClient()
-        {
-            Peers = new List<string>();
-            RecievedPackets = new ConcurrentQueue<Packet>();
-        }
         public NetworkClient(List<string> peers)
         {
             Peers = peers;
+            RecievedPackets = new ConcurrentQueue<Packet>();
+        }
+
+        public NetworkClient()
+        {
+            Peers = new List<string>();
             RecievedPackets = new ConcurrentQueue<Packet>();
         }
 
@@ -51,14 +54,14 @@ namespace Swopblock.Stack.NetworkLayer
                         }
                         catch (Exception ex)
                         {
-                            Debug.WriteLine(ex.Message);
+                            if (logData) Debug.WriteLine(ex.Message);
                         }
                     }
                 }
             }
         }
 
-        public void SendData(byte[] data)
+        public void SendData(byte[] data, Packet.PacketType pkType)
         {
             int count = 0;
 
@@ -66,7 +69,7 @@ namespace Swopblock.Stack.NetworkLayer
 
             while (count < data.Length)
             {
-                byte[] rawPack = Packet.PackBytes(data);
+                byte[] rawPack = Packet.PackBytes(data, pkType);
 
                 count = client.Send(rawPack, rawPack.Length);
 
@@ -100,20 +103,26 @@ namespace Swopblock.Stack.NetworkLayer
                         if (data.Length > 0)
                         {
                             Packet pkt = Packet.GetPacket(data);
+
                             if (pkt != null)
                             {
                                 RecievedPackets.Enqueue(pkt);
 
-                                Console.WriteLine(pkt.Readable);
+                                if (logData) Console.WriteLine(pkt.Readable);
                             }
                             else
                             {
-                                //Console.WriteLine("[Failed]");
+                                if (logData) Console.WriteLine("[No Packet]");
                             }
                         }
                     }
                 }
             }).Start();
+        }
+
+        public void ToggleLogging()
+        {
+            logData = !logData;
         }
     }
 }
