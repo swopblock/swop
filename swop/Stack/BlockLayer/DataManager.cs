@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,7 +26,6 @@ namespace Swopblock.Stack.BlockLayer
 
         public DataManager()
         {
-            client.Peers = Settings.NetworkPeers;
             SuperBlocks = new ConcurrentQueue<SuperBlock>();
             unsavedBlocks = new List<SuperBlock>();
             logs = new List<string>();
@@ -68,6 +68,13 @@ namespace Swopblock.Stack.BlockLayer
                     Thread.Sleep(10);
                 }
             }).Start();
+        }
+
+        public void AddPeer(IPAddress address)
+        {
+            if (Settings.NetworkPeers == null) Settings.NetworkPeers = new List<string>();
+            
+            Settings.NetworkPeers.Add(address.ToString());
         }
 
         public void AddBlock(Block blk)

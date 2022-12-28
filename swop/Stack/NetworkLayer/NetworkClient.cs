@@ -11,9 +11,7 @@ using System.Diagnostics;
 namespace Swopblock.Stack.NetworkLayer
 {
     public class NetworkClient
-    {
-        public List<string> Peers { get; set; }
-
+    { 
         public ConcurrentQueue<Packet> RecievedPackets { get; set; }
 
         private static readonly ushort port = 25233; //hotel room at money2020
@@ -26,25 +24,18 @@ namespace Swopblock.Stack.NetworkLayer
 
         UdpClient client = new UdpClient();
 
-        public NetworkClient(List<string> peers)
-        {
-            Peers = peers;
-            RecievedPackets = new ConcurrentQueue<Packet>();
-        }
-
         public NetworkClient()
         {
-            Peers = new List<string>();
             RecievedPackets = new ConcurrentQueue<Packet>();
         }
 
         public void Setup()
         {
-            if (Peers != null)
+            if (Settings.NetworkPeers != null)
             {
-                if (Peers.Count > 0)
+                if (Settings.NetworkPeers.Count > 0)
                 {
-                    foreach (string ip in Peers)
+                    foreach (string ip in Settings.NetworkPeers)
                     {
                         try
                         {
