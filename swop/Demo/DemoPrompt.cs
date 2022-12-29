@@ -1,7 +1,10 @@
 ﻿using Swopblock.Intentions;
+using Swopblock.Stack.BlockLayer;
+using Swopblock.Stack.NetworkLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,11 +13,32 @@ namespace Swopblock.Demo
     public class DemoPrompt
     {
         IntentionTree Tree = new IntentionTree();
+        DataManager manager = new DataManager();
 
         SimulationStates simulationStates = SimulationStates.Empty;
+
+        public void Start()
+        {
+            Console.WriteLine("Hello, Swopblock!");
+            Console.WriteLine();
+
+            Console.Write("Connect To: ");
+            string value = Console.ReadLine();
+
+            try
+            {
+                manager.AddPeer(IPAddress.Parse(value));
+                manager.StartNetwork();
+            }
+            catch
+            {
+                Console.WriteLine("Incorrect Format");
+            }
+
+            Run();
+        }
         public void Run()
         {
-            Console.WriteLine();
             Console.Write("Intent: ");
 
             string intention = Console.ReadLine();
@@ -26,6 +50,10 @@ namespace Swopblock.Demo
                 if (Tree.Validate(intention))
                 {
                     SimulationStates nState = SimulationStates.ParseFromIntention(intention);
+
+                    manager.AddTx(new Transaction(intention), Block.BlockchainTag.BTC);
+
+                    manager.SendPacket(manager.Serialize(), Packet.PacketType.SendBestBlock);
 
                     //if (simulationStates.ConsensusState.MarketCashVolume < nState.AddressState.CashLock)
                     //{
@@ -40,7 +68,8 @@ namespace Swopblock.Demo
                 }
                 else
                 {
-                    Console.WriteLine("Invalid Input");                    
+                    Console.WriteLine("Intentions are invalid!");
+                    Console.WriteLine();
                 }
 
                 Run();

@@ -10,33 +10,32 @@ using System.Diagnostics;
 
 namespace Swopblock.Stack.NetworkLayer
 {
-    public class Network
-    {
-        public List<string> Peers { get; set; }
-
+    public class NetworkClient
+    { 
         public ConcurrentQueue<Packet> RecievedPackets { get; set; }
 
         private static readonly ushort port = 25233; //hotel room at money2020
 
         bool watching = true;
 
+        bool logData = true;
+
         int resendAttempts = 10;
 
         UdpClient client = new UdpClient();
 
-        public Network(List<string> peers)
+        public NetworkClient()
         {
-            Peers = peers;
             RecievedPackets = new ConcurrentQueue<Packet>();
         }
 
         public void Setup()
         {
-            if (Peers != null)
+            if (Settings.NetworkPeers != null)
             {
-                if (Peers.Count > 0)
+                if (Settings.NetworkPeers.Count > 0)
                 {
-                    foreach (string ip in Peers)
+                    foreach (string ip in Settings.NetworkPeers)
                     {
                         try
                         {
@@ -46,14 +45,14 @@ namespace Swopblock.Stack.NetworkLayer
                         }
                         catch (Exception ex)
                         {
-                            Debug.WriteLine(ex.Message);
+                            if (logData) Debug.WriteLine(ex.Message);
                         }
                     }
                 }
             }
         }
 
-        public void SendData(byte[] data)
+        public void SendData(byte[] data, Packet.PacketType pkType)
         {
             int count = 0;
 
@@ -61,7 +60,7 @@ namespace Swopblock.Stack.NetworkLayer
 
             while (count < data.Length)
             {
-                byte[] rawPack = Packet.PackBytes(data);
+                byte[] rawPack = Packet.PackBytes(data, pkType);
 
                 count = client.Send(rawPack, rawPack.Length);
 
@@ -95,20 +94,26 @@ namespace Swopblock.Stack.NetworkLayer
                         if (data.Length > 0)
                         {
                             Packet pkt = Packet.GetPacket(data);
+
                             if (pkt != null)
                             {
                                 RecievedPackets.Enqueue(pkt);
 
-                                Console.WriteLine(pkt.Readable);
+                                if (logData) Console.WriteLine(pkt.Readable);
                             }
                             else
                             {
-                                //Console.WriteLine("[Failed]");
+                                if (logData) Console.WriteLine("[No Packet]");
                             }
                         }
                     }
                 }
             }).Start();
+        }
+
+        public void ToggleLogging()
+        {
+            logData = !logData;
         }
     }
 }

@@ -9,11 +9,26 @@ namespace Swopblock.Stack.NetworkLayer
 {
     public class Packet
     {
-        public static string head = "[SwopBlock]";
+        public enum PacketType
+        {
+            None,
+            GetPeerList,
+            GetBestBlock,
+            GetMerkleTree,
+            SendPeerList,
+            SendBestBlock,
+            SendMerkleTree
+        }
 
-        public string Heading { get; set; }
-        public byte[] rawData { get; set; }
-        public byte[] data { get; set; }
+        public PacketType packetType = PacketType.None;
+
+        private static string head = "[SwopBlock]";
+
+        private string Heading { get; set; }
+        private byte[] rawData { get; set; }
+        private byte[] data { get; set; }
+
+        private byte[] renderedData { get; set; }
 
         public string Readable
         {
@@ -33,7 +48,17 @@ namespace Swopblock.Stack.NetworkLayer
         public int Length = 0;
         public int Checksum = 0;
 
-        public static byte[] PackBytes(byte[] data)
+        public Packet(byte[] data, PacketType pkType = PacketType.None)
+        {
+            renderedData = PackBytes(data, pkType);
+        }
+
+        public Packet()
+        {
+
+        }
+
+        public static byte[] PackBytes(byte[] data, PacketType pkType)
         {
             List<byte> bytes = new List<byte>();
 
@@ -41,6 +66,8 @@ namespace Swopblock.Stack.NetworkLayer
             {
                 bytes.Add((byte)head[i]);
             }
+
+            bytes.AddRange(BitConverter.GetBytes((int)pkType));
 
             bytes.AddRange(BitConverter.GetBytes(data.Length));
             bytes.AddRange(data);
@@ -59,26 +86,46 @@ namespace Swopblock.Stack.NetworkLayer
 
                 if (header == head)
                 {
-                    int len = BitConverter.ToInt32(data, head.Length);
-                    byte[] bytes = Utility.GetNextByteSet(data, 4 + head.Length, len);
-                    int check = BitConverter.ToInt32(data, len + 4 + head.Length);
+                    int pty = BitConverter.ToInt32(data, head.Length);
+
+                    int len = BitConverter.ToInt32(data, head.Length + 4);
+                    byte[] bytes = Utility.GetNextByteSet(data, 8 + head.Length, len);
+                    int check = BitConverter.ToInt32(data, len + 8 + head.Length);
 
                     if (check == checksum(bytes))
                     {
                         packet = new Packet
                         {
                             Heading = header,
+                            packetType = (PacketType)pty,
                             Length = len,
                             rawData = data,
                             Checksum = check,
                             data = bytes
-
                         };
                     }
                 }
             }
 
             return packet;
+        }
+
+        public byte[] GetDataForSending()
+        {
+            if (renderedData != null)
+            {
+                if (renderedData.Length > 0)
+                {
+                    return renderedData;
+                }
+            }
+
+            return null;
+        }
+
+        public byte[] GetMessageData()
+        {
+            return data;
         }
 
         private static int checksum(byte[] data)
