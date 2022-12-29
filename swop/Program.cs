@@ -13,7 +13,23 @@ using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using Swopblock.Stack.IncentiveLayer;
 using Swopblock.Simulation;
-using Swopblock.API;
+//using Swopblock.API;
+using Swopblock.API.Process;
+using Swopblock.API.Data;
+using Swopblock.API.Custody;
+
+// Put Simulation Here
+// Put Simulation Here
+// Put Simulation Here
+
+Console.WriteLine("Hello Swopblock World!");
+
+// Put Simulation Here
+// Put Simulation Here
+// Put Simulation Here
+
+
+
 
 namespace Swopblock
 {
@@ -35,7 +51,7 @@ namespace Swopblock
         //   Step 3: Show user updated simulation state
         /* **************************************************************** */
 
-        public static void Main(string[] args)
+        public static void MainTBD(string[] args)
         {
             TestStream();
 

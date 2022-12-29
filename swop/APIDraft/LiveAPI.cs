@@ -1,5 +1,6 @@
 ﻿namespace Swopblock.API
 {
+    //public interface IAppAPI { }
     public interface ILiveAPI
     {
         void Subscribe(ILiveAppAPI App);

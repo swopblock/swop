@@ -1,80 +1,39 @@
-﻿using Swopblock.API.Data;
+﻿// Copywrite (c) 2022 Swopblock LLC   (see https://github.com/swopblock)
+// Created December 29, 2022 4:53 PM ET by Jeff Hilde, jeff@swopblock.org
+
+using Swopblock.API.Data;
 using Swopblock.API.Process;
+using Swopblock.API.State;
 
-namespace Swopblock.API
+namespace Swopblock.API.Custody
 {
-
-    public interface ICustody : IUser, IAuto
+    public abstract class APP : UserControlLayer
     {
-        public ICash[] Circulated { get; set; }
+        public User Pending, Confirming;
 
-        public IAsset[] Uncirculated { get; set; }
-
+        public CORE CORE { get; init; }
     }
 
-    public interface IAPP : ICustody
+    public abstract class CORE : UserIncentiveLayer
     {
-        ICORE[] CORE { get; set; }
-    }
+        public User Pending, Confirming;
 
-    public interface ICORE : ILayer, ICustody
-    {
-        ICARRIER[] CARRIER { get; set; }
-    }
+        public APP APP { get; init; }
 
-    public interface ICARRIER : ILayer, ICustody
-    {
-        ILayer[] Layers { get; set; }
-    }
+        public CARRIER[] CARRIER { get; init; }
 
-    public interface IUser
-    {
-        IMessageQueue SigningQueue { get; }
-
-        void Sign(IMessage message)
+        public override Message Call(Message message)
         {
-            SigningQueue.Enqueue(message);
+            CARRIER[0].Call(message);
+
+            return base.Call(message);
         }
     }
 
-    public interface IAuto
+    public abstract class CARRIER : UserConsensusLayer
     {
-        IMessageQueue ConfirmingQueue { get; }
+        public User Pending, Confirming;
 
-        void Confirm(IMessage message)
-        {
-            ConfirmingQueue.Enqueue(message);
-        }
+        public CORE CORE { get; init; }
     }
-
-
-    public interface SWOBL : IAsset { }
-
-    public interface BTC : IAsset { }
-
-    public interface ETH : IAsset { }
-
-    public interface ICash : IAsset
-    {
-        public SWOBL Base { get; set; }
-    }
-
-    public interface IAsset : IClaim
-    {
-        public IAsset[] Quits { get; set; }
-    }
-
-    public interface IClaim : IPatent
-    {
-        public decimal Sum { get; set; }
-        public IClaim[] Claims { get; set; }
-    }
-
-    public interface IPatent
-    {
-        public string Symbol { get; set; }
-
-        public decimal Domain { get; set; }
-    }
-
 }

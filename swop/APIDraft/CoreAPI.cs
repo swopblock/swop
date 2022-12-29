@@ -1,5 +1,8 @@
 ﻿namespace Swopblock.API
 {
+    public interface IAppAPI { }
+
+    public interface IConfirming { }
     public interface ICoreAPI
     {
         public IOrderBroadcasting Subscribe(IAppAPI App);

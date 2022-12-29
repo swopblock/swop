@@ -2,14 +2,15 @@
 
 namespace Swopblock.API
 {
+    /*
     public interface IAppAPI
     {
-        public ISigning Subsribe(IOrderAPI Order);
+        public IMessage Subsribe(IOrderAPI Order);
 
         public IConfirming Subscribe(ICoreAPI LiveCore);
     }
 
-    public class AppAPI : IAppAPI, ISigning, IConfirming
+    public class AppAPI : IAppAPI, IMessage, IConfirming
     {
         private IOrderAPI[] Input, InputOutput;
 
@@ -44,20 +45,20 @@ namespace Swopblock.API
             throw new NotImplementedException();
         }
 
-        public ISigning Subsribe(ILiveAPI Client)
+        public IMessage Subsribe(ILiveAPI Client)
         {
             LiveAPI = Client;
 
-            return (ISigning)this;
+            return (IMessage)this;
         }
 
-        public ISigning Subsribe(IOrderAPI Order)
+        public IMessage Subsribe(IOrderAPI Order)
         {
             throw new NotImplementedException();
         }
     }
 
-    public interface ISigning
+    public interface IMessage
     {
         void Sign(string OrderIntention);
     }
@@ -66,4 +67,5 @@ namespace Swopblock.API
     {
         void Confirm(IConfirmationAPI Confirmation);
     }
+    */
 }
