@@ -5,35 +5,23 @@ using Swopblock.API.Data;
 using Swopblock.API.Process;
 using Swopblock.API.State;
 
-namespace Swopblock.API.Custody
+namespace Swopblock.API.Application
 {
-    public abstract class APP : UserControlLayer
+    public abstract class APP : UserApplicationLayer
     {
-        public User Pending, Confirming;
-
         public CORE CORE { get; init; }
     }
 
     public abstract class CORE : UserIncentiveLayer
     {
-        public User Pending, Confirming;
-
         public APP APP { get; init; }
 
         public CARRIER[] CARRIER { get; init; }
 
-        public override Message Call(Message message)
-        {
-            CARRIER[0].Call(message);
-
-            return base.Call(message);
-        }
     }
 
     public abstract class CARRIER : UserConsensusLayer
     {
-        public User Pending, Confirming;
-
         public CORE CORE { get; init; }
     }
 }

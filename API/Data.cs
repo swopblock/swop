@@ -34,6 +34,8 @@ namespace Swopblock.API.Data
         Sample Offer;
 
         Population Return;
+
+        Sample Trade;
         
         public virtual string Text()
         {

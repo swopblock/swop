@@ -1,25 +1,18 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC   (see https://github.com/swopblock)
 // Created November 29, 2022 3:51 PM ET by Jeff Hilde, jeff@swopblock.org
 
-using Swopblock.API.Custody;
+using Swopblock.API.Application;
 using Swopblock.API.Data;
 using Swopblock.API.Process;
+using Swopblock.API.State;
 using System.Diagnostics;
 
 namespace Swopblock.API.Process
 {
      public class AutoFeedbackLayer
-    {
-        public virtual Message Call(Message message)
-        {
-            return message;
-        }
-
-        public virtual Message Return(Message message)
-        {
-            return message;
-        }
-    }
+     {
+        public Main Signed, Broadcast, Confirmed;
+     }
 
     public class AutoApplicationLayer : AutoFeedbackLayer
     {
@@ -31,52 +24,51 @@ namespace Swopblock.API.Process
 
     public class AutoConsensusLayer : AutoIncentiveLayer
     {
-        public void Bid(Bidding message) { }
-
-        public void Ask(Asking message) { }
     }
 
     public class AutoNetworkLayer : AutoConsensusLayer
     {
-        static UInt16 n = 0;
-
-        public static AutoNetworkLayer[] AutoNeighborhood = new AutoNetworkLayer[n];
-
-        public AutoNetworkLayer()
+        public void Confirm(Message message)
         {
-            AutoNeighborhood[n++] = this;
+
         }
     }
 
     public class InterNetworkLayer : AutoNetworkLayer
     {
-        public static InterNetworkLayer[] Nodes; 
+        public static InterNetworkLayer[] Nodes;
+
+        public static Random rand;
+
+        static InterNetworkLayer()
+        {
+            rand = new Random();
+
+            Nodes = new InterNetworkLayer[rand.Next(1, 1000)];
+        }
+
+        public void Broadcast(string message)
+        {
+            for (int i = 0; i < Nodes.Length; i++)
+            {
+                Nodes[rand.Next(Nodes.Length)].Receive(message);
+            }
+        }
+
+
+        public void Receive(string message)
+        {
+            base.Confirm(Message.Parse(message));
+        }
     }
 
     public class UserNetworkLayer : InterNetworkLayer
     {
-        static UInt16 n = 0;
-
-        public static UserNetworkLayer[] UserNeighborhood = new UserNetworkLayer[n];
-
-        public UserNetworkLayer()
+        public void Sign(Message message)
         {
-            UserNeighborhood[n++] = this;
-        }
+            base.Broadcast(message.Text());
 
-        public override Message Call(Message message)
-        {
-            foreach (var neighborhood in UserNeighborhood)
-            {
-                Call(message);
-            }
-
-            return base.Call(message);
-        }
-
-        public override Message Return(Message message)
-        {
-            return base.Return(message);
+            base.Confirm(message);
         }
     }
 
