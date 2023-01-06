@@ -1,129 +1,82 @@
 ﻿// Copywrite (c) 2022 Swopblock LLC   (see https://github.com/swopblock)
 // Created December 1, 2022 12:13 AM ET by Jeff Hilde, jeff@swopblock.org
 
+using Swopblock.API.State;
+
 namespace Swopblock.API.Data
 {
-    public record Amount(decimal amount);
+    // Messaging is a base record for executing, ordering, invoicing and receipting
+    //     in bidding, asking, buying, selling, paying, cashing, expencing and incoming transactions.
+    public record Transaction(User Executive);
 
-    public record Location(byte[] location);
 
-    public record Signature(byte[] signature);
-
-    public record Term(Amount Available, Amount Expiration);
-
-    public record Sample(Amount amount, Location Location, Signature Signature);
-
-    public record Medium(Amount amount, Location Location, Signature Signature) : Sample(amount, Location, Signature);
-
-    public record Population(Amount AtLeast, Amount AtMost);
-
-    public record Asset(decimal amount) : Amount(amount);
-
-    public record Cash(decimal amount) : Asset(amount);
-
-    public record Btc(decimal amount) : Asset(amount);
-
-    public record Eth(decimal amount) : Asset(amount);
-
-    public record Message()
-    {
-        Term Term;
-
-        Medium Quote;
-
-        Sample Offer;
-
-        Population Return;
-
-        Sample Trade;
+    // make a market order
+    public record Executing(User Executive, Supply Cash, decimal Expiration) 
         
-        public virtual string Text()
-        {
-            return "I.";
-        }
+        : Transaction(Executive);
 
-        public static Message Parse(string intention)
-        {
-            var message = new Message();
+    public record Ordering(Executing Execution, decimal AtLeastAmountOfMarket, decimal AtMostAmountAmountOfMarket, Market Market, User Executive, Supply Cash, decimal Expiration) 
+        
+        : Executing(Executive, Cash, Expiration);
 
-            if (intention.StartsWith("I"))
-            {
-                var result = new Success();
+    // invoice matching market orders
+    public record Invoicing(Ordering BidOrder, Ordering AskOrder, decimal BidAmount, decimal AskAmount, User Executive, Supply Cash, decimal Expiration) 
+        
+        : Executing(Executive, Cash, Expiration);
 
-                result.Message = message;
+    // change custody in a invoiced matched market order
+    public record Changing(Invoicing Invoice, decimal AssetAmount, User Executive, Supply Cash, decimal Expiration) 
+        
+        : Executing(Executive, Cash, Expiration);
 
-                return result;
-            }
+    // receipt the change of custody in a matched market order
+    public record Receipting(Changing Change, decimal CashAmount, User Executive, Supply Cash, decimal Expiration) 
+        
+        : Changing(Change.Invoice, Change.AssetAmount, Executive, Cash, Expiration);
 
-            else
-            {
-                var result = new Failure("Error: parsing intention.");
 
-                result.Message = message;
 
-                return result;
-            }
-        }
-    }
+    // bidding is a type of market order
+    public record Bidding(Executing Execution, decimal AtLeastAmountOfMarket, decimal AtMostAmountAmountOfMarket, Market Market, User Executive, Supply Cash, decimal Expiration)
 
-    public record Report2(bool Pass) : Message
-    {
-        public Message Message;
+        : Ordering(Execution, AtLeastAmountOfMarket, AtMostAmountAmountOfMarket, Market, Executive, Cash, Expiration);
 
-        public override string Text()
-        {
-            return "We.";
-        }
+    // asking is a type of market order
+    public record Asking(Executing Execution, decimal AtLeastAmountOfMarket, decimal AtMostAmountAmountOfMarket, Market Market, User Executive, Supply Cash, decimal Expiration)
 
-        public static Report2 Parse(string report)
-        {
-            if (report.StartsWith("We"))
-            {
-                return new Success();
-            }
+        : Ordering(Execution, AtLeastAmountOfMarket, AtMostAmountAmountOfMarket, Market, Executive, Cash, Expiration);
 
-            else
-            {
-                return new Failure("Error: parsing report.");
-            }
-        }
-    }
 
-    public record Success() : Report2(true)
-    {
+    // buying is a type of invoice for a bidding market order
+    public record Buying(Ordering BidOrder, Ordering AskOrder, decimal BidAmount, decimal AskAmount, User Executive, Supply Cash, decimal Expiration)
 
-    }
+        : Invoicing(BidOrder, AskOrder, BidAmount, AskAmount, Executive, Cash, Expiration);
 
-    public record Failure(string ErrorText) : Report2(false)
-    {
+    // selling is a type of invoice for a asking market order
+    public record Selling(Ordering BidOrder, Ordering AskOrder, decimal BidAmount, decimal AskAmount, User Executive, Supply Cash, decimal Expiration)
 
-    }
+         : Invoicing(BidOrder, AskOrder, BidAmount, AskAmount, Executive, Cash, Expiration);
 
-    public record Resourcing : Message { }
 
-    public record Booking : Message { }
+    // paying is a type of change in custody in a buying invoice for a bidding market order
+    public record Paying(Invoicing Invoice, decimal AssetAmount, User Executive, Supply Cash, decimal Expiration)
 
-    public record Ordering : Resourcing { }
+        : Changing(Invoice, AssetAmount, Executive, Cash, Expiration);
 
-    public record Changing : Resourcing { }
+    // cashing is a type of change in custody in a selling invoice for a asking market order
+    public record Cashing(Invoicing Invoice, decimal AssetAmount, User Executive, Supply Cash, decimal Expiration)
 
-    public record Bidding : Ordering { }
+        : Changing(Invoice, AssetAmount, Executive, Cash, Expiration);
 
-    public record Asking : Ordering { }
 
-    public record Paying :  Changing { }
+    // expensing is a type of receipt in a paying change in custody in a buying invoice for a bidding market order
+    public record Expensing(Changing Change, decimal CashAmount, User Executive, Supply Cash, decimal Expiration)
 
-    public record Cashing : Changing { }
+        : Receipting(Change, CashAmount, Executive, Cash, Expiration);
 
-    public record Invoicing : Booking { }
+    // incoming is a type of receipt in a cashing change in custody in a selling invoice for an asking market order
+    public record Incoming(Changing Change, decimal CashAmount, User Executive, Supply Cash, decimal Expiration)
 
-    public record Receipting : Booking { }
+        : Receipting(Change, CashAmount, Executive, Cash, Expiration);
 
-    public record Buying : Invoicing { }
-
-    public record Selling : Invoicing { }
-
-    public record Expencing : Receipting { }
-
-    public record Incoming : Receipting { }
  }

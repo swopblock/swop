@@ -7,21 +7,21 @@ using Swopblock.API.State;
 
 namespace Swopblock.API.Application
 {
-    public abstract class APP : UserApplicationLayer
+    public class APP : UserApplicationLayer
     {
-        public CORE CORE { get; init; }
+        public CORE CORE;
     }
 
-    public abstract class CORE : UserIncentiveLayer
+    public class CORE : UserIncentiveLayer
     {
-        public APP APP { get; init; }
+        public APP APP;
 
-        public CARRIER[] CARRIER { get; init; }
+        public CARRIER[] CARRIER;
 
     }
 
-    public abstract class CARRIER : UserConsensusLayer
+    public class CARRIER : UserConsensusLayer
     {
-        public CORE CORE { get; init; }
+        public CORE CORE;
     }
 }

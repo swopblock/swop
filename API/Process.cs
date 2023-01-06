@@ -9,10 +9,37 @@ using System.Diagnostics;
 
 namespace Swopblock.API.Process
 {
-     public class AutoFeedbackLayer
-     {
-        public Main Signed, Broadcast, Confirmed;
-     }
+    public abstract class AbstractLayer
+    {
+        public static string Text(Transaction message)
+        {
+            return message.Text();
+        }
+
+        public static Transaction Parse(string message)
+        {
+            return Transaction.Parse(message);
+        }
+
+        public static Sourcing Source(string message)
+        {
+            return Sourcing.
+        }
+
+        public abstract string Buy(Buying message);
+
+        public abstract Buying Buy(string message);
+
+        //Bid, Ask, 
+
+    }
+
+    public class AutoFeedbackLayer
+    {
+        public Exchange Signed, Broadcast, Confirmed;
+
+        public void Buy();
+    }
 
     public class AutoApplicationLayer : AutoFeedbackLayer
     {
@@ -28,7 +55,7 @@ namespace Swopblock.API.Process
 
     public class AutoNetworkLayer : AutoConsensusLayer
     {
-        public void Confirm(Message message)
+        public void Confirm(Transaction message)
         {
 
         }
@@ -58,13 +85,13 @@ namespace Swopblock.API.Process
 
         public void Receive(string message)
         {
-            base.Confirm(Message.Parse(message));
+            base.Confirm(Transaction.Parse(message));
         }
     }
 
     public class UserNetworkLayer : InterNetworkLayer
     {
-        public void Sign(Message message)
+        public void Sign(Transaction message)
         {
             base.Broadcast(message.Text());
 
@@ -87,4 +114,5 @@ namespace Swopblock.API.Process
     public class UserControlLayer : UserApplicationLayer
     {
     }
- }
+
+}

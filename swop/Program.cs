@@ -22,13 +22,66 @@ using Swopblock.API.Application;
 // Put Simulation Here
 // Put Simulation Here
 
-Console.WriteLine("Hello Swopblock World!");
+var sim = new Sim();
+
+string order, invoice, change, receipt;
+
+Console.WriteLine("Hello Swopblock Sim!");
+
+while (true)
+{
+    Console.WriteLine("We are confirming 123 BTC in your account 2387 and pending 73 SWOBL in your account 2387.");
+
+    order = Console.ReadLine();
+
+    order = "I am bidding at most 10 SWOBL in my supply 1028943 in order for at least 1 BTC in the market at market volume 293847 SWOBL" +
+                "and the order is good until the maket volume reaches 128923 SWOBL using my signature 192837.";
+
+    Console.WriteLine("Please commit your order:");
+    Console.WriteLine("    " + order);
+
+    invoice = "We are invoicing 10 SWOBL in your supply 1028943 in order for 2 BTC in their supply 40293 at market volume 209834 SWOBL.";
+
+    change = "We are changing 10 SWOBL in your supply 1028942 in demand for 2 BTC in their supply 40293 at market volume 309843 SWOBL.";
+
+    receipt = "We are receipting 10 SWOBL in your supply 1028942 in demand for 2 BTC in their supply 40293 at market volume 309843 SWOBL."
+}
+
+Console.WriteLine("Goodbye Swopblock Sim!");
 
 // Put Simulation Here
 // Put Simulation Here
 // Put Simulation Here
 
+public class Sim
+{
+    APP[] apps;
 
+    CARRIER[] carrier;
+    public Sim()
+    {
+        apps = new APP[1000];
+
+        for (int i = 0; i < apps.Length; i++)
+        {
+            apps[i] = new APP();
+
+            apps[i].CORE = new CORE();
+
+            apps[i].CORE.APP = apps[i];
+
+            for (int j = 0)
+        }
+    }
+
+    public void MakeRandomOrder()
+    {
+        for (int i = 0; i < orderCount; i++)
+        {
+
+        }
+    }
+}
 
 
 namespace Swopblock

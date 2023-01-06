@@ -5,15 +5,15 @@ using Swopblock.API.Data;
 
 namespace Swopblock.API.State
 {
-    public class Main : LedgerAccount<Main, Branch[]>
+    public class Exchange : LedgerAccount<Exchange, Market[]>
     {
     }
 
-    public class Branch : LedgerAccount<Main, User[]>
+    public class Market : LedgerAccount<Exchange, User[]>
     {
     }
 
-    public class User : LedgerAccount<Branch, Account[]>
+    public class User : LedgerAccount<Market, Account[]>
     {
     }
 
